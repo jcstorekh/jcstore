@@ -234,7 +234,7 @@
 
     <!-- Custom Confirm Modal -->
     <div id="confirmModal" class="fixed inset-0 bg-slate-900/80 z-[70] hidden items-center justify-center backdrop-blur-sm">
-        <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl w-full max-w-sm mx-4 overflow-hidden">
+        <div id="confirmModalBox" class="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl w-full max-w-sm mx-4 overflow-hidden">
             <div class="p-6">
                 <div class="flex items-start space-x-4">
                     <div class="w-10 h-10 rounded-full bg-red-100 dark:bg-red-900/40 flex items-center justify-center flex-shrink-0 mt-0.5">
@@ -1448,7 +1448,7 @@
         </div>
     </div>
 
-    <script type="module">
+    <script>
         // --- DATA ARCHITECTURE & STATE ---
         const STORAGE_KEY = 'jc_store_sys_data';
         
@@ -1985,10 +1985,12 @@
         // --- CUSTOM CONFIRM DIALOG ---
         let confirmCallback = null;
 
-        function showConfirm(title, htmlBody, onOk, okLabel = 'Confirm', okClass = 'bg-emerald-600 hover:bg-emerald-700') {
+        function showConfirm(title, htmlBody, onOk, okLabel = 'Confirm', okClass = 'bg-emerald-600 hover:bg-emerald-700', modalWidthClass = 'max-w-sm') {
             const modal  = document.getElementById('confirmModal');
+            const box    = document.getElementById('confirmModalBox');
             const msgEl  = document.getElementById('confirmMessage');
             const okBtn  = document.getElementById('confirmOkBtn');
+            if (box) box.className = `bg-white dark:bg-slate-800 rounded-2xl shadow-2xl w-full ${modalWidthClass} mx-4 overflow-hidden`;
             if (msgEl) {
                 msgEl.innerHTML = `<p class="font-black text-slate-800 dark:text-white mb-3">${title}</p>${htmlBody}`;
             }
@@ -2015,7 +2017,11 @@
             const modal = document.getElementById('confirmModal');
             modal.classList.add('hidden');
             modal.classList.remove('flex');
-            // Reset button to default delete appearance
+            // Reset width and button to default appearance so any confirm dialog opened
+            // afterward (e.g. a plain delete confirmation) doesn't inherit a wide layout
+            // left over from something like the KHQR charge confirmation.
+            const box = document.getElementById('confirmModalBox');
+            if (box) box.className = 'bg-white dark:bg-slate-800 rounded-2xl shadow-2xl w-full max-w-sm mx-4 overflow-hidden';
             document.getElementById('confirmOkBtn').innerHTML = '<i class="fas fa-trash mr-1"></i> Delete';
             document.getElementById('confirmOkBtn').className = 'px-4 py-2 text-sm font-bold text-white bg-red-600 rounded-lg hover:bg-red-700 transition shadow';
         }
@@ -2540,99 +2546,135 @@
         }
 
         // --- LOCAL STORAGE PERSISTENCE ENGINE ---
-        async function saveSystemData() {
-    const appState = {
-        inventoryData, khqrData, matrixData, itemCategories, timeFormat, currentLang,
-        customTranslations, userAccounts, activeUserId, posSalesLog, receiptSettings,
-        employeeData, attendanceLog, customerData, holdOrders, leaveRequests,
-        loyaltySettings, expenseData, expenseCategories,
-        settings: {
-            logo: currentStoreLogo,
-            currency: activeCurrency,
-            sign: activeCurrencySign,
-            rate: parseFloat(document.getElementById('exchangeRateInput').value) || 4100,
-            name: document.getElementById('store_name').value || 'JC STORE'
+        function saveSystemData() {
+            const appState = {
+                inventoryData, khqrData, matrixData, itemCategories, timeFormat, currentLang,
+                customTranslations,
+                userAccounts,
+                activeUserId,
+                posSalesLog,
+                receiptSettings,
+                employeeData,
+                attendanceLog,
+                customerData,
+                holdOrders,
+                leaveRequests,
+                loyaltySettings,
+                expenseData,
+                expenseCategories,
+                settings: {
+                    logo: currentStoreLogo,
+                    currency: activeCurrency,
+                    sign: activeCurrencySign,
+                    rate: parseFloat(document.getElementById('exchangeRateInput').value) || 4100,
+                    name: document.getElementById('store_name').value || 'JC STORE'
+                }
+            };
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
         }
-    };
-    
-    try {
-        // Save to Firebase instead of LocalStorage
-        await setDoc(doc(window.db, "jcstore", "systemData"), appState);
-    } catch (e) {
-        console.error("Error saving to Firebase: ", e);
-        showToast("Cloud sync failed!", "error");
-    }
 
-        async function loadSystemData() {
-    if (localStorage.getItem('theme_pref') === 'dark') {
-        document.documentElement.classList.add('dark');
-        document.getElementById('themeIcon').classList.replace('fa-moon', 'fa-sun');
-    }
-
-    try {
-        // Fetch from Firebase instead of LocalStorage
-        const docRef = doc(window.db, "jcstore", "systemData");
-        const docSnap = await getDoc(docRef);
-
-        if (docSnap.exists()) {
-            const parsed = docSnap.data();
-            
-            // Map data to your variables
-            if(parsed.inventoryData) inventoryData = parsed.inventoryData;
-            if(parsed.khqrData) khqrData = parsed.khqrData;
-            if(parsed.matrixData) matrixData = parsed.matrixData;
-            if(parsed.itemCategories) itemCategories = parsed.itemCategories;
-            if(parsed.timeFormat) timeFormat = parsed.timeFormat;
-            if(parsed.currentLang) currentLang = parsed.currentLang;
-            
-            if(parsed.customTranslations) {
-                customTranslations = parsed.customTranslations;
-                Object.assign(i18nDictionary.en, customTranslations.en);
-                Object.assign(i18nDictionary.zh, customTranslations.zh);
-                Object.assign(i18nDictionary.km, customTranslations.km);
+        function loadSystemData() {
+            // Check Theme Preference First
+            if (localStorage.getItem('theme_pref') === 'dark') {
+                document.documentElement.classList.add('dark');
+                document.getElementById('themeIcon').classList.replace('fa-moon', 'fa-sun');
             }
-            
-            if(parsed.userAccounts) userAccounts = parsed.userAccounts;
-            if(parsed.activeUserId) activeUserId = parsed.activeUserId;
-            if(parsed.posSalesLog) posSalesLog = parsed.posSalesLog;
-            if(parsed.receiptSettings) receiptSettings = { ...receiptSettings, ...parsed.receiptSettings };
-            if(parsed.employeeData) employeeData = parsed.employeeData;
-            if(parsed.attendanceLog) attendanceLog = parsed.attendanceLog;
-            if(parsed.customerData) customerData = parsed.customerData;
-            if(parsed.loyaltySettings) loyaltySettings = { ...loyaltySettings, ...parsed.loyaltySettings };
-            if(parsed.expenseData) expenseData = parsed.expenseData;
-            if(parsed.expenseCategories) expenseCategories = parsed.expenseCategories;
-            if(parsed.holdOrders) holdOrders = parsed.holdOrders;
-            if(parsed.leaveRequests) leaveRequests = parsed.leaveRequests;
 
-            if(parsed.settings) {
-                currentStoreLogo = parsed.settings.logo || DEFAULT_LOGO;
-                activeCurrency = parsed.settings.currency || 'USD';
-                activeCurrencySign = parsed.settings.sign || '$';
-                
-                const rateInput = document.getElementById('exchangeRateInput');
-                if (rateInput) rateInput.value = parsed.settings.rate || 4100;
-                
-                const storeNameInput = document.getElementById('store_name');
-                if (storeNameInput) storeNameInput.value = parsed.settings.name || 'JC STORE';
-                
-                document.getElementById('sidebarLogo').src = currentStoreLogo;
-                document.getElementById('settingsLogoPreview').src = currentStoreLogo;
-                document.getElementById('bpStoreName').innerText = parsed.settings.name || 'JC STORE';
-                setGlobalCurrency(activeCurrency, activeCurrencySign, true);
+            const saved = localStorage.getItem(STORAGE_KEY);
+            if(saved) {
+                try {
+                    const parsed = JSON.parse(saved);
+                    if(parsed.inventoryData) inventoryData = parsed.inventoryData;
+                    if(parsed.khqrData) khqrData = parsed.khqrData;
+                    if(parsed.matrixData) matrixData = parsed.matrixData;
+                    if(parsed.itemCategories) itemCategories = parsed.itemCategories;
+                    if(parsed.timeFormat) timeFormat = parsed.timeFormat;
+                    if(parsed.currentLang) currentLang = parsed.currentLang;
+                    
+                    if(parsed.customTranslations) {
+                        customTranslations = parsed.customTranslations;
+                        Object.assign(i18nDictionary.en, customTranslations.en);
+                        Object.assign(i18nDictionary.zh, customTranslations.zh);
+                        Object.assign(i18nDictionary.km, customTranslations.km);
+                    }
+                    
+                    if(parsed.userAccounts && Array.isArray(parsed.userAccounts) && parsed.userAccounts.length > 0) {
+                        userAccounts = parsed.userAccounts;
+                        // Ensure there's always at least one admin account
+                        const hasAdmin = userAccounts.some(u => u.isAdmin);
+                        if (!hasAdmin) {
+                            userAccounts.unshift({
+                                id:'admin_001', name:'JC Manager', role:'Administrator',
+                                email:'admin@jcstore.com', pin:'', isAdmin:true,
+                                tabs:['dashboard','pos','customers','costing','inventory','employee','reports','business-plan','investment','roi','settings'],
+                                avatar:null
+                            });
+                        }
+                    }
+                    if(parsed.activeUserId) {
+                        // Validate the stored activeUserId still exists
+                        const exists = userAccounts.some(u => u.id === parsed.activeUserId);
+                        activeUserId = exists ? parsed.activeUserId : (userAccounts.find(u=>u.isAdmin)?.id || userAccounts[0]?.id || 'admin_001');
+                    }
+                    if(parsed.posSalesLog && Array.isArray(parsed.posSalesLog)) {
+                        posSalesLog = parsed.posSalesLog;
+                    }
+                    if(parsed.receiptSettings) {
+                        receiptSettings = { ...receiptSettings, ...parsed.receiptSettings };
+                    }
+                    if(parsed.employeeData && Array.isArray(parsed.employeeData)) {
+                        employeeData = parsed.employeeData;
+                    }
+                    if(parsed.attendanceLog && Array.isArray(parsed.attendanceLog)) {
+                        attendanceLog = parsed.attendanceLog;
+                    }
+                    if(parsed.customerData && Array.isArray(parsed.customerData)) {
+                        customerData = parsed.customerData;
+                    }
+                    if(parsed.loyaltySettings) {
+                        loyaltySettings = { ...loyaltySettings, ...parsed.loyaltySettings };
+                    }
+                    if(parsed.expenseData && Array.isArray(parsed.expenseData)) {
+                        expenseData = parsed.expenseData;
+                    }
+                    if(parsed.expenseCategories && Array.isArray(parsed.expenseCategories)) {
+                        expenseCategories = parsed.expenseCategories;
+                    }
+                    if(parsed.holdOrders && Array.isArray(parsed.holdOrders)) {
+                        holdOrders = parsed.holdOrders;
+                    }
+                    if(parsed.leaveRequests && Array.isArray(parsed.leaveRequests)) {
+                        leaveRequests = parsed.leaveRequests;
+                    }
+
+                    if(parsed.settings) {
+                        currentStoreLogo = parsed.settings.logo || DEFAULT_LOGO;
+                        activeCurrency = parsed.settings.currency || 'USD';
+                        activeCurrencySign = parsed.settings.sign || '$';
+                        
+                        document.getElementById('exchangeRateInput').value = parsed.settings.rate || 4100;
+                        const navRateEl = document.getElementById('navExchangeRateInput');
+                        if (navRateEl) navRateEl.value = parsed.settings.rate || 4100;
+                        document.getElementById('store_name').value = parsed.settings.name || 'JC STORE';
+                        document.getElementById('sidebarLogo').src = currentStoreLogo;
+                        document.getElementById('settingsLogoPreview').src = currentStoreLogo;
+                        document.getElementById('bpStoreName').innerText = parsed.settings.name || 'JC STORE';
+                        // Reflect the persisted currency on both button sets (Settings tab +
+                        // navbar dropdown) — without this, a reload after switching to KHR
+                        // would silently show USD as "active" in the UI again.
+                        setGlobalCurrency(activeCurrency, activeCurrencySign, true);
+                    }
+                    const loyEarnEl = document.getElementById('loyEarnRateInput');
+                    const loyRedeemEl = document.getElementById('loyRedeemRateInput');
+                    if (loyEarnEl)   loyEarnEl.value   = loyaltySettings.earnPerDollar;
+                    if (loyRedeemEl) loyRedeemEl.value = loyaltySettings.redeemPerDollar;
+                } catch(e) { console.error("Corrupted local storage data structure", e); }
             }
+            document.getElementById('timeFormatBadge').innerText = timeFormat.toUpperCase();
+            setLanguage(currentLang);
+            applyUserProfileUI();
         }
-    } catch(e) { 
-        console.error("Failed to load from Firebase", e); 
-        showToast("Failed to load cloud data", "error");
-    }
 
-    document.getElementById('timeFormatBadge').innerText = timeFormat.toUpperCase();
-    setLanguage(currentLang);
-    applyUserProfileUI();
-    renderTables();
-    renderDashboard();
-}
         // --- CAMERA BARCODE SCANNER ENGINE ---
         let html5QrcodeScanner = null;
         let activeScanTarget = 'costing';
@@ -4874,38 +4916,52 @@
             const methodLabel = { cash_usd: 'Cash USD', cash_khr: 'Cash KHR', khqr: 'KHQR' }[method] || method;
             const itemCount = posCart.reduce((s, c) => s + c.qty, 0);
 
-            let khqrHtml = '';
-            if (method === 'khqr') {
-                if (khqrData.length) {
-                    const idx = (_posKHQRIdx < khqrData.length) ? _posKHQRIdx : 0;
-                    const g = khqrData[idx];
-                    khqrHtml = `
-                        <div class="flex items-center gap-3 py-3 border-t border-b dark:border-slate-700 my-2">
-                            <img src="${g.qr}" class="w-24 h-auto max-h-32 rounded-lg border-2 border-blue-200 dark:border-blue-700 shadow-sm object-contain bg-white flex-shrink-0">
-                            <div class="flex-1 min-w-0">
-                                <p class="text-[10px] font-bold text-slate-500 dark:text-slate-400 truncate">${g.bank} — ${g.merchant}</p>
-                                <p class="text-base font-black text-blue-600 dark:text-blue-400">$${total.toFixed(2)}</p>
-                                <p class="text-[10px] text-slate-400 dark:text-slate-500">${t('pos_khqr_scan_prompt')}</p>
+            // The standard set of sale-summary rows shown for every payment method.
+            const detailRows = `
+                <div class="flex justify-between"><span class="text-slate-500">Items</span><span class="font-bold">${itemCount} item(s)</span></div>
+                ${discount > 0 ? `<div class="flex justify-between"><span class="text-slate-500">Discount</span><span class="font-bold text-red-500">-$${discount.toFixed(2)}</span></div>` : ''}
+                ${vatAmt > 0 ? `<div class="flex justify-between"><span class="text-slate-500">VAT (${receiptSettings.vatRate}%)</span><span class="font-bold text-amber-600">+$${vatAmt.toFixed(2)}</span></div>` : ''}
+                <div class="flex justify-between text-lg font-black border-t pt-1.5 mt-1.5"><span>Total</span><span class="text-emerald-600">$${total.toFixed(2)}</span></div>
+                <div class="flex justify-between"><span class="text-slate-500">Payment</span><span class="font-bold">${methodLabel}</span></div>
+                <div class="flex justify-between"><span class="text-slate-500">Customer</span><span class="font-bold">${posCustomer || 'Walk-in'}</span></div>`;
+
+            let bodyHtml, modalWidthClass = 'max-w-sm';
+
+            if (method === 'khqr' && khqrData.length) {
+                // Pay-by-QR gets a wider, two-column layout: the merchant's actual
+                // uploaded QR image runs the full height of the dialog on the left
+                // (so it's large enough for a customer's phone to scan comfortably),
+                // with the bank/merchant identity and sale summary stacked on the right.
+                modalWidthClass = 'max-w-2xl';
+                const idx = (_posKHQRIdx < khqrData.length) ? _posKHQRIdx : 0;
+                const g = khqrData[idx];
+                bodyHtml = `
+                    <div class="flex flex-col sm:flex-row gap-5 text-left text-base">
+                        <img src="${g.qr}" class="w-full sm:w-56 max-h-80 rounded-xl border-2 border-blue-200 dark:border-blue-700 shadow-sm object-contain bg-white flex-shrink-0">
+                        <div class="flex-1 min-w-0 space-y-2">
+                            <div class="pb-2 mb-1 border-b dark:border-slate-700">
+                                <p class="text-sm font-bold text-blue-600 dark:text-blue-400 truncate">${g.bank} — ${g.merchant}</p>
+                                <p class="text-xs text-slate-400 dark:text-slate-500">${t('pos_khqr_scan_prompt')}</p>
                             </div>
-                        </div>`;
-                } else {
-                    khqrHtml = `<p class="text-xs text-amber-600 text-center py-2">${t('pos_khqr_none_configured')}</p>`;
+                            ${detailRows}
+                        </div>
+                    </div>`;
+            } else {
+                let khqrNote = '';
+                if (method === 'khqr' && !khqrData.length) {
+                    khqrNote = `<p class="text-xs text-amber-600 text-center py-2 border-t dark:border-slate-700 mt-2">${t('pos_khqr_none_configured')}</p>`;
                 }
+                bodyHtml = `<div class="text-left space-y-1.5 text-sm">${detailRows}${khqrNote}</div>`;
             }
 
             // ── Confirm before completing sale ────────────────────
             showConfirm(
                 `Complete Sale — $${total.toFixed(2)}`,
-                `<div class="text-left space-y-1.5 text-sm">
-                    <div class="flex justify-between"><span class="text-slate-500">Items</span><span class="font-bold">${itemCount} item(s)</span></div>
-                    ${discount > 0 ? `<div class="flex justify-between"><span class="text-slate-500">Discount</span><span class="font-bold text-red-500">-$${discount.toFixed(2)}</span></div>` : ''}
-                    ${vatAmt > 0 ? `<div class="flex justify-between"><span class="text-slate-500">VAT (${receiptSettings.vatRate}%)</span><span class="font-bold text-amber-600">+$${vatAmt.toFixed(2)}</span></div>` : ''}
-                    <div class="flex justify-between text-base font-black border-t pt-1.5 mt-1.5"><span>Total</span><span class="text-emerald-600">$${total.toFixed(2)}</span></div>
-                    <div class="flex justify-between"><span class="text-slate-500">Payment</span><span class="font-bold">${methodLabel}</span></div>
-                    <div class="flex justify-between"><span class="text-slate-500">Customer</span><span class="font-bold">${posCustomer || 'Walk-in'}</span></div>
-                    ${khqrHtml}
-                </div>`,
-                () => _executeSale(total, subtotal, discount, vatAmt, rate, method)
+                bodyHtml,
+                () => _executeSale(total, subtotal, discount, vatAmt, rate, method),
+                'Confirm',
+                'bg-emerald-600 hover:bg-emerald-700',
+                modalWidthClass
             );
         }
 
@@ -4993,8 +5049,10 @@
 
             document.getElementById('posReceiptContent').innerHTML = `
                 <div class="text-center mb-3 space-y-0.5">
-                    ${logo ? `<img src="${logo}" class="w-16 h-16 object-contain mx-auto mb-2">` : ''}
-                    <p class="text-base font-black uppercase tracking-widest">${storeName}</p>
+                    <div class="flex items-center justify-center gap-2 mb-1">
+                        ${logo ? `<img src="${logo}" class="w-10 h-10 object-contain flex-shrink-0">` : ''}
+                        <p class="text-base font-black uppercase tracking-widest">${storeName}</p>
+                    </div>
                     ${rs.address ? `<p class="text-[10px] text-slate-500">${rs.address}</p>` : ''}
                     ${rs.phone   ? `<p class="text-[10px] text-slate-500">Tel: ${rs.phone}</p>` : ''}
                     ${rs.tax     ? `<p class="text-[10px] text-slate-500">${rs.tax}</p>` : ''}
@@ -6242,8 +6300,10 @@
             const total      = subtotal + vatAmt;
             el.innerHTML = `
                 <div class="text-center space-y-0.5 pb-2 border-b border-dashed border-slate-300">
-                    ${logo ? `<img src="${logo}" class="w-14 h-14 object-contain mx-auto mb-1">` : ''}
-                    <p class="font-black text-sm uppercase tracking-widest">${n}</p>
+                    <div class="flex items-center justify-center gap-1.5 mb-0.5">
+                        ${logo ? `<img src="${logo}" class="w-8 h-8 object-contain flex-shrink-0">` : ''}
+                        <p class="font-black text-sm uppercase tracking-widest">${n}</p>
+                    </div>
                     ${addr ? `<p class="text-slate-500 text-[10px]">${addr}</p>` : ''}
                     ${ph   ? `<p class="text-slate-500 text-[10px]">Tel: ${ph}</p>` : ''}
                     ${tax  ? `<p class="text-slate-500 text-[10px]">${tax}</p>` : ''}
@@ -8114,34 +8174,6 @@
                 }
             });
         };
-        // Add this at the top of your script section, or right before your data state variables
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
-
-// Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
-  apiKey: "AIzaSyCOeuF7s7Ru0tUeIkBrQSbCOwDoqNwniYU",
-  authDomain: "jcstore-kh.firebaseapp.com",
-  projectId: "jcstore-kh",
-  storageBucket: "jcstore-kh.firebasestorage.app",
-  messagingSenderId: "900472208623",
-  appId: "1:900472208623:web:6f032ac2220ea5f9d56f1a",
-  measurementId: "G-WEVC0XDZXD"
-};
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
-
-const app = initializeApp(firebaseConfig);
-window.db = getFirestore(app);
     </script>
 </body>
 </html>
