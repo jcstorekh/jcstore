@@ -234,21 +234,21 @@
 
     <!-- Custom Confirm Modal -->
     <div id="confirmModal" class="fixed inset-0 bg-slate-900/80 z-[70] hidden items-center justify-center backdrop-blur-sm">
-        <div id="confirmModalBox" class="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl w-full max-w-sm mx-4 overflow-hidden">
-            <div class="p-6">
+        <div id="confirmModalBox" class="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl w-full max-w-lg mx-4 overflow-hidden">
+            <div class="p-7">
                 <div class="flex items-start space-x-4">
-                    <div class="w-10 h-10 rounded-full bg-red-100 dark:bg-red-900/40 flex items-center justify-center flex-shrink-0 mt-0.5">
-                        <i class="fas fa-exclamation-triangle text-red-600 dark:text-red-400"></i>
+                    <div class="w-12 h-12 rounded-full bg-red-100 dark:bg-red-900/40 flex items-center justify-center flex-shrink-0 mt-0.5">
+                        <i class="fas fa-exclamation-triangle text-red-600 dark:text-red-400 text-lg"></i>
                     </div>
-                    <div>
-                        <h4 id="confirmTitle" class="text-base font-black text-slate-800 dark:text-white">Confirm Action</h4>
-                        <p id="confirmMessage" class="text-sm text-slate-500 dark:text-slate-400 mt-1">This action cannot be undone.</p>
+                    <div class="flex-1 min-w-0">
+                        <h4 id="confirmTitle" class="text-lg font-black text-slate-800 dark:text-white">Confirm Action</h4>
+                        <p id="confirmMessage" class="text-sm text-slate-500 dark:text-slate-400 mt-1.5">This action cannot be undone.</p>
                     </div>
                 </div>
             </div>
-            <div class="px-6 pb-6 flex justify-end space-x-3">
-                <button onclick="cancelConfirm()" class="px-4 py-2 text-sm font-bold text-slate-600 dark:text-slate-300 bg-slate-100 dark:bg-slate-700 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-600 transition">Cancel</button>
-                <button id="confirmOkBtn" class="px-4 py-2 text-sm font-bold text-white bg-red-600 rounded-lg hover:bg-red-700 transition shadow"><i class="fas fa-trash mr-1"></i> Delete</button>
+            <div class="px-7 pb-7 flex justify-end space-x-3">
+                <button onclick="cancelConfirm()" class="px-5 py-2.5 text-sm font-bold text-slate-600 dark:text-slate-300 bg-slate-100 dark:bg-slate-700 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-600 transition">Cancel</button>
+                <button id="confirmOkBtn" class="px-5 py-2.5 text-sm font-bold text-white bg-red-600 rounded-lg hover:bg-red-700 transition shadow"><i class="fas fa-trash mr-1"></i> Delete</button>
             </div>
         </div>
     </div>
@@ -1059,6 +1059,10 @@
                                     <label class="flex items-center space-x-2 cursor-pointer">
                                         <input type="checkbox" id="rcpt_show_logo" checked onchange="updateReceiptPreview()" class="accent-emerald-600 w-4 h-4 rounded">
                                         <span class="text-sm text-slate-700 dark:text-slate-300 font-medium">Show Logo</span>
+                                    </label>
+                                    <label class="flex items-center space-x-2 cursor-pointer">
+                                        <input type="checkbox" id="rcpt_show_store_name" checked onchange="updateReceiptPreview()" class="accent-emerald-600 w-4 h-4 rounded">
+                                        <span class="text-sm text-slate-700 dark:text-slate-300 font-medium">Show Store Name</span>
                                     </label>
                                     <label class="flex items-center space-x-2 cursor-pointer">
                                         <input type="checkbox" id="rcpt_show_cashier" checked onchange="updateReceiptPreview()" class="accent-emerald-600 w-4 h-4 rounded">
@@ -1978,14 +1982,15 @@
             toast.className = `toast-item ${colors[type]} text-white px-4 py-3 rounded-xl shadow-xl flex items-center space-x-3 transform translate-x-full transition-all duration-300 text-sm font-semibold`;
             toast.innerHTML = `<i class="fas ${icons[type]} text-white/80"></i><span>${message}</span><button onclick="this.parentElement.remove()" class="ml-auto text-white/60 hover:text-white pl-2"><i class="fas fa-times text-xs"></i></button>`;
             container.appendChild(toast);
+            const duration = (type === 'error' || type === 'warning') ? 7000 : 3500;
             setTimeout(() => toast.classList.replace('translate-x-full', 'translate-x-0'), 10);
-            setTimeout(() => { toast.classList.replace('translate-x-0', 'translate-x-full'); toast.style.opacity = '0'; setTimeout(() => toast.remove(), 350); }, 3500);
+            setTimeout(() => { toast.classList.replace('translate-x-0', 'translate-x-full'); toast.style.opacity = '0'; setTimeout(() => toast.remove(), 350); }, duration);
         }
 
         // --- CUSTOM CONFIRM DIALOG ---
         let confirmCallback = null;
 
-        function showConfirm(title, htmlBody, onOk, okLabel = 'Confirm', okClass = 'bg-emerald-600 hover:bg-emerald-700', modalWidthClass = 'max-w-sm') {
+        function showConfirm(title, htmlBody, onOk, okLabel = 'Confirm', okClass = 'bg-emerald-600 hover:bg-emerald-700', modalWidthClass = 'max-w-lg') {
             const modal  = document.getElementById('confirmModal');
             const box    = document.getElementById('confirmModalBox');
             const msgEl  = document.getElementById('confirmMessage');
@@ -1997,18 +2002,20 @@
             confirmCallback = () => { cancelConfirm(); onOk(); };
             okBtn.onclick   = confirmCallback;
             okBtn.innerHTML = okLabel;
-            okBtn.className = `px-5 py-2 text-sm font-bold text-white rounded-lg transition shadow ${okClass}`;
+            okBtn.className = `px-5 py-2.5 text-sm font-bold text-white rounded-lg transition shadow ${okClass}`;
             modal.classList.remove('hidden');
             modal.classList.add('flex');
         }
 
         function confirmDelete(idx) {
             const modal = document.getElementById('confirmModal');
+            const box = document.getElementById('confirmModalBox');
+            if (box) box.className = 'bg-white dark:bg-slate-800 rounded-2xl shadow-2xl w-full max-w-lg mx-4 overflow-hidden';
             document.getElementById('confirmMessage').innerText = `Delete item "${i18nDictionary[currentLang][inventoryData[idx]?.name] || inventoryData[idx]?.sku || 'this item'}"? This cannot be undone.`;
             confirmCallback = () => { deleteItem(idx); cancelConfirm(); };
             document.getElementById('confirmOkBtn').onclick = confirmCallback;
             document.getElementById('confirmOkBtn').innerHTML = '<i class="fas fa-trash mr-1"></i> Delete';
-            document.getElementById('confirmOkBtn').className = 'px-4 py-2 text-sm font-bold text-white bg-red-600 rounded-lg hover:bg-red-700 transition shadow';
+            document.getElementById('confirmOkBtn').className = 'px-5 py-2.5 text-sm font-bold text-white bg-red-600 rounded-lg hover:bg-red-700 transition shadow';
             modal.classList.remove('hidden');
             modal.classList.add('flex');
         }
@@ -2021,15 +2028,19 @@
             // afterward (e.g. a plain delete confirmation) doesn't inherit a wide layout
             // left over from something like the KHQR charge confirmation.
             const box = document.getElementById('confirmModalBox');
-            if (box) box.className = 'bg-white dark:bg-slate-800 rounded-2xl shadow-2xl w-full max-w-sm mx-4 overflow-hidden';
+            if (box) box.className = 'bg-white dark:bg-slate-800 rounded-2xl shadow-2xl w-full max-w-lg mx-4 overflow-hidden';
             document.getElementById('confirmOkBtn').innerHTML = '<i class="fas fa-trash mr-1"></i> Delete';
-            document.getElementById('confirmOkBtn').className = 'px-4 py-2 text-sm font-bold text-white bg-red-600 rounded-lg hover:bg-red-700 transition shadow';
+            document.getElementById('confirmOkBtn').className = 'px-5 py-2.5 text-sm font-bold text-white bg-red-600 rounded-lg hover:bg-red-700 transition shadow';
         }
 
         // --- KHQR DELETE ---
         function deleteKhqrConfirm(idx) {
             const modal = document.getElementById('confirmModal');
+            const box = document.getElementById('confirmModalBox');
+            if (box) box.className = 'bg-white dark:bg-slate-800 rounded-2xl shadow-2xl w-full max-w-lg mx-4 overflow-hidden';
             document.getElementById('confirmMessage').innerText = `Remove KHQR connection for "${khqrData[idx]?.bank}"?`;
+            document.getElementById('confirmOkBtn').innerHTML = '<i class="fas fa-trash mr-1"></i> Delete';
+            document.getElementById('confirmOkBtn').className = 'px-5 py-2.5 text-sm font-bold text-white bg-red-600 rounded-lg hover:bg-red-700 transition shadow';
             document.getElementById('confirmOkBtn').onclick = () => { deleteKhqrAccount(idx); cancelConfirm(); };
             modal.classList.remove('hidden');
             modal.classList.add('flex');
@@ -2570,7 +2581,31 @@
                     name: document.getElementById('store_name').value || 'JC STORE'
                 }
             };
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
+            // Browsers cap localStorage at roughly 5-10MB per site. This app stores
+            // uploaded images as base64 text (store logo, employee photos, and — the
+            // most common culprit — real KHQR bank-screenshot photos), so total usage
+            // can creep up over many sessions until a save silently throws here. Left
+            // uncaught, that exception would abort execution mid-function for every
+            // caller — e.g. an "Add Merchant" flow would push the new entry into memory
+            // but then die right here, before the table ever re-renders or the form
+            // closes, making it look like the button simply didn't do anything (and the
+            // entry would vanish for good on the next reload, since it was never
+            // actually persisted). Catching it here means every caller downstream still
+            // runs, and the person gets a clear, actionable warning instead of silence.
+            try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
+                return true;
+            } catch (err) {
+                console.error('saveSystemData failed:', err);
+                const isQuota = err && (err.name === 'QuotaExceededError' || err.code === 22 || err.code === 1014);
+                showToast(
+                    isQuota
+                        ? 'Storage is full — this change was NOT saved permanently. Remove old data (e.g. export & clear old sales history) or use a smaller image, then try again.'
+                        : 'Could not save changes. Please try again.',
+                    'error'
+                );
+                return false;
+            }
         }
 
         function loadSystemData() {
@@ -3355,12 +3390,14 @@
         
         function saveKhqrAccount() { 
             const idx = parseInt(document.getElementById('khqr_idx').value);
-            const data = {
-                bank: document.getElementById('k_bank').value,
-                merchant: document.getElementById('k_merchant').value,
-                account: document.getElementById('k_account').value,
-                qr: 'https://via.placeholder.com/100x100?text=QR+CODE' // Fallback
-            };
+            const bank     = document.getElementById('k_bank').value.trim();
+            const merchant = document.getElementById('k_merchant').value.trim();
+            const account  = document.getElementById('k_account').value.trim();
+            if (!bank || !merchant) {
+                showToast('Bank Node and Merchant Legal Name are required.', 'warning');
+                return;
+            }
+            const data = { bank, merchant, account, qr: 'https://via.placeholder.com/100x100?text=QR+CODE' };
 
             const fileInput = document.getElementById('k_qr_image');
             if (fileInput.files && fileInput.files[0]) {
@@ -3370,6 +3407,12 @@
                     if(idx >= 0) khqrData[idx] = data; else khqrData.push(data);
                     saveSystemData(); renderKhqrTable(); toggleKhqrForm();
                     showToast(idx >= 0 ? 'KHQR connection updated!' : 'KHQR connection added!', 'success');
+                };
+                // Without this, a file that fails to read (corrupted, unsupported, or
+                // just unlucky) leaves onload never firing — no save, no error, no
+                // feedback at all. Now it tells the person clearly instead of going silent.
+                reader.onerror = function() {
+                    showToast('Could not read that image file. Try a different image.', 'error');
                 };
                 reader.readAsDataURL(fileInput.files[0]);
             } else {
@@ -3904,13 +3947,14 @@
         let receiptSettings = {
             name: '', address: '', phone: '', tax: '',
             footer: 'Thank you for your purchase!',
-            showCashier: true, showCustomer: true,
-            showLogo:    true,
-            vatEnabled:  false,
-            vatRate:     10,        // percent
-            showVAT:     true,      // show VAT line on receipt when enabled
-            itemDiscount: false     // allow per-item discount in cart
-        };   // historical sales records
+            showCashier:    true, showCustomer: true,
+            showLogo:       true,
+            showStoreName:  true,    // show the store name on the receipt header
+            vatEnabled:     false,
+            vatRate:        10,
+            showVAT:        true,
+            itemDiscount:   false
+        };
         let loyaltySettings = {
             earnPerDollar:   1,    // points earned per $1 spent (final total charged)
             redeemPerDollar: 100   // points required to redeem for $1 off
@@ -4925,23 +4969,23 @@
                 <div class="flex justify-between"><span class="text-slate-500">Payment</span><span class="font-bold">${methodLabel}</span></div>
                 <div class="flex justify-between"><span class="text-slate-500">Customer</span><span class="font-bold">${posCustomer || 'Walk-in'}</span></div>`;
 
-            let bodyHtml, modalWidthClass = 'max-w-sm';
+            let bodyHtml, modalWidthClass = 'max-w-lg';
 
             if (method === 'khqr' && khqrData.length) {
                 // Pay-by-QR gets a wider, two-column layout: the merchant's actual
                 // uploaded QR image runs the full height of the dialog on the left
                 // (so it's large enough for a customer's phone to scan comfortably),
                 // with the bank/merchant identity and sale summary stacked on the right.
-                modalWidthClass = 'max-w-2xl';
+                modalWidthClass = 'max-w-3xl';
                 const idx = (_posKHQRIdx < khqrData.length) ? _posKHQRIdx : 0;
                 const g = khqrData[idx];
                 bodyHtml = `
-                    <div class="flex flex-col sm:flex-row gap-5 text-left text-base">
-                        <img src="${g.qr}" class="w-full sm:w-56 max-h-80 rounded-xl border-2 border-blue-200 dark:border-blue-700 shadow-sm object-contain bg-white flex-shrink-0">
-                        <div class="flex-1 min-w-0 space-y-2">
-                            <div class="pb-2 mb-1 border-b dark:border-slate-700">
-                                <p class="text-sm font-bold text-blue-600 dark:text-blue-400 truncate">${g.bank} — ${g.merchant}</p>
-                                <p class="text-xs text-slate-400 dark:text-slate-500">${t('pos_khqr_scan_prompt')}</p>
+                    <div class="flex flex-col sm:flex-row gap-6 text-left text-base">
+                        <img src="${g.qr}" class="w-full sm:w-72 max-h-96 rounded-xl border-2 border-blue-200 dark:border-blue-700 shadow-sm object-contain bg-white flex-shrink-0">
+                        <div class="flex-1 min-w-0 space-y-2.5 text-base">
+                            <div class="pb-2.5 mb-1.5 border-b dark:border-slate-700">
+                                <p class="text-base font-bold text-blue-600 dark:text-blue-400 truncate">${g.bank} — ${g.merchant}</p>
+                                <p class="text-sm text-slate-400 dark:text-slate-500">${t('pos_khqr_scan_prompt')}</p>
                             </div>
                             ${detailRows}
                         </div>
@@ -5051,7 +5095,7 @@
                 <div class="text-center mb-3 space-y-0.5">
                     <div class="flex items-center justify-center gap-2 mb-1">
                         ${logo ? `<img src="${logo}" class="w-10 h-10 object-contain flex-shrink-0">` : ''}
-                        <p class="text-base font-black uppercase tracking-widest">${storeName}</p>
+                        ${rs.showStoreName !== false ? `<p class="text-xl font-black uppercase tracking-widest">${storeName}</p>` : ''}
                     </div>
                     ${rs.address ? `<p class="text-[10px] text-slate-500">${rs.address}</p>` : ''}
                     ${rs.phone   ? `<p class="text-[10px] text-slate-500">Tel: ${rs.phone}</p>` : ''}
@@ -6247,29 +6291,31 @@
             get('rcpt_tax',      receiptSettings.tax);
             get('rcpt_footer',   receiptSettings.footer);
             get('rcpt_vat_rate', receiptSettings.vatRate ?? 10);
-            chk('rcpt_show_cashier',   receiptSettings.showCashier);
-            chk('rcpt_show_customer',  receiptSettings.showCustomer);
-            chk('rcpt_show_logo',      receiptSettings.showLogo !== false);
-            chk('rcpt_vat_enabled',    receiptSettings.vatEnabled);
-            chk('rcpt_show_vat',       receiptSettings.showVAT !== false);
-            chk('rcpt_item_discount',  receiptSettings.itemDiscount);
+            chk('rcpt_show_cashier',    receiptSettings.showCashier);
+            chk('rcpt_show_customer',   receiptSettings.showCustomer);
+            chk('rcpt_show_logo',       receiptSettings.showLogo !== false);
+            chk('rcpt_show_store_name', receiptSettings.showStoreName !== false);
+            chk('rcpt_vat_enabled',     receiptSettings.vatEnabled);
+            chk('rcpt_show_vat',        receiptSettings.showVAT !== false);
+            chk('rcpt_item_discount',   receiptSettings.itemDiscount);
             updateReceiptPreview();
         }
 
         function saveReceiptSettings() {
             receiptSettings = {
-                name:         document.getElementById('rcpt_name')?.value.trim()    || '',
-                address:      document.getElementById('rcpt_address')?.value.trim() || '',
-                phone:        document.getElementById('rcpt_phone')?.value.trim()   || '',
-                tax:          document.getElementById('rcpt_tax')?.value.trim()     || '',
-                footer:       document.getElementById('rcpt_footer')?.value.trim()  || '',
-                showCashier:  document.getElementById('rcpt_show_cashier')?.checked  ?? true,
-                showCustomer: document.getElementById('rcpt_show_customer')?.checked ?? true,
-                showLogo:     document.getElementById('rcpt_show_logo')?.checked     ?? true,
-                vatEnabled:   document.getElementById('rcpt_vat_enabled')?.checked   ?? false,
-                vatRate:      parseFloat(document.getElementById('rcpt_vat_rate')?.value) || 10,
-                showVAT:      document.getElementById('rcpt_show_vat')?.checked       ?? true,
-                itemDiscount: document.getElementById('rcpt_item_discount')?.checked  ?? false,
+                name:           document.getElementById('rcpt_name')?.value.trim()    || '',
+                address:        document.getElementById('rcpt_address')?.value.trim() || '',
+                phone:          document.getElementById('rcpt_phone')?.value.trim()   || '',
+                tax:            document.getElementById('rcpt_tax')?.value.trim()     || '',
+                footer:         document.getElementById('rcpt_footer')?.value.trim()  || '',
+                showCashier:    document.getElementById('rcpt_show_cashier')?.checked    ?? true,
+                showCustomer:   document.getElementById('rcpt_show_customer')?.checked   ?? true,
+                showLogo:       document.getElementById('rcpt_show_logo')?.checked        ?? true,
+                showStoreName:  document.getElementById('rcpt_show_store_name')?.checked  ?? true,
+                vatEnabled:     document.getElementById('rcpt_vat_enabled')?.checked      ?? false,
+                vatRate:        parseFloat(document.getElementById('rcpt_vat_rate')?.value) || 10,
+                showVAT:        document.getElementById('rcpt_show_vat')?.checked         ?? true,
+                itemDiscount:   document.getElementById('rcpt_item_discount')?.checked    ?? false,
             };
             saveSystemData();
             showToast('Receipt template saved!', 'success');
@@ -6289,7 +6335,8 @@
             const ph         = document.getElementById('rcpt_phone')?.value   || '';
             const tax        = document.getElementById('rcpt_tax')?.value     || '';
             const ftr        = document.getElementById('rcpt_footer')?.value  || 'Thank you for your purchase!';
-            const showLogo   = document.getElementById('rcpt_show_logo')?.checked !== false;
+            const showLogo      = document.getElementById('rcpt_show_logo')?.checked !== false;
+            const showStoreName = document.getElementById('rcpt_show_store_name')?.checked !== false;
             const vatEnabled = document.getElementById('rcpt_vat_enabled')?.checked;
             const showVAT    = document.getElementById('rcpt_show_vat')?.checked;
             const vatRate    = parseFloat(document.getElementById('rcpt_vat_rate')?.value) || 10;
@@ -6302,7 +6349,7 @@
                 <div class="text-center space-y-0.5 pb-2 border-b border-dashed border-slate-300">
                     <div class="flex items-center justify-center gap-1.5 mb-0.5">
                         ${logo ? `<img src="${logo}" class="w-8 h-8 object-contain flex-shrink-0">` : ''}
-                        <p class="font-black text-sm uppercase tracking-widest">${n}</p>
+                        ${showStoreName ? `<p class="font-black text-lg uppercase tracking-widest">${n}</p>` : ''}
                     </div>
                     ${addr ? `<p class="text-slate-500 text-[10px]">${addr}</p>` : ''}
                     ${ph   ? `<p class="text-slate-500 text-[10px]">Tel: ${ph}</p>` : ''}
@@ -7673,17 +7720,20 @@
                     <div id="_expNewCategoryWrap" class="hidden">
                         <label class="block text-xs font-bold text-slate-500 uppercase mb-1">${t('exp_category_new_lbl')}</label>
                         <input id="_expNewCategory" type="text" placeholder="${t('exp_category_new_ph')}"
+                            onkeydown="if(event.key==='Enter'){event.preventDefault(); document.getElementById('confirmOkBtn').click();}"
+                            class="w-full p-2.5 border border-slate-200 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-lg text-sm focus:ring-2 focus:ring-orange-500 outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 uppercase mb-1">${t('exp_desc_lbl')} *</label>
+                        <input id="_expDescription" type="text" placeholder="${t('exp_desc_ph')}"
+                            onkeydown="if(event.key==='Enter'){event.preventDefault(); document.getElementById('confirmOkBtn').click();}"
                             class="w-full p-2.5 border border-slate-200 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-lg text-sm focus:ring-2 focus:ring-orange-500 outline-none">
                     </div>
                     <div>
                         <label class="block text-xs font-bold text-slate-500 uppercase mb-1">${t('exp_amount_lbl')}</label>
                         <input id="_expAmount" type="number" min="0" step="0.01" placeholder="0.00"
+                            onkeydown="if(event.key==='Enter'){event.preventDefault(); document.getElementById('confirmOkBtn').click();}"
                             class="w-full p-2.5 border border-slate-200 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-lg text-sm font-mono focus:ring-2 focus:ring-orange-500 outline-none">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold text-slate-500 uppercase mb-1">${t('exp_desc_lbl')} *</label>
-                        <input id="_expDescription" type="text" placeholder="${t('exp_desc_ph')}"
-                            class="w-full p-2.5 border border-slate-200 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-lg text-sm focus:ring-2 focus:ring-orange-500 outline-none">
                     </div>
                 </div>`,
                 () => {
@@ -7704,6 +7754,7 @@
                 t('exp_add_btn'),
                 'bg-orange-500 hover:bg-orange-600'
             );
+            setTimeout(() => document.getElementById('_expCategory')?.focus(), 100);
         }
 
         function toggleExpenseNewCategory(val) {
