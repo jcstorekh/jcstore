@@ -686,6 +686,7 @@
                         <div><label class="block text-xs font-bold text-slate-600 dark:text-slate-400 uppercase" data-i18n="form_stock">Stock Quantity</label><input type="number" id="c_qty" required min="0" value="10" class="w-full p-2.5 border border-slate-300 dark:border-slate-600 dark:bg-slate-800 dark:text-white rounded mt-1 text-sm focus:ring-2 focus:ring-blue-500 outline-none"></div>
                         <div><label class="block text-xs font-bold text-slate-600 dark:text-slate-400 uppercase" data-i18n="form_expiry">Expiration Date</label><input type="date" id="c_expiry" class="w-full p-2.5 border border-slate-300 dark:border-slate-600 dark:bg-slate-800 dark:text-white rounded mt-1 text-sm focus:ring-2 focus:ring-blue-500 outline-none text-slate-500 dark:text-slate-300"></div>
                         <div><label class="block text-xs font-bold text-slate-600 dark:text-slate-400 uppercase" data-i18n="form_cost">Unit Cost (Base USD)</label><input type="number" step="0.01" id="c_cost" required class="w-full p-2.5 border border-slate-300 dark:border-slate-600 dark:bg-slate-800 dark:text-white rounded mt-1 text-sm focus:ring-2 focus:ring-blue-500 outline-none" oninput="calcMargin()"></div>
+                        <div><label class="block text-xs font-bold text-slate-600 dark:text-slate-400 uppercase" data-i18n="form_op_cost_pct">Operating Cost %</label><input type="number" step="0.1" min="0" id="c_op_cost_pct" value="0" class="w-full p-2.5 border border-slate-300 dark:border-slate-600 dark:bg-slate-800 dark:text-white rounded mt-1 text-sm focus:ring-2 focus:ring-blue-500 outline-none" oninput="calcMargin()"></div>
                         <div><label class="block text-xs font-bold text-slate-600 dark:text-slate-400 uppercase" data-i18n="form_price">Selling Price (Base USD)</label><input type="number" step="0.01" id="c_price" required class="w-full p-2.5 border border-slate-300 dark:border-slate-600 dark:bg-slate-800 dark:text-white rounded mt-1 text-sm focus:ring-2 focus:ring-blue-500 outline-none" oninput="calcMargin()"></div>
                         <div><label class="block text-xs font-bold text-slate-600 dark:text-slate-400 uppercase" data-i18n="form_redeem_points">Redeem Points (0 = not redeemable)</label><input type="number" step="1" min="0" id="c_redeem_points" value="0" class="w-full p-2.5 border border-slate-300 dark:border-slate-600 dark:bg-slate-800 dark:text-white rounded mt-1 text-sm focus:ring-2 focus:ring-amber-500 outline-none"></div>
                         <div class="md:col-span-2">
@@ -696,6 +697,7 @@
                                     <i id="c_image_placeholder" class="fas fa-image text-slate-300 dark:text-slate-600 text-2xl"></i>
                                 </div>
                                 <input type="file" id="c_image" accept="image/*" onchange="previewProductImage(this)" class="w-full p-1.5 border border-slate-300 dark:border-slate-600 rounded text-sm bg-slate-50 dark:bg-slate-800 dark:text-slate-300">
+                                <p class="text-[10px] text-slate-400 mt-0.5" data-i18n="upload_hint_item">Any size is fine — auto-resized to 600px</p>
                             </div>
                         </div>
                         <div class="md:col-span-4 flex items-center justify-between bg-slate-50 dark:bg-slate-700 p-4 rounded-xl border border-slate-200 dark:border-slate-600 mt-2">
@@ -703,6 +705,7 @@
                                 <span class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider block" data-i18n="form_analysis">Profit Margin Analysis</span>
                                 <span id="c_margin" class="font-black text-2xl text-slate-400">0.00%</span>
                                 <span id="c_margin_warn" class="hidden ml-3 text-xs font-bold text-red-500 bg-red-50 dark:bg-red-900/30 px-2 py-1 rounded"><i class="fas fa-exclamation-triangle mr-1"></i>Selling below cost!</span>
+                                <span id="c_effective_cost" class="hidden ml-3 text-xs font-bold text-slate-500 dark:text-slate-400"></span>
                             </div>
                             <button type="submit" id="btnSubmitCosting" class="bg-emerald-600 text-white font-bold text-sm px-6 py-3 rounded-lg shadow-md hover:bg-emerald-700 transition flex items-center"><i class="fas fa-save mr-2"></i> <span data-i18n="btn_save_sync">Save & Sync to Inventory</span></button>
                         </div>
@@ -935,6 +938,7 @@
                                         <input type="file" id="store_logo_input" accept="image/*" class="text-xs w-full text-slate-500 dark:text-slate-400 file:mr-2 file:py-1 file:px-3 file:rounded file:border-0 file:text-xs file:font-bold file:bg-blue-50 file:text-blue-700 dark:file:bg-slate-700 dark:file:text-white hover:file:bg-blue-100 transition">
                                         <button type="button" onclick="deleteStoreLogo()" class="bg-red-50 dark:bg-red-900/30 text-red-600 dark:text-red-400 px-3 py-1.5 rounded border border-red-200 dark:border-red-800 hover:bg-red-100 dark:hover:bg-red-900/50 text-xs font-bold transition shadow-sm"><i class="fas fa-trash"></i></button>
                                     </div>
+                                    <p class="text-[10px] text-slate-400 mt-0.5" data-i18n="upload_hint_store_logo">Any size is fine — auto-resized to 500px</p>
                                 </div>
                                 <div class="mb-3"><label class="block text-xs font-bold text-slate-600 dark:text-slate-400 uppercase" data-i18n="set_lbl_name">Enterprise Name</label><input type="text" id="store_name" value="JC STORE" required class="w-full p-2 border border-slate-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded mt-1 text-sm outline-none focus:ring-2 focus:ring-blue-500"></div>
                                 <button type="submit" class="w-full bg-slate-800 text-white font-bold text-xs py-2.5 rounded hover:bg-slate-900 shadow transition"><i class="fas fa-save mr-1"></i> <span data-i18n="btn_commit_details">Commit Profile Details</span></button>
@@ -988,7 +992,8 @@
                                 <div><label class="block text-xs font-bold text-slate-600 dark:text-slate-400 uppercase" data-i18n="khqr_lbl_bank">Bank Node</label><input type="text" id="k_bank" class="w-full p-2 border dark:border-slate-600 dark:bg-slate-700 dark:text-white text-sm rounded mt-1 outline-none focus:ring-1 focus:ring-blue-500"></div>
                                 <div><label class="block text-xs font-bold text-slate-600 dark:text-slate-400 uppercase" data-i18n="khqr_lbl_merchant">Merchant Legal Name</label><input type="text" id="k_merchant" class="w-full p-2 border dark:border-slate-600 dark:bg-slate-700 dark:text-white text-sm rounded mt-1 outline-none focus:ring-1 focus:ring-blue-500"></div>
                                 <div><label class="block text-xs font-bold text-slate-600 dark:text-slate-400 uppercase" data-i18n="khqr_lbl_acct">Account Number</label><input type="text" id="k_account" class="w-full p-2 border dark:border-slate-600 dark:bg-slate-700 dark:text-white text-sm rounded mt-1 outline-none focus:ring-1 focus:ring-blue-500"></div>
-                                <div><label class="block text-xs font-bold text-slate-600 dark:text-slate-400 uppercase" data-i18n="khqr_lbl_file">Upload KHQR Image</label><input type="file" id="k_qr_image" accept="image/*" class="w-full p-1 border dark:border-slate-600 text-xs rounded mt-1 bg-white dark:bg-slate-700 dark:text-slate-300"></div>
+                                <div><label class="block text-xs font-bold text-slate-600 dark:text-slate-400 uppercase" data-i18n="khqr_lbl_file">Upload KHQR Image</label><input type="file" id="k_qr_image" accept="image/*" class="w-full p-1 border dark:border-slate-600 text-xs rounded mt-1 bg-white dark:bg-slate-700 dark:text-slate-300"><p class="text-[10px] text-slate-400 mt-0.5" data-i18n="upload_hint_qr">Any size is fine — auto-resized to 700px</p></div>
+                                <div><label class="block text-xs font-bold text-slate-600 dark:text-slate-400 uppercase" data-i18n="khqr_lbl_logo">Bank Logo (optional)</label><input type="file" id="k_bank_logo" accept="image/*" class="w-full p-1 border dark:border-slate-600 text-xs rounded mt-1 bg-white dark:bg-slate-700 dark:text-slate-300"><p class="text-[10px] text-slate-400 mt-0.5" data-i18n="upload_hint_logo">Any size is fine — auto-resized to 200px</p></div>
                             </div>
                             <div class="flex justify-end space-x-3 mt-5">
                                 <button onclick="toggleKhqrForm()" class="bg-white dark:bg-slate-800 border dark:border-slate-600 text-slate-600 dark:text-slate-300 font-bold text-xs px-4 py-2 rounded hover:bg-slate-100 dark:hover:bg-slate-700 transition" data-i18n="btn_cancel">Cancel</button>
@@ -1010,6 +1015,22 @@
                             </table>
                         </div>
                     </div>
+                </div>
+
+                <!-- Storage Usage Panel -->
+                <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 mt-6">
+                    <div class="flex justify-between items-center mb-5 border-b dark:border-slate-700 pb-4">
+                        <div>
+                            <h3 class="text-lg font-bold text-slate-800 dark:text-white flex items-center">
+                                <i class="fas fa-database text-indigo-500 mr-2"></i> <span data-i18n="storage_title">Storage Usage</span>
+                            </h3>
+                            <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5" data-i18n="storage_desc">See what's using space and how much room you have left.</p>
+                        </div>
+                        <button onclick="renderStorageUsagePanel()" class="border border-slate-200 dark:border-slate-600 text-slate-600 dark:text-slate-300 font-bold text-xs px-4 py-2 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-700 transition flex items-center">
+                            <i class="fas fa-rotate mr-1.5"></i> <span data-i18n="btn_refresh">Refresh</span>
+                        </button>
+                    </div>
+                    <div id="storageUsageContent"><p class="text-xs text-slate-400 text-center py-4">Loading…</p></div>
                 </div>
 
                 <!-- Receipt Template Panel -->
@@ -1076,6 +1097,16 @@
                                         <input type="checkbox" id="rcpt_item_discount" onchange="saveReceiptSettings()" class="accent-emerald-600 w-4 h-4 rounded">
                                         <span class="text-sm text-slate-700 dark:text-slate-300 font-medium">Per-Item Discount</span>
                                     </label>
+                                </div>
+                                <div class="mt-4 pt-4 border-t border-slate-200 dark:border-slate-600">
+                                    <div class="flex justify-between items-center mb-1.5">
+                                        <label for="rcpt_logo_size" class="text-sm text-slate-700 dark:text-slate-300 font-medium" data-i18n="rcpt_logo_size_lbl">Logo Size</label>
+                                        <span id="rcpt_logo_size_val" class="text-xs font-mono font-bold text-emerald-600 dark:text-emerald-400">40px</span>
+                                    </div>
+                                    <input type="range" id="rcpt_logo_size" min="20" max="80" step="2" value="40"
+                                        oninput="document.getElementById('rcpt_logo_size_val').textContent = this.value + 'px'; updateReceiptPreview();"
+                                        onchange="saveReceiptSettings()"
+                                        class="w-full h-2 rounded-full appearance-none bg-slate-200 dark:bg-slate-600 accent-emerald-600 cursor-pointer">
                                 </div>
                             </div>
 
@@ -1557,7 +1588,7 @@
                 dash_revenue: "Gross Revenue", dash_net_yield: "Net Profit Yield", dash_active_skus: "Active SKUs", dash_roi: "Current ROI",
                 cost_create_profile: "Create New Costing Profile", btn_cancel_edit: "Cancel Edit", form_prod_name: "Product Name",
                 form_category: "Category", form_sku: "SKU Number", form_barcode: "Barcode String", btn_scan: "Scan",
-                form_stock: "Stock Quantity", form_expiry: "Expiration Date", form_cost: "Unit Cost (Base USD)", form_price: "Selling Price (Base USD)",
+                form_stock: "Stock Quantity", form_expiry: "Expiration Date", form_cost: "Unit Cost (Base USD)", form_op_cost_pct: "Operating Cost %", form_price: "Selling Price (Base USD)",
                 form_image: "Product Image Asset", form_analysis: "Profit Margin Analysis", btn_save_sync: "Save & Sync to Inventory",
                 cost_db_title: "Costing Records Database", tbl_asset: "Asset", tbl_specs: "Product Specs", tbl_costing: "Costing",
                 tbl_price: "Price", tbl_margin: "Margin", tbl_actions: "Actions", search_holder: "Search SKU, Name, or Barcode...",
@@ -1586,7 +1617,7 @@
                 set_id_title: "Store Identity Profile", set_lbl_logo: "Enterprise Logo Asset", set_lbl_name: "Enterprise Name", btn_commit_details: "Commit Profile Details",
                 set_curr_title: "Currency Engine", set_lbl_exch: "Exchange Rate (1 USD to KHR)", btn_sync: "Sync", set_lbl_display_curr: "Active Display Currency",
                 khqr_title: "KHQR Gateway Control", khqr_desc: "Manage localized digital payment receiver codes.", btn_add_node: "Add Gateway Node",
-                khqr_form_title: "Configure Merchant Connection", khqr_lbl_bank: "Bank Node", khqr_lbl_merchant: "Merchant Legal Name", khqr_lbl_acct: "Account Number", khqr_lbl_file: "Upload KHQR Image",
+                khqr_form_title: "Configure Merchant Connection", khqr_lbl_bank: "Bank Node", khqr_lbl_merchant: "Merchant Legal Name", khqr_lbl_acct: "Account Number", khqr_lbl_file: "Upload KHQR Image", khqr_lbl_logo: "Bank Logo (optional)",
                 btn_cancel: "Cancel", btn_commit_conn: "Commit Connection", khqr_th_asset: "QR Asset", khqr_th_node: "Clearing Node", khqr_th_target: "Merchant Target", khqr_th_id: "Account ID", khqr_th_ops: "Security Ops",
                 mat_row_capex: "Capital Injection (CAPEX)", mat_row_rev: "Gross Sales Revenue", mat_row_cogs: "Cost of Goods Sold (COGS)", mat_row_opex: "Operating Expenses (OPEX)", mat_row_ebitda: "EBITDA (Net Profit)",
                 // POS translations
@@ -1655,7 +1686,20 @@
                 pos_redeem_insufficient_item: "Not enough points for this item.",
                 cust_view_qr: "View QR", exp_category_new: "+ Add New Category", exp_category_new_lbl: "New Category Name",
                 exp_category_new_ph: "e.g. Equipment Repair", exp_desc_lbl: "Description", exp_desc_ph: "What was this expense for?",
-                pos_customer_qr_not_found: "QR code doesn't match any customer.", pos_customer_selected: "Selected", pos_scan_customer_qr: "Scan customer QR"
+                pos_customer_qr_not_found: "QR code doesn't match any customer.", pos_customer_selected: "Selected", pos_scan_customer_qr: "Scan customer QR",
+                storage_title: "Storage Usage", storage_desc: "See what's using space and how much room you have left.", btn_refresh: "Refresh",
+                storage_used_label: "Used", storage_available_label: "Available", storage_no_quota_api: "This browser doesn't report a storage quota, but usage is shown below.",
+                storage_unlimited_note: "Data is now stored using IndexedDB instead of the old, much smaller localStorage limit — this app can comfortably hold far more images and history than before.", storage_cat_qr: "KHQR QR Images", storage_cat_logo: "Bank Logos",
+                storage_cat_items: "Inventory Item Photos", storage_cat_store_logo: "Store Logo", storage_cat_sales: "Sales History",
+                storage_cat_employee: "Employee & Attendance", storage_cat_customer: "Customer Data", storage_cat_other: "Other Data",
+                storage_total_label: "Total App Data", storage_avg_each: "avg each", storage_no_files: "None uploaded yet",
+                rcpt_logo_size_lbl: "Logo Size",
+                attend_stat_employees: "Employees", attend_stat_days: "Total Days Present", attend_stat_hours: "Total Hours",
+                attend_summary_title: "Attendance Summary", attend_th_days: "Days Present", attend_th_morning_hrs: "Morning Hrs",
+                attend_th_afternoon_hrs: "Afternoon Hrs", attend_th_ot_hrs: "OT Hrs", attend_th_total_hrs: "Total Hrs",
+                attend_th_employee: "Employee",
+                upload_hint_qr: "Any size is fine — auto-resized to 700px", upload_hint_logo: "Any size is fine — auto-resized to 200px", upload_hint_item: "Any size is fine — auto-resized to 600px",
+                upload_hint_store_logo: "Any size is fine — auto-resized to 500px"
             },
             zh: {
                 prod_toy: "重型遥控赛车", prod_gel: "高级环保洗衣凝珠",
@@ -1700,7 +1744,7 @@
                 dash_revenue: "总销售总额", dash_net_yield: "净利润率", dash_active_skus: "活跃内码数", dash_roi: "当前回报率",
                 cost_create_profile: "创建新成本档案", btn_cancel_edit: "取消编辑", form_prod_name: "产品名称",
                 form_category: "商品品类", form_sku: "SKU 编号", form_barcode: "条形码数据", btn_scan: "相机扫描",
-                form_stock: "现有库存量", form_expiry: "到期生存期", form_cost: "单位成本 (基础美金)", form_price: "销售价格 (基础美金)",
+                form_stock: "现有库存量", form_expiry: "到期生存期", form_cost: "单位成本 (基础美金)", form_op_cost_pct: "营运成本百分比", form_price: "销售价格 (基础美金)",
                 form_image: "产品图像资产", form_analysis: "利润空间分析", btn_save_sync: "保存并同步到库存",
                 cost_db_title: "核心成本记录数据库", tbl_asset: "资产图片", tbl_specs: "产品规格明细", tbl_costing: "核算成本",
                 tbl_price: "零售价格", tbl_margin: "毛利率", tbl_actions: "操作管理", search_holder: "搜索SKU、名称或条形码...",
@@ -1729,7 +1773,7 @@
                 set_id_title: "门店核心身份档案", set_lbl_logo: "企业标志标识资产", set_lbl_name: "企业法定名称", btn_commit_details: "提交更新并保存档案",
                 set_curr_title: "货币汇率控制引擎", set_lbl_exch: "基础固定汇率 (1 美元兑瑞尔)", btn_sync: "同步", set_lbl_display_curr: "全局激活显示币种",
                 khqr_title: "KHQR 本地清算网关控制器", khqr_desc: "集中化管控本地化数字支付商户收款二维码。", btn_add_node: "对接新增网关节点",
-                khqr_form_title: "配置商户端收单连接", khqr_lbl_bank: "清算银行节点", khqr_lbl_merchant: "商户法定登记名称", khqr_lbl_acct: "银行结算账号", khqr_lbl_file: "上传商户原生KHQR图档",
+                khqr_form_title: "配置商户端收单连接", khqr_lbl_bank: "清算银行节点", khqr_lbl_merchant: "商户法定登记名称", khqr_lbl_acct: "银行结算账号", khqr_lbl_file: "上传商户原生KHQR图档", khqr_lbl_logo: "银行标志（可选）",
                 btn_cancel: "取消", btn_commit_conn: "提交并激活连接", khqr_th_asset: "商户二维码", khqr_th_node: "清算总行", khqr_th_target: "商户主体", khqr_th_id: "结算卡号", khqr_th_ops: "信息安全操作",
                 mat_row_capex: "资本性注入投入 (CAPEX)", mat_row_rev: "总营业销售收入", mat_row_cogs: "主营业务成本 (COGS)", mat_row_opex: "日常经营性费用 (OPEX)", mat_row_ebitda: "息税折旧摊销前利润 (EBITDA)",
                 pos_tab_cashier: "收银台", pos_tab_history: "销售记录", pos_today: "今日",
@@ -1797,7 +1841,18 @@
                 pos_redeem_insufficient_item: "积分不足，无法兑换此商品。",
                 cust_view_qr: "查看二维码", exp_category_new: "+ 添加新类别", exp_category_new_lbl: "新类别名称",
                 exp_category_new_ph: "例如：设备维修", exp_desc_lbl: "说明", exp_desc_ph: "这笔支出用于什么？",
-                pos_customer_qr_not_found: "此二维码与任何客户都不匹配。", pos_customer_selected: "已选择", pos_scan_customer_qr: "扫描客户二维码"
+                pos_customer_qr_not_found: "此二维码与任何客户都不匹配。", pos_customer_selected: "已选择", pos_scan_customer_qr: "扫描客户二维码",
+                storage_title: "存储用量", storage_desc: "查看空间使用情况以及剩余可用空间。", btn_refresh: "刷新",
+                storage_used_label: "已用", storage_available_label: "可用空间", storage_no_quota_api: "此浏览器不提供存储配额信息，但下方仍显示已用空间。",
+                storage_unlimited_note: "数据现已改用 IndexedDB 存储，不再受限于旧版 localStorage 的较小上限——现在可以从容存储比以往多得多的图片和历史记录。", storage_cat_qr: "KHQR 二维码图片", storage_cat_logo: "银行标志",
+                storage_cat_items: "商品图片", storage_cat_store_logo: "店铺标志", storage_cat_sales: "销售记录",
+                storage_cat_employee: "员工与考勤记录", storage_cat_customer: "客户数据", storage_cat_other: "其他数据",
+                storage_total_label: "应用数据总量", storage_avg_each: "平均每个", storage_no_files: "尚未上传",
+                rcpt_logo_size_lbl: "标志大小",
+                attend_stat_employees: "员工人数", attend_stat_days: "总出勤天数", attend_stat_hours: "总工时",
+                attend_summary_title: "考勤汇总", attend_th_days: "出勤天数", attend_th_morning_hrs: "早班工时",
+                attend_th_afternoon_hrs: "午班工时", attend_th_ot_hrs: "加班工时", attend_th_total_hrs: "总工时",
+                attend_th_employee: "员工"
             },
             km: {
                 prod_toy: "ឡានបញ្ជាប្រណាំងធុនធ្ងន់", prod_gel: "សាប៊ូបោកខោអាវប្រភេទជែលពិសេស",
@@ -1842,7 +1897,7 @@
                 dash_revenue: "ចំណូលសរុប", dash_net_yield: "ផលចំណេញសុទ្ធ", dash_active_skus: "មុខទំនិញសកម្ម", dash_roi: "សន្ទស្សន៍ ROI បច្ចុប្បន្ន",
                 cost_create_profile: "បង្កើតប្រវត្តិថ្លៃដើមថ្មី", btn_cancel_edit: "បោះបង់ការកែប្រែ", form_prod_name: "ឈ្មោះផលិតផល",
                 form_category: "ប្រភេទក្រុមទំនិញ", form_sku: "លេខកូដ SKU", form_barcode: "ទិន្នន័យបារកូដ", btn_scan: "ស្កេនកាមេរ៉ា",
-                form_stock: "បរិមាណស្តុក", form_expiry: "កាលបរិច្ឆេទផុតកំណត់", form_cost: "ថ្លៃដើមឯកតា (USD គោល)", form_price: "តម្លៃលក់ចេញ (USD គោល)",
+                form_stock: "បរិមាណស្តុក", form_expiry: "កាលបរិច្ឆេទផុតកំណត់", form_cost: "ថ្លៃដើមឯកតា (USD គោល)", form_op_cost_pct: "ភាគរយថ្លៃដើមប្រតិបត្តិការ", form_price: "តម្លៃលក់ចេញ (USD គោល)",
                 form_image: "រូបភាពផលិតផល", form_analysis: "ការវិភាគរឹមប្រាក់ចំណេញ", btn_save_sync: "រក្សាទុក និងភ្ជាប់ទៅស្តុក",
                 cost_db_title: "ទិន្នន័យកំណត់ត្រាថ្លៃដើម", tbl_asset: "រូបភាព", tbl_specs: "លក្ខណៈផលិតផល", tbl_costing: "ថ្លៃដើម",
                 tbl_price: "តម្លៃលក់", tbl_margin: "ផលចំណេញ", tbl_actions: "សកម្មភាព", search_holder: "ស្វែងរក SKU ឈ្មោះ ឬបារកូដ...",
@@ -1871,7 +1926,7 @@
                 set_id_title: "ប្រវត្តិអត្តសញ្ញាណហាង", set_lbl_logo: "ឡូហ្គោសហគ្រាស", set_lbl_name: "ឈ្មោះសហគ្រាស", btn_commit_details: "រក្សាទុកព័ត៌មានលម្អិត",
                 set_curr_title: "ម៉ាស៊ីនគ្រប់គ្រងរូបិយប័ណ្ណ", set_lbl_exch: "អត្រាប្តូរប្រាក់ (1 USD ទៅ KHR)", btn_sync: "ធ្វើសមកាលកម្ម", set_lbl_display_curr: "រូបិយប័ណ្ណបង្ហាញសកម្ម",
                 khqr_title: "ការគ្រប់គ្រងច្រកទូទាត់ KHQR", khqr_desc: "គ្រប់គ្រងលេខកូដអ្នកទទួលការទូទាត់ឌីជីថលក្នុងស្រុក។", btn_add_node: "បន្ថែមថ្នាំងច្រកទូទាត់",
-                khqr_form_title: "កំណត់រចនាសម្ព័ន្ធការតភ្ជាប់ពាណិជ្ជករ", khqr_lbl_bank: "ធនាគារទូទាត់", khqr_lbl_merchant: "ឈ្មោះស្របច្បាប់របស់ពាណិជ្ជករ", khqr_lbl_acct: "លេខគណនី", khqr_lbl_file: "ផ្ទុករូបភាព KHQR",
+                khqr_form_title: "កំណត់រចនាសម្ព័ន្ធការតភ្ជាប់ពាណិជ្ជករ", khqr_lbl_bank: "ធនាគារទូទាត់", khqr_lbl_merchant: "ឈ្មោះស្របច្បាប់របស់ពាណិជ្ជករ", khqr_lbl_acct: "លេខគណនី", khqr_lbl_file: "ផ្ទុករូបភាព KHQR", khqr_lbl_logo: "និមិត្តសញ្ញាធនាគារ (ស្រេចចិត្ត)",
                 btn_cancel: "បោះបង់", btn_commit_conn: "អនុវត្តការតភ្ជាប់", khqr_th_asset: "កូដ QR", khqr_th_node: "ធនាគារជម្រះបញ្ជី", khqr_th_target: "គោលដៅពាណិជ្ជករ", khqr_th_id: "លេខសម្គាល់គណនី", khqr_th_ops: "ប្រតិបត្តិការសុវត្ថិភាព",
                 mat_row_capex: "ការចាក់បញ្ចូលដើមទុន (CAPEX)", mat_row_rev: "ចំណូលពីការលក់ដុល", mat_row_cogs: "ថ្លៃដើមទំនិញលក់ (COGS)", mat_row_opex: "ចំណាយប្រតិបត្តិការ (OPEX)", mat_row_ebitda: "EBITDA (ប្រាក់ចំណេញសុទ្ធ)",
                 pos_tab_cashier: "ជំពូកគិតលុយ", pos_tab_history: "ប្រវត្តិការលក់", pos_today: "ថ្ងៃនេះ",
@@ -1939,7 +1994,18 @@
                 pos_redeem_insufficient_item: "ពិន្ទុមិនគ្រប់គ្រាន់សម្រាប់ទំនិញនេះ។",
                 cust_view_qr: "មើល QR", exp_category_new: "+ បញ្ចូលប្រភេទថ្មី", exp_category_new_lbl: "ឈ្មោះប្រភេទថ្មី",
                 exp_category_new_ph: "ឧ. ការជួសជុលឧបករណ៍", exp_desc_lbl: "ការពិពណ៌នា", exp_desc_ph: "ការចំណាយនេះសម្រាប់អ្វី?",
-                pos_customer_qr_not_found: "កូដ QR មិនត្រូវនឹងអតិថិជនណាមួយឡើយ។", pos_customer_selected: "បានជ្រើសរើស", pos_scan_customer_qr: "ស្កេន QR អតិថិជន"
+                pos_customer_qr_not_found: "កូដ QR មិនត្រូវនឹងអតិថិជនណាមួយឡើយ។", pos_customer_selected: "បានជ្រើសរើស", pos_scan_customer_qr: "ស្កេន QR អតិថិជន",
+                storage_title: "ការប្រើប្រាស់ទំហំផ្ទុក", storage_desc: "មើលអ្វីកំពុងប្រើទំហំ និងទំហំនៅសល់ប៉ុន្មាន។", btn_refresh: "ធ្វើឱ្យស្រស់",
+                storage_used_label: "បានប្រើ", storage_available_label: "ទំហំនៅសល់", storage_no_quota_api: "កម្មវិធីរុករកនេះមិនបានរាយការណ៍ពីកូតាទំហំផ្ទុកទេ ប៉ុន្តែការប្រើប្រាស់បង្ហាញខាងក្រោម។",
+                storage_unlimited_note: "ទិន្នន័យឥឡូវនេះត្រូវបានផ្ទុកដោយប្រើ IndexedDB ជំនួសឱ្យដែនកំណត់ localStorage ចាស់ដែលតូចជាង — កម្មវិធីនេះឥឡូវអាចផ្ទុករូបភាព និងប្រវត្តិកាន់តែច្រើនដោយងាយស្រួល។", storage_cat_qr: "រូបភាព QR របស់ KHQR", storage_cat_logo: "និមិត្តសញ្ញាធនាគារ",
+                storage_cat_items: "រូបថតទំនិញក្នុងស្តុក", storage_cat_store_logo: "និមិត្តសញ្ញាហាង", storage_cat_sales: "ប្រវត្តិការលក់",
+                storage_cat_employee: "បុគ្គលិក និងវត្តមាន", storage_cat_customer: "ទិន្នន័យអតិថិជន", storage_cat_other: "ទិន្នន័យផ្សេងទៀត",
+                storage_total_label: "ទិន្នន័យកម្មវិធីសរុប", storage_avg_each: "ជាមធ្យមក្នុងមួយ", storage_no_files: "មិនទាន់បានផ្ទុកឡើងទេ",
+                rcpt_logo_size_lbl: "ទំហំនិមិត្តសញ្ញា",
+                attend_stat_employees: "ចំនួនបុគ្គលិក", attend_stat_days: "ចំនួនថ្ងៃមកធ្វើការសរុប", attend_stat_hours: "ម៉ោងសរុប",
+                attend_summary_title: "សេចក្ដីសង្ខេបវត្តមាន", attend_th_days: "ចំនួនថ្ងៃមកធ្វើការ", attend_th_morning_hrs: "ម៉ោងព្រឹក",
+                attend_th_afternoon_hrs: "ម៉ោងរសៀល", attend_th_ot_hrs: "ម៉ោង OT", attend_th_total_hrs: "ម៉ោងសរុប",
+                attend_th_employee: "បុគ្គលិក"
             }
         };
 
@@ -2557,8 +2623,60 @@
         }
 
         // --- LOCAL STORAGE PERSISTENCE ENGINE ---
-        function saveSystemData() {
-            const appState = {
+        // ============================================================
+        // ── STORAGE ENGINE (IndexedDB) ────────────────────────────────
+        // ============================================================
+        // localStorage caps out around 5-10MB per site — once real photos (KHQR bank
+        // screenshots, product images, a store logo) accumulate, that fills up fast and
+        // every save silently fails once the ceiling is hit. IndexedDB has no such small
+        // fixed limit — its quota is normally a share of the device's free disk space
+        // (commonly hundreds of MB up to several GB), which is the closest a browser-only
+        // app without its own server can get to "unlimited." This app keeps its full
+        // state in memory at all times (the `let` variables throughout this file), so
+        // IndexedDB is used purely as the persistence layer underneath: saves fire in the
+        // background the same way `saveSystemData()` was always called everywhere (no
+        // caller needs to change), and the one-time load at startup is awaited before the
+        // rest of the app initializes.
+        const IDB_NAME    = 'jc_store_idb';
+        const IDB_VERSION = 1;
+        const IDB_STORE   = 'kv';
+        let _idbInstance  = null;
+
+        function openIDB() {
+            return new Promise((resolve, reject) => {
+                if (_idbInstance) { resolve(_idbInstance); return; }
+                if (!window.indexedDB) { reject(new Error('IndexedDB is not supported in this browser.')); return; }
+                const req = indexedDB.open(IDB_NAME, IDB_VERSION);
+                req.onupgradeneeded = (e) => {
+                    const db = e.target.result;
+                    if (!db.objectStoreNames.contains(IDB_STORE)) db.createObjectStore(IDB_STORE);
+                };
+                req.onsuccess = (e) => { _idbInstance = e.target.result; resolve(_idbInstance); };
+                req.onerror   = (e) => reject(e.target.error);
+            });
+        }
+        function idbGet(key) {
+            return openIDB().then(db => new Promise((resolve, reject) => {
+                const tx  = db.transaction(IDB_STORE, 'readonly');
+                const req = tx.objectStore(IDB_STORE).get(key);
+                req.onsuccess = () => resolve(req.result);
+                req.onerror   = () => reject(req.error);
+            }));
+        }
+        function idbSet(key, value) {
+            return openIDB().then(db => new Promise((resolve, reject) => {
+                const tx = db.transaction(IDB_STORE, 'readwrite');
+                tx.objectStore(IDB_STORE).put(value, key);
+                tx.oncomplete = () => resolve(true);
+                tx.onerror    = () => reject(tx.error);
+            }));
+        }
+
+        // Builds the single object that represents the app's entire persisted state.
+        // Shared by saveSystemData() (writes it) and the Storage Usage panel (measures
+        // it), so the reported size always matches exactly what actually gets saved.
+        function buildAppStateBlob() {
+            return {
                 inventoryData, khqrData, matrixData, itemCategories, timeFormat, currentLang,
                 customTranslations,
                 userAccounts,
@@ -2581,44 +2699,176 @@
                     name: document.getElementById('store_name').value || 'JC STORE'
                 }
             };
-            // Browsers cap localStorage at roughly 5-10MB per site. This app stores
-            // uploaded images as base64 text (store logo, employee photos, and — the
-            // most common culprit — real KHQR bank-screenshot photos), so total usage
-            // can creep up over many sessions until a save silently throws here. Left
-            // uncaught, that exception would abort execution mid-function for every
-            // caller — e.g. an "Add Merchant" flow would push the new entry into memory
-            // but then die right here, before the table ever re-renders or the form
-            // closes, making it look like the button simply didn't do anything (and the
-            // entry would vanish for good on the next reload, since it was never
-            // actually persisted). Catching it here means every caller downstream still
-            // runs, and the person gets a clear, actionable warning instead of silence.
-            try {
-                localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
-                return true;
-            } catch (err) {
+        }
+
+        function formatBytes(bytes) {
+            if (!bytes || bytes <= 0) return '0 B';
+            if (bytes < 1024) return bytes + ' B';
+            if (bytes < 1024*1024) return (bytes/1024).toFixed(1) + ' KB';
+            if (bytes < 1024*1024*1024) return (bytes/1024/1024).toFixed(2) + ' MB';
+            return (bytes/1024/1024/1024).toFixed(2) + ' GB';
+        }
+
+        // Byte-accurate size of a value once JSON-serialized, via Blob (which the browser
+        // computes for us) rather than approximating from string .length — that would
+        // under-count anything with multi-byte UTF-8 characters, like Khmer or Chinese text.
+        function byteSize(value) {
+            if (value === undefined || value === null || value === '') return 0;
+            try { return new Blob([JSON.stringify(value)]).size; } catch(e) { return 0; }
+        }
+
+        // Storage Usage panel (Settings tab) — measures the SAME in-memory data that
+        // buildAppStateBlob() actually persists, broken down by what's using the space,
+        // plus the browser's own real usage/quota reading when it's available. This is
+        // what answers "where can I check the storage" and "how big are my QR/logo/item
+        // images" — practical visibility that didn't exist before.
+        async function renderStorageUsagePanel() {
+            const el = document.getElementById('storageUsageContent');
+            if (!el) return;
+            el.innerHTML = `<p class="text-xs text-slate-400 text-center py-4">Loading…</p>`;
+
+            // Only count actual stored image data (base64 "data:" URIs) — an external
+            // reference link (a placeholder service, or a hosted photo URL like the
+            // sample Unsplash images this app ships with) is just a short string, not
+            // real local storage weight, so it shouldn't be counted as if it were.
+            const isStoredImage = (v) => typeof v === 'string' && v.startsWith('data:');
+
+            const qrTotal    = khqrData.reduce((s,k) => s + (isStoredImage(k.qr) ? byteSize(k.qr) : 0), 0);
+            const qrCount    = khqrData.filter(k => isStoredImage(k.qr)).length;
+            const logoTotal  = khqrData.reduce((s,k) => s + (isStoredImage(k.logo) ? byteSize(k.logo) : 0), 0);
+            const logoCount  = khqrData.filter(k => isStoredImage(k.logo)).length;
+            const itemsTotal = inventoryData.reduce((s,i) => s + (isStoredImage(i.img) ? byteSize(i.img) : 0), 0);
+            const itemsCount = inventoryData.filter(i => isStoredImage(i.img)).length;
+            const storeLogoTotal = isStoredImage(currentStoreLogo) ? byteSize(currentStoreLogo) : 0;
+            const salesTotal    = byteSize(posSalesLog);
+            const employeeTotal = byteSize(employeeData) + byteSize(attendanceLog);
+            const customerTotal = byteSize(customerData);
+
+            const grandTotal = byteSize(buildAppStateBlob());
+            const categorizedTotal = qrTotal + logoTotal + itemsTotal + storeLogoTotal + salesTotal + employeeTotal + customerTotal;
+            const otherTotal = Math.max(0, grandTotal - categorizedTotal);
+
+            const categories = [
+                { label: t('storage_cat_qr'),        size: qrTotal,        count: qrCount,   icon: 'fa-qrcode',            color: 'blue' },
+                { label: t('storage_cat_logo'),      size: logoTotal,      count: logoCount, icon: 'fa-building-columns',  color: 'violet' },
+                { label: t('storage_cat_items'),     size: itemsTotal,     count: itemsCount,icon: 'fa-image',             color: 'emerald' },
+                { label: t('storage_cat_store_logo'),size: storeLogoTotal, count: storeLogoTotal>0?1:0, icon: 'fa-store',  color: 'amber' },
+                { label: t('storage_cat_sales'),     size: salesTotal,     count: posSalesLog.length, icon: 'fa-receipt', color: 'rose' },
+                { label: t('storage_cat_employee'),  size: employeeTotal,  count: employeeData.length + attendanceLog.length, icon: 'fa-users', color: 'cyan' },
+                { label: t('storage_cat_customer'),  size: customerTotal,  count: customerData.length, icon: 'fa-address-book', color: 'indigo' },
+                { label: t('storage_cat_other'),     size: otherTotal,     count: null, icon: 'fa-ellipsis', color: 'slate' },
+            ].sort((a,b) => b.size - a.size);
+
+            const maxSize = Math.max(1, ...categories.map(c => c.size));
+
+            // Real browser-reported usage/quota when available (Chrome, Edge, Firefox,
+            // Safari 15.2+) — this is what actually proves the new quota is dramatically
+            // larger than the old localStorage ceiling, not just a claim.
+            let usageHtml = '';
+            if (navigator.storage && navigator.storage.estimate) {
+                try {
+                    const est = await navigator.storage.estimate();
+                    const pct = est.quota > 0 ? Math.min(100, (est.usage / est.quota) * 100) : 0;
+                    usageHtml = `
+                        <div class="mb-5">
+                            <div class="flex justify-between text-xs font-bold mb-1.5">
+                                <span class="text-slate-600 dark:text-slate-300">${t('storage_used_label')}: ${formatBytes(est.usage)}</span>
+                                <span class="text-slate-400">${t('storage_available_label')}: ${formatBytes(est.quota)}</span>
+                            </div>
+                            <div class="h-2.5 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden">
+                                <div class="h-full bg-gradient-to-r from-indigo-500 to-blue-400 rounded-full transition-all" style="width:${pct}%"></div>
+                            </div>
+                            <p class="text-[10px] text-slate-400 mt-1">${pct.toFixed(2)}% of available browser storage used</p>
+                        </div>`;
+                } catch(e) {
+                    usageHtml = `<p class="text-xs text-amber-600 mb-4"><i class="fas fa-triangle-exclamation mr-1"></i>${t('storage_no_quota_api')}</p>`;
+                }
+            } else {
+                usageHtml = `<p class="text-xs text-amber-600 mb-4"><i class="fas fa-triangle-exclamation mr-1"></i>${t('storage_no_quota_api')}</p>`;
+            }
+
+            el.innerHTML = `
+                ${usageHtml}
+                <div class="space-y-3">
+                    ${categories.map(c => `
+                        <div>
+                            <div class="flex items-center justify-between text-xs mb-1 gap-2">
+                                <span class="font-bold text-slate-700 dark:text-slate-300 flex items-center gap-1.5 min-w-0">
+                                    <i class="fas ${c.icon} text-${c.color}-500 w-4 text-center flex-shrink-0"></i>
+                                    <span class="truncate">${c.label}</span>
+                                    ${c.count !== null ? `<span class="text-slate-400 font-normal flex-shrink-0">(${c.count})</span>` : ''}
+                                </span>
+                                <span class="font-mono font-bold text-slate-600 dark:text-slate-400 flex-shrink-0 text-right">
+                                    ${c.size > 0 ? formatBytes(c.size) : `<span class="text-slate-300 dark:text-slate-600 font-normal">${t('storage_no_files')}</span>`}
+                                    ${c.count > 1 ? `<span class="text-slate-400 font-normal"> · ${formatBytes(c.size / c.count)} ${t('storage_avg_each')}</span>` : ''}
+                                </span>
+                            </div>
+                            <div class="h-1.5 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden">
+                                <div class="h-full bg-${c.color}-400 rounded-full" style="width:${(c.size/maxSize*100)}%"></div>
+                            </div>
+                        </div>`).join('')}
+                </div>
+                <div class="flex justify-between items-center mt-4 pt-3 border-t dark:border-slate-700">
+                    <span class="text-sm font-black text-slate-800 dark:text-white">${t('storage_total_label')}</span>
+                    <span class="text-sm font-black text-indigo-600 dark:text-indigo-400">${formatBytes(grandTotal)}</span>
+                </div>
+                <p class="text-[10px] text-slate-400 mt-3 italic"><i class="fas fa-circle-info mr-1"></i>${t('storage_unlimited_note')}</p>`;
+        }
+
+        // Tracks the most recent save so a critical flow (like a full backup restore,
+        // right before reloading the page) can explicitly wait for it to actually land
+        // instead of just hoping a fixed delay was long enough.
+        let _pendingSave = Promise.resolve();
+
+        function saveSystemData() {
+            const appState = buildAppStateBlob();
+            _pendingSave = idbSet(STORAGE_KEY, appState).catch(err => {
                 console.error('saveSystemData failed:', err);
-                const isQuota = err && (err.name === 'QuotaExceededError' || err.code === 22 || err.code === 1014);
+                const isQuota = err && (err.name === 'QuotaExceededError' || err.code === 22);
                 showToast(
                     isQuota
                         ? 'Storage is full — this change was NOT saved permanently. Remove old data (e.g. export & clear old sales history) or use a smaller image, then try again.'
-                        : 'Could not save changes. Please try again.',
+                        : 'Could not save changes: ' + (err && err.message ? err.message : 'unknown error'),
                     'error'
                 );
-                return false;
-            }
+            });
+            return true;
         }
 
-        function loadSystemData() {
+        async function loadSystemData() {
             // Check Theme Preference First
             if (localStorage.getItem('theme_pref') === 'dark') {
                 document.documentElement.classList.add('dark');
                 document.getElementById('themeIcon').classList.replace('fa-moon', 'fa-sun');
             }
 
-            const saved = localStorage.getItem(STORAGE_KEY);
-            if(saved) {
+            let parsed = null;
+            try {
+                parsed = await idbGet(STORAGE_KEY);
+                // One-time migration: older versions of this app stored everything in
+                // localStorage under this same key. If IndexedDB is empty but that old
+                // data is still sitting there, adopt it once, write it into IndexedDB,
+                // then clear the old copy — nothing else in the app uses that key
+                // afterward, and this frees up the localStorage quota it was consuming.
+                if (!parsed) {
+                    const legacy = localStorage.getItem(STORAGE_KEY);
+                    if (legacy) {
+                        try {
+                            parsed = JSON.parse(legacy);
+                            await idbSet(STORAGE_KEY, parsed);
+                            localStorage.removeItem(STORAGE_KEY);
+                            console.log('Migrated existing data from localStorage to IndexedDB.');
+                        } catch (e) { console.error('Legacy data migration failed:', e); }
+                    }
+                }
+            } catch (err) {
+                console.error('Could not open IndexedDB, falling back to localStorage for this session:', err);
+                const legacy = localStorage.getItem(STORAGE_KEY);
+                if (legacy) { try { parsed = JSON.parse(legacy); } catch(e) {} }
+            }
+
+            if(parsed) {
                 try {
-                    const parsed = JSON.parse(saved);
                     if(parsed.inventoryData) inventoryData = parsed.inventoryData;
                     if(parsed.khqrData) khqrData = parsed.khqrData;
                     if(parsed.matrixData) matrixData = parsed.matrixData;
@@ -2703,7 +2953,7 @@
                     const loyRedeemEl = document.getElementById('loyRedeemRateInput');
                     if (loyEarnEl)   loyEarnEl.value   = loyaltySettings.earnPerDollar;
                     if (loyRedeemEl) loyRedeemEl.value = loyaltySettings.redeemPerDollar;
-                } catch(e) { console.error("Corrupted local storage data structure", e); }
+                } catch(e) { console.error("Corrupted stored data structure", e); }
             }
             document.getElementById('timeFormatBadge').innerText = timeFormat.toUpperCase();
             setLanguage(currentLang);
@@ -2985,7 +3235,60 @@
         }
 
         // --- RESTORED OPERATIONAL SETTINGS FUNCTIONS ---
-        function saveStoreProfile(e) { e.preventDefault(); const name = document.getElementById('store_name').value; const logoInput = document.getElementById('store_logo_input'); if(logoInput.files && logoInput.files[0]) { const reader = new FileReader(); reader.onload = function(evt) { currentStoreLogo = evt.target.result; commitProfileVisuals(name); }; reader.readAsDataURL(logoInput.files[0]); } else { commitProfileVisuals(name); } }
+
+        // Resizes and re-encodes an uploaded image client-side before it's stored as
+        // base64 text. localStorage caps out around 5-10MB total for the whole site, but
+        // a real photo — a phone screenshot of a bank QR code, a product photo, a
+        // full-resolution logo — routinely runs 1-5MB *each* as originally uploaded.
+        // A handful of those uploads alone can exhaust the entire budget, which is what
+        // was silently breaking KHQR merchant saves (and anything else that tried to
+        // save afterward, since they all share the same quota) once storage filled up.
+        // Resizing to a sensible max dimension and re-encoding as JPEG typically shrinks
+        // each image by 90-98%, so the same quota now comfortably holds many more
+        // uploads — several KHQR merchants, a full inventory of product photos, etc.
+        function compressImageFile(file, maxDimension = 800, quality = 0.8) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onerror = () => reject(new Error('Could not read the file.'));
+                reader.onload = (e) => {
+                    const img = new Image();
+                    img.onerror = () => reject(new Error('Could not load the image.'));
+                    img.onload = () => {
+                        let { width, height } = img;
+                        if (width > maxDimension || height > maxDimension) {
+                            if (width > height) { height = Math.round(height * maxDimension / width); width = maxDimension; }
+                            else { width = Math.round(width * maxDimension / height); height = maxDimension; }
+                        }
+                        const canvas = document.createElement('canvas');
+                        canvas.width = width; canvas.height = height;
+                        const ctx = canvas.getContext('2d');
+                        // JPEG has no transparency — fill white first so a transparent
+                        // PNG (e.g. a logo) doesn't turn black on that canvas.
+                        ctx.fillStyle = '#ffffff';
+                        ctx.fillRect(0, 0, width, height);
+                        ctx.drawImage(img, 0, 0, width, height);
+                        resolve(canvas.toDataURL('image/jpeg', quality));
+                    };
+                    img.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+
+        async function saveStoreProfile(e) {
+            e.preventDefault();
+            const name = document.getElementById('store_name').value;
+            const logoInput = document.getElementById('store_logo_input');
+            if (logoInput.files && logoInput.files[0]) {
+                try {
+                    currentStoreLogo = await compressImageFile(logoInput.files[0], 500, 0.8);
+                } catch (err) {
+                    showToast('Could not process that logo image. Try a different file.', 'error');
+                    return;
+                }
+            }
+            commitProfileVisuals(name);
+        }
         function commitProfileVisuals(name) { document.getElementById('sidebarLogo').src = currentStoreLogo; document.getElementById('settingsLogoPreview').src = currentStoreLogo; document.getElementById('bpStoreName').innerText = name; saveSystemData(); showToast('Store profile saved!', 'success'); }
         function deleteStoreLogo() { 
             const m = document.getElementById('confirmModal');
@@ -3004,6 +3307,18 @@
         }
         
         function getRate() { return parseFloat(document.getElementById('exchangeRateInput').value) || 4100; }
+
+        // Formats a USD-denominated amount for on-screen display according to the
+        // currently active display currency (the "Base" toggle in Settings/navbar).
+        // Everything in this app is calculated and stored internally in USD — this is
+        // purely how that number gets SHOWN, so a switch to KHR only ever needs to
+        // change what this function returns, not the underlying math anywhere else.
+        function formatCurrency(usdValue) {
+            if (activeCurrency === 'KHR') {
+                return Math.round((usdValue || 0) * getRate()).toLocaleString() + ' ៛';
+            }
+            return '$' + (usdValue || 0).toFixed(2);
+        }
         function syncExchangeRate() {
             const rate = Math.floor(Math.random() * (4150 - 4050 + 1) + 4050);
             document.getElementById('exchangeRateInput').value = rate;
@@ -3076,7 +3391,16 @@
                 document.querySelectorAll('.curr-btn-usd').forEach(el => el.className = 'curr-btn-usd ' + inactiveCls);
             }
             saveSystemData();
-            if(!skipRender) renderTables(); 
+            if(!skipRender) renderTables();
+            // The POS product grid and cart totals are built once per tab-switch, not
+            // re-rendered automatically on every state change — without this, switching
+            // currency while already sitting on the POS tab left it showing stale prices
+            // until the cashier navigated away and back.
+            const posEl = document.getElementById('pos');
+            if (posEl && posEl.classList.contains('active')) {
+                renderPOSProducts();
+                updatePOSCart();
+            }
         }
 
         function simulateBarcodeScan() { document.getElementById('c_barcode').value = "884" + Math.floor(100000000 + Math.random() * 900000000); }
@@ -3105,13 +3429,28 @@
         function calcMargin() { 
             const cost = parseFloat(document.getElementById('c_cost').value) || 0; 
             const price = parseFloat(document.getElementById('c_price').value) || 0; 
+            const opCostPct = parseFloat(document.getElementById('c_op_cost_pct')?.value) || 0;
+            // Operating Cost % represents overhead (rent, utilities, labor share, etc.)
+            // allocated per unit — added on top of the raw unit cost to get the true
+            // "landed" cost, which is what should actually be compared against the
+            // selling price to know the REAL margin, not just a naive product-cost margin.
+            const effectiveCost = cost * (1 + opCostPct / 100);
             const l = document.getElementById('c_margin');
             const warn = document.getElementById('c_margin_warn');
+            const effCostEl = document.getElementById('c_effective_cost');
             const btn = document.getElementById('btnSubmitCosting');
             
             if (cost > 0 && price > 0) { 
-                const m = ((price - cost) / price) * 100; 
+                const m = ((price - effectiveCost) / price) * 100; 
                 l.innerText = m.toFixed(2) + '%'; 
+                if (effCostEl) {
+                    if (opCostPct > 0) {
+                        effCostEl.textContent = `Effective cost: $${effectiveCost.toFixed(2)} (incl. ${opCostPct}% operating cost)`;
+                        effCostEl.classList.remove('hidden');
+                    } else {
+                        effCostEl.classList.add('hidden');
+                    }
+                }
                 if (m > 0) {
                     l.className = 'font-black text-2xl text-emerald-600';
                     btn.className = 'bg-emerald-600 text-white font-bold text-sm px-6 py-3 rounded-lg shadow-md hover:bg-emerald-700 transition flex items-center';
@@ -3125,6 +3464,7 @@
                 l.innerText = '0.00%'; 
                 l.className = 'font-black text-2xl text-slate-400';
                 warn.classList.add('hidden');
+                if (effCostEl) effCostEl.classList.add('hidden');
                 btn.className = 'bg-emerald-600 text-white font-bold text-sm px-6 py-3 rounded-lg shadow-md hover:bg-emerald-700 transition flex items-center';
             } 
         }
@@ -3143,7 +3483,7 @@
             calcMargin(); 
         }
 
-        function syncToInventory(e) {
+        async function syncToInventory(e) {
             e.preventDefault();
             const idx = parseInt(document.getElementById('c_edit_index').value);
             const sku     = document.getElementById('c_sku').value.trim();
@@ -3195,6 +3535,7 @@
                 qty: parseInt(document.getElementById('c_qty').value) || 0,
                 expiry: document.getElementById('c_expiry').value,
                 cost: parseFloat(document.getElementById('c_cost').value) || 0,
+                opCostPct: parseFloat(document.getElementById('c_op_cost_pct')?.value) || 0,
                 price: parseFloat(document.getElementById('c_price').value) || 0,
                 redeemPoints: parseInt(document.getElementById('c_redeem_points').value) || 0,
                 img: 'https://via.placeholder.com/150' 
@@ -3202,16 +3543,20 @@
 
             const fileInput = document.getElementById('c_image');
             if (fileInput.files && fileInput.files[0]) {
-                const reader = new FileReader();
-                reader.onload = function(evt) {
-                    item.img = evt.target.result;
-                    processSaveItem(item, idx);
-                };
-                reader.readAsDataURL(fileInput.files[0]);
+                try {
+                    // Compressed for the same reason as the KHQR and logo uploads above —
+                    // a full-resolution product photo adds up fast across many inventory
+                    // items and is one of the biggest contributors to hitting the shared
+                    // storage quota over time.
+                    item.img = await compressImageFile(fileInput.files[0], 600, 0.75);
+                } catch (err) {
+                    showToast('Could not process that image. Try a different file.', 'error');
+                    return;
+                }
             } else {
                 if (idx >= 0 && inventoryData[idx].img) item.img = inventoryData[idx].img;
-                processSaveItem(item, idx);
             }
+            processSaveItem(item, idx);
         }
 
         function processSaveItem(item, idx) {
@@ -3236,6 +3581,7 @@
             document.getElementById('c_qty').value = item.qty;
             document.getElementById('c_expiry').value = item.expiry;
             document.getElementById('c_cost').value = item.cost;
+            document.getElementById('c_op_cost_pct').value = item.opCostPct || 0;
             document.getElementById('c_price').value = item.price;
             document.getElementById('c_redeem_points').value = item.redeemPoints || 0;
             document.getElementById('c_edit_index').value = idx;
@@ -3365,6 +3711,8 @@
                 document.getElementById('k_merchant').value = '';
                 document.getElementById('k_account').value = '';
                 document.getElementById('khqr_idx').value = '-1';
+                const logoInput = document.getElementById('k_bank_logo');
+                if (logoInput) logoInput.value = '';
                 const titleEl = document.getElementById('khqrFormTitle');
                 if (titleEl) titleEl.innerHTML = `<span data-i18n="khqr_form_title">${t('khqr_form_title')}</span>`;
             }
@@ -3383,12 +3731,14 @@
             document.getElementById('khqr_idx').value   = idx;
             const fileInput = document.getElementById('k_qr_image');
             if (fileInput) fileInput.value = ''; // leave blank = keep existing QR image unless a new one is chosen
+            const logoInput = document.getElementById('k_bank_logo');
+            if (logoInput) logoInput.value = ''; // leave blank = keep existing bank logo unless a new one is chosen
             const titleEl = document.getElementById('khqrFormTitle');
             if (titleEl) titleEl.innerHTML = `<span data-i18n="khqr_edit_title">${t('khqr_edit_title')}</span>`;
             formWrapper.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         }
         
-        function saveKhqrAccount() { 
+        async function saveKhqrAccount() { 
             const idx = parseInt(document.getElementById('khqr_idx').value);
             const bank     = document.getElementById('k_bank').value.trim();
             const merchant = document.getElementById('k_merchant').value.trim();
@@ -3397,36 +3747,48 @@
                 showToast('Bank Node and Merchant Legal Name are required.', 'warning');
                 return;
             }
-            const data = { bank, merchant, account, qr: 'https://via.placeholder.com/100x100?text=QR+CODE' };
+            const data = { bank, merchant, account, qr: 'https://via.placeholder.com/100x100?text=QR+CODE', logo: '' };
 
             const fileInput = document.getElementById('k_qr_image');
             if (fileInput.files && fileInput.files[0]) {
-                const reader = new FileReader();
-                reader.onload = function(evt) {
-                    data.qr = evt.target.result;
-                    if(idx >= 0) khqrData[idx] = data; else khqrData.push(data);
-                    saveSystemData(); renderKhqrTable(); toggleKhqrForm();
-                    showToast(idx >= 0 ? 'KHQR connection updated!' : 'KHQR connection added!', 'success');
-                };
-                // Without this, a file that fails to read (corrupted, unsupported, or
-                // just unlucky) leaves onload never firing — no save, no error, no
-                // feedback at all. Now it tells the person clearly instead of going silent.
-                reader.onerror = function() {
+                try {
+                    // Compressed rather than stored raw — a real bank-app screenshot can
+                    // easily be 1-3MB; resized and re-encoded it typically lands under
+                    // 100KB while staying sharp enough to scan, which is what actually
+                    // lets several merchants fit in the shared storage quota at once.
+                    data.qr = await compressImageFile(fileInput.files[0], 700, 0.85);
+                } catch (err) {
                     showToast('Could not read that image file. Try a different image.', 'error');
-                };
-                reader.readAsDataURL(fileInput.files[0]);
-            } else {
-                if(idx >= 0) data.qr = khqrData[idx].qr;
-                if(idx >= 0) khqrData[idx] = data; else khqrData.push(data);
-                saveSystemData(); renderKhqrTable(); toggleKhqrForm();
-                showToast(idx >= 0 ? 'KHQR connection updated!' : 'KHQR connection added!', 'success');
+                    return;
+                }
+            } else if (idx >= 0) {
+                data.qr = khqrData[idx].qr;
             }
+
+            const logoInput = document.getElementById('k_bank_logo');
+            if (logoInput && logoInput.files && logoInput.files[0]) {
+                try {
+                    // Logos are simple graphics, not detailed photos — a small size still
+                    // reads perfectly clearly at the icon sizes this is displayed at.
+                    data.logo = await compressImageFile(logoInput.files[0], 200, 0.85);
+                } catch (err) {
+                    showToast('Could not read that logo image. Try a different image.', 'error');
+                    return;
+                }
+            } else if (idx >= 0) {
+                data.logo = khqrData[idx].logo || '';
+            }
+
+            if (idx >= 0) khqrData[idx] = data; else khqrData.push(data);
+            saveSystemData(); renderKhqrTable(); toggleKhqrForm(); renderStorageUsagePanel();
+            showToast(idx >= 0 ? 'KHQR connection updated!' : 'KHQR connection added!', 'success');
         }
         
         function deleteKhqrAccount(idx) {
             khqrData.splice(idx, 1);
             saveSystemData();
             renderKhqrTable();
+            renderStorageUsagePanel();
             showToast('KHQR connection removed.', 'info');
         }
 
@@ -3440,7 +3802,12 @@
             tbody.innerHTML = khqrData.map((k, i) => `
                 <tr class="hover:bg-slate-50 dark:hover:bg-slate-700 transition">
                     <td class="p-4"><img src="${k.qr}" class="w-12 h-12 rounded object-cover shadow-sm cursor-pointer" onclick="showImage('${k.qr}')"></td>
-                    <td class="p-4 font-bold text-slate-800 dark:text-slate-200">${k.bank}</td>
+                    <td class="p-4 font-bold text-slate-800 dark:text-slate-200">
+                        <div class="flex items-center gap-2">
+                            <span class="w-6 h-6 rounded-full overflow-hidden flex-shrink-0 border border-slate-200 dark:border-slate-600">${khqrIconHTML(k)}</span>
+                            ${k.bank}
+                        </div>
+                    </td>
                     <td class="p-4 text-slate-600 dark:text-slate-400 font-medium">${k.merchant}</td>
                     <td class="p-4 font-mono text-slate-600 dark:text-slate-400">${k.account}</td>
                     <td class="p-4 text-center">
@@ -3950,6 +4317,7 @@
             showCashier:    true, showCustomer: true,
             showLogo:       true,
             showStoreName:  true,    // show the store name on the receipt header
+            logoSize:       40,      // logo display size on the receipt, in pixels
             vatEnabled:     false,
             vatRate:        10,
             showVAT:        true,
@@ -4379,7 +4747,7 @@
 
             grid.innerHTML = filtered.map(item => {
                 const name  = i18nDictionary[currentLang][item.name] || item.name;
-                const price = activeCurrency === 'KHR' ? `${Math.round(item.price * getRate()).toLocaleString()} ៛` : `$${item.price.toFixed(2)}`;
+                const price = formatCurrency(item.price);
                 const outOfStock = item.qty <= 0;
                 return `<button onclick="${outOfStock ? '' : `addToPOSCart('${item.sku}')`}"
                     class="pos-product-card relative flex flex-col bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-md hover:border-emerald-400 transition text-left overflow-hidden ${outOfStock ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer active:scale-95'}">
@@ -4740,7 +5108,7 @@
                     const discPct   = c.itemDiscount || 0;
                     const basePrice = c.unitPrice * c.qty;
                     const discAmt   = basePrice * (discPct / 100);
-                    const lineTotal = (basePrice - discAmt).toFixed(2);
+                    const lineTotal = basePrice - discAmt;
                     return `<div class="flex flex-col px-4 py-2 border-b dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700/50 transition ${c.isRedeemed ? 'bg-amber-50/50 dark:bg-amber-900/10' : ''}">
                         <div class="flex items-center space-x-3">
                             <img src="${c.img}" class="w-10 h-10 rounded-lg object-cover flex-shrink-0 border border-slate-200 dark:border-slate-600">
@@ -4749,7 +5117,7 @@
                                     ${name}
                                     ${c.isRedeemed ? `<span class="text-[8px] bg-amber-500 text-white px-1.5 py-0.5 rounded-full font-black flex-shrink-0">${t('pos_redeemed_item_badge')}</span>` : ''}
                                 </p>
-                                <p class="text-[11px] text-slate-500 dark:text-slate-400">${c.isRedeemed ? `<i class="fas fa-star text-amber-400"></i> ${c.redeemPointsCost} ${t('pos_points_suffix')}` : `$${c.unitPrice.toFixed(2)} each`}</p>
+                                <p class="text-[11px] text-slate-500 dark:text-slate-400">${c.isRedeemed ? `<i class="fas fa-star text-amber-400"></i> ${c.redeemPointsCost} ${t('pos_points_suffix')}` : `${formatCurrency(c.unitPrice)} each`}</p>
                             </div>
                             ${c.isRedeemed ? `
                             <div class="flex-shrink-0 text-xs font-black text-slate-400 px-2">×1</div>
@@ -4762,8 +5130,8 @@
                                 <button onclick="setPOSCartQty('${c.sku}', ${c.qty + 1})" class="w-6 h-6 rounded-full bg-slate-200 dark:bg-slate-600 text-slate-700 dark:text-slate-200 font-bold text-xs hover:bg-emerald-100 hover:text-emerald-700 transition flex items-center justify-center">+</button>
                             </div>`}
                             <div class="text-right flex-shrink-0 ml-2 min-w-[52px]">
-                                <p class="text-xs font-black ${c.isRedeemed ? 'text-amber-500' : 'text-slate-800 dark:text-slate-200'}">$${lineTotal}</p>
-                                ${discPct > 0 ? `<p class="text-[9px] text-red-400 line-through">$${basePrice.toFixed(2)}</p>` : ''}
+                                <p class="text-xs font-black ${c.isRedeemed ? 'text-amber-500' : 'text-slate-800 dark:text-slate-200'}">${formatCurrency(lineTotal)}</p>
+                                ${discPct > 0 ? `<p class="text-[9px] text-red-400 line-through">${formatCurrency(basePrice)}</p>` : ''}
                                 <button onclick="removePOSCartItem('${c.sku}')" class="text-[10px] text-red-400 hover:text-red-600 transition">${t('pos_remove')}</button>
                             </div>
                         </div>
@@ -4776,7 +5144,7 @@
                                     class="w-12 text-center text-xs font-black bg-white dark:bg-slate-700 dark:text-white py-0.5 focus:outline-none focus:ring-1 focus:ring-emerald-400 border-none">
                                 <span class="text-[10px] text-slate-500 dark:text-slate-400 px-1.5 bg-slate-50 dark:bg-slate-800 font-bold">%</span>
                             </div>
-                            ${discPct > 0 ? `<span class="text-[10px] font-bold text-red-500">-$${discAmt.toFixed(2)}</span>` : ''}
+                            ${discPct > 0 ? `<span class="text-[10px] font-bold text-red-500">-${formatCurrency(discAmt)}</span>` : ''}
                         </div>` : ''}
                     </div>`;
                 }).join('');
@@ -4795,17 +5163,17 @@
             const btn     = document.getElementById('posChargeBtnLabel');
             const badge   = document.getElementById('posCartCount');
 
-            if (sub)      sub.textContent      = `$${subtotal.toFixed(2)}`;
-            if (discAmtEl) discAmtEl.textContent = `-$${discount.toFixed(2)}`;
+            if (sub)      sub.textContent      = formatCurrency(subtotal);
+            if (discAmtEl) discAmtEl.textContent = '-' + formatCurrency(discount);
             if (discRow)  discRow.style.display  = discount > 0 ? 'flex' : 'none';
             const discLbl = document.getElementById('posDiscountLabel');
             if (discLbl) {
                 discLbl.textContent = posDiscount.type === 'pct'
                     ? `${t('pos_discount')} ${posDiscount.value || 0}%`
-                    : `${t('pos_discount')} $${(posDiscount.value || 0).toFixed(2)}`;
+                    : `${t('pos_discount')} ${formatCurrency(posDiscount.value || 0)}`;
             }
             if (vatRow)   vatRow.style.display   = (receiptSettings.vatEnabled && vatAmt > 0) ? 'flex' : 'none';
-            if (vatAmtEl) vatAmtEl.textContent   = `+$${vatAmt.toFixed(2)}`;
+            if (vatAmtEl) vatAmtEl.textContent   = '+' + formatCurrency(vatAmt);
             const vatLbl = document.getElementById('posVATLabel');
             if (vatLbl)  vatLbl.textContent      = `VAT ${receiptSettings.vatRate || 0}%`;
             // Sync POS VAT quick-toggle with receiptSettings
@@ -4813,9 +5181,17 @@
             const posVatRt  = document.getElementById('posVatRate');
             if (posVatChk) posVatChk.checked = !!receiptSettings.vatEnabled;
             if (posVatRt)  posVatRt.value    = receiptSettings.vatRate || 10;
-            if (tot)      tot.textContent        = `$${total.toFixed(2)}`;
-            if (khr)      khr.textContent        = `${Math.round(total * rate).toLocaleString()} ៛`;
-            if (btn)      btn.textContent        = `${t('pos_charge')} $${total.toFixed(2)}`;
+            if (tot)      tot.textContent        = formatCurrency(total);
+            // This auxiliary line always shows whichever currency ISN'T the primary
+            // display right now — a USD-based total shows its KHR equivalent for
+            // reference, and a KHR-based total shows its USD equivalent, so it never
+            // just repeats the number already shown as the main total above it.
+            if (khr) {
+                khr.textContent = activeCurrency === 'KHR'
+                    ? `$${total.toFixed(2)}`
+                    : `${Math.round(total * rate).toLocaleString()} ៛`;
+            }
+            if (btn)      btn.textContent        = `${t('pos_charge')} ${formatCurrency(total)}`;
 
             const totalItems = posCart.reduce((s, c) => s + c.qty, 0);
             if (badge) {
@@ -4905,6 +5281,18 @@
         // Shows the merchant's KHQR code (from Settings → KHQR Gateway Control) so the
         // customer can scan it with their banking app when "Pay by QR" is selected.
         let _posKHQRIdx = 0;
+        // Renders a small icon for a KHQR entry — the uploaded bank logo if there is one,
+        // otherwise a colored initial badge (same fallback pattern used for customer and
+        // employee avatars elsewhere in the app) so entries stay visually distinguishable
+        // even before a logo has been added.
+        const _khqrBadgeColors = ['bg-blue-500','bg-emerald-500','bg-violet-500','bg-amber-500','bg-rose-500','bg-cyan-500'];
+        function khqrIconHTML(k) {
+            if (k.logo) return `<img src="${k.logo}" class="w-full h-full object-contain bg-white p-0.5">`;
+            const hash = (k.bank || '?').split('').reduce((s,c) => s + c.charCodeAt(0), 0);
+            const color = _khqrBadgeColors[hash % _khqrBadgeColors.length];
+            return `<div class="w-full h-full ${color} flex items-center justify-center text-white font-black text-sm">${(k.bank||'?')[0].toUpperCase()}</div>`;
+        }
+
         function renderPOSKHQRBlock() {
             const block = document.getElementById('posKHQRBlock');
             if (!block) return;
@@ -4925,13 +5313,19 @@
 
             block.innerHTML = `
                 <div class="flex flex-col items-center gap-1.5 py-2">
-                    ${khqrData.length > 1 ? `
-                    <select onchange="_posKHQRIdx=parseInt(this.value); renderPOSKHQRBlock();" class="text-[10px] font-bold border border-slate-200 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-lg px-2 py-1 mb-1 max-w-full">
-                        ${khqrData.map((k,i)=>`<option value="${i}" ${i===_posKHQRIdx?'selected':''}>${k.bank} — ${k.merchant}</option>`).join('')}
-                    </select>` : `<p class="text-[10px] font-bold text-slate-500 dark:text-slate-400">${g.bank} — ${g.merchant}</p>`}
+                    <p class="text-[10px] font-bold text-slate-500 dark:text-slate-400">${g.bank} — ${g.merchant}</p>
                     <img src="${g.qr}" class="w-32 h-32 rounded-lg border-2 border-blue-200 dark:border-blue-700 shadow-sm object-cover bg-white">
                     <p class="text-base font-black text-blue-600 dark:text-blue-400">$${total.toFixed(2)}</p>
-                    <p class="text-[10px] text-slate-400 dark:text-slate-500">${t('pos_khqr_scan_prompt')}</p>
+                    <p class="text-[10px] text-slate-400 dark:text-slate-500 mb-0.5">${t('pos_khqr_scan_prompt')}</p>
+                    ${khqrData.length > 1 ? `
+                    <div class="flex items-center gap-1.5 flex-wrap justify-center pt-1 border-t border-slate-100 dark:border-slate-700 w-full">
+                        ${khqrData.map((k,i)=>`
+                        <button type="button" onclick="_posKHQRIdx=${i}; renderPOSKHQRBlock();" title="${k.bank} — ${k.merchant}"
+                            class="relative w-9 h-9 rounded-lg overflow-hidden flex-shrink-0 transition ${i===_posKHQRIdx ? 'ring-2 ring-blue-500 ring-offset-1 dark:ring-offset-slate-800' : 'opacity-60 hover:opacity-100 border border-slate-200 dark:border-slate-600'}">
+                            ${khqrIconHTML(k)}
+                            ${i===_posKHQRIdx ? `<span class="absolute -top-0.5 -right-0.5 w-3.5 h-3.5 bg-blue-500 rounded-full flex items-center justify-center border border-white dark:border-slate-800"><i class="fas fa-check text-white text-[7px]"></i></span>` : ''}
+                        </button>`).join('')}
+                    </div>` : ''}
                 </div>`;
         }
 
@@ -4960,13 +5354,22 @@
             const methodLabel = { cash_usd: 'Cash USD', cash_khr: 'Cash KHR', khqr: 'KHQR' }[method] || method;
             const itemCount = posCart.reduce((s, c) => s + c.qty, 0);
 
+            // Snapshot which bank is selected right now, at the moment Charge is clicked —
+            // stored on the sale record itself rather than re-read later, so it stays
+            // correct for this specific sale (and any future reprint of its receipt) even
+            // if the cashier switches the default KHQR bank afterward.
+            const khqrBank = (method === 'khqr' && khqrData.length)
+                ? khqrData[(_posKHQRIdx < khqrData.length) ? _posKHQRIdx : 0].bank
+                : null;
+            const paymentDisplay = khqrBank ? `${methodLabel} - ${khqrBank}` : methodLabel;
+
             // The standard set of sale-summary rows shown for every payment method.
             const detailRows = `
                 <div class="flex justify-between"><span class="text-slate-500">Items</span><span class="font-bold">${itemCount} item(s)</span></div>
-                ${discount > 0 ? `<div class="flex justify-between"><span class="text-slate-500">Discount</span><span class="font-bold text-red-500">-$${discount.toFixed(2)}</span></div>` : ''}
-                ${vatAmt > 0 ? `<div class="flex justify-between"><span class="text-slate-500">VAT (${receiptSettings.vatRate}%)</span><span class="font-bold text-amber-600">+$${vatAmt.toFixed(2)}</span></div>` : ''}
-                <div class="flex justify-between text-lg font-black border-t pt-1.5 mt-1.5"><span>Total</span><span class="text-emerald-600">$${total.toFixed(2)}</span></div>
-                <div class="flex justify-between"><span class="text-slate-500">Payment</span><span class="font-bold">${methodLabel}</span></div>
+                ${discount > 0 ? `<div class="flex justify-between"><span class="text-slate-500">Discount</span><span class="font-bold text-red-500">-${formatCurrency(discount)}</span></div>` : ''}
+                ${vatAmt > 0 ? `<div class="flex justify-between"><span class="text-slate-500">VAT (${receiptSettings.vatRate}%)</span><span class="font-bold text-amber-600">+${formatCurrency(vatAmt)}</span></div>` : ''}
+                <div class="flex justify-between text-lg font-black border-t pt-1.5 mt-1.5"><span>Total</span><span class="text-emerald-600">${formatCurrency(total)}</span></div>
+                <div class="flex justify-between"><span class="text-slate-500">Payment</span><span class="font-bold">${paymentDisplay}</span></div>
                 <div class="flex justify-between"><span class="text-slate-500">Customer</span><span class="font-bold">${posCustomer || 'Walk-in'}</span></div>`;
 
             let bodyHtml, modalWidthClass = 'max-w-lg';
@@ -5000,16 +5403,16 @@
 
             // ── Confirm before completing sale ────────────────────
             showConfirm(
-                `Complete Sale — $${total.toFixed(2)}`,
+                `Complete Sale — ${formatCurrency(total)}`,
                 bodyHtml,
-                () => _executeSale(total, subtotal, discount, vatAmt, rate, method),
+                () => _executeSale(total, subtotal, discount, vatAmt, rate, method, khqrBank),
                 'Confirm',
                 'bg-emerald-600 hover:bg-emerald-700',
                 modalWidthClass
             );
         }
 
-        function _executeSale(total, subtotal, discount, vatAmt, rate, method) {
+        function _executeSale(total, subtotal, discount, vatAmt, rate, method, khqrBank = null) {
 
             // Deduct inventory
             posCart.forEach(c => {
@@ -5032,6 +5435,7 @@
                 items:      JSON.parse(JSON.stringify(posCart)),
                 subtotal, discount, vatAmt, vatRate: receiptSettings.vatRate, total,
                 payment:    method,
+                khqrBank:   khqrBank || null,
                 lang:       currentLang,
             };
             posSalesLog.unshift(saleRecord);
@@ -5069,6 +5473,7 @@
             const dateStr   = new Date(sale.date).toLocaleString();
             const payLabels = { cash_usd: t('pos_cash_usd'), cash_khr: t('pos_cash_khr'), khqr: t('pos_khqr') };
             const logo      = (rs.showLogo !== false) && currentStoreLogo && !currentStoreLogo.includes('placehold') ? currentStoreLogo : null;
+            const logoSize  = rs.logoSize || 40;
 
             const itemLines = sale.items.map(c => {
                 const name     = i18nDictionary[currentLang][c.name] || c.name;
@@ -5094,7 +5499,7 @@
             document.getElementById('posReceiptContent').innerHTML = `
                 <div class="text-center mb-3 space-y-0.5">
                     <div class="flex items-center justify-center gap-2 mb-1">
-                        ${logo ? `<img src="${logo}" class="w-10 h-10 object-contain flex-shrink-0">` : ''}
+                        ${logo ? `<img src="${logo}" style="width:${logoSize}px;height:${logoSize}px" class="object-contain flex-shrink-0">` : ''}
                         ${rs.showStoreName !== false ? `<p class="text-xl font-black uppercase tracking-widest">${storeName}</p>` : ''}
                     </div>
                     ${rs.address ? `<p class="text-[10px] text-slate-500">${rs.address}</p>` : ''}
@@ -5112,7 +5517,7 @@
                     ${khrLine}
                     <div class="flex justify-between text-xs pt-2 border-t border-dashed border-slate-300 dark:border-slate-600">
                         <span class="text-slate-500">${t('pos_payment_method')}</span>
-                        <span class="font-bold">${payLabels[sale.payment] || sale.payment}</span>
+                        <span class="font-bold">${(payLabels[sale.payment] || sale.payment)}${sale.khqrBank ? ` - ${sale.khqrBank}` : ''}</span>
                     </div>
                     ${rs.showCashier  ? `<div class="flex justify-between text-xs"><span class="text-slate-500">Cashier</span><span>${sale.cashier}</span></div>` : ''}
                     ${rs.showCustomer ? `<div class="flex justify-between text-xs"><span class="text-slate-500">${t('pos_hist_customer')}</span><span>${sale.customer}</span></div>` : ''}
@@ -5191,6 +5596,13 @@
         let _empQRStream   = null;
         let _empCurrentSession = 'morning'; // 'morning' | 'afternoon' | 'ot'
 
+        // Attendance Report filter state — deliberately separate from the Sales
+        // Report's _reportMode/_reportDate/etc. so filtering one never affects the other.
+        let _attendReportMode = 'day';
+        let _attendReportDate = new Date().toISOString().slice(0,10);
+        let _attendReportFrom = new Date().toISOString().slice(0,10);
+        let _attendReportTo   = new Date().toISOString().slice(0,10);
+
         /* ── EMPLOYEE RENDER ──────────────────────────────────── */
         function renderEmployee() {
             const el = document.getElementById('employee');
@@ -5263,46 +5675,28 @@
 
                 <!-- Attendance Sub-Tab -->
                 <div id="empSubAttend" class="${_empSubTab === 'attend' && !_empSubTabExtra ? 'flex' : 'hidden'} flex-col flex-1 overflow-hidden">
-                    <div class="bg-white dark:bg-slate-800 px-5 py-3 border-b dark:border-slate-700 flex items-center justify-between flex-shrink-0">
-                        <div class="flex items-center space-x-4">
-                            <h3 class="font-bold text-slate-800 dark:text-white text-sm">${t('emp_tab_attend')}</h3>
-                            <input type="date" id="attendDateFilter" value="${new Date().toISOString().split('T')[0]}" onchange="renderAttendanceTable()" class="text-xs border border-slate-200 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-lg px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-violet-500">
+                    <div class="no-print bg-white dark:bg-slate-800 px-5 py-3 border-b dark:border-slate-700 flex items-center justify-between flex-shrink-0 flex-wrap gap-y-2">
+                        <div class="flex items-center gap-3 flex-wrap">
+                            <h3 class="font-bold text-slate-800 dark:text-white text-sm flex-shrink-0">${t('emp_tab_attend')}</h3>
+                            <div class="flex gap-1 bg-slate-100 dark:bg-slate-700 p-1 rounded-xl">
+                                ${['day','month','range'].map(m => `
+                                <button onclick="setAttendReportMode('${m}')" id="aMode_${m}"
+                                    class="text-xs font-bold px-3 py-1.5 rounded-lg transition ${_attendReportMode===m ? 'bg-white dark:bg-slate-800 text-violet-600 shadow' : 'text-slate-500 hover:text-slate-700'}">
+                                    ${m==='day' ? t('rpt_mode_daily') : m==='month' ? t('rpt_mode_monthly') : t('rpt_mode_range')}
+                                </button>`).join('')}
+                            </div>
+                            <div id="attendFilterInputs" class="flex items-center gap-2 flex-wrap"></div>
+                            <button onclick="renderAttendanceTable()" class="bg-violet-600 text-white text-xs font-bold px-4 py-2 rounded-lg hover:bg-violet-700 transition shadow flex-shrink-0">
+                                <i class="fas fa-search mr-1"></i> ${t('rpt_apply')}
+                            </button>
                         </div>
                         <div class="flex items-center space-x-3">
-                            <span class="text-xs bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-400 font-bold px-2.5 py-1 rounded-full"><i class="fas fa-check-circle mr-1"></i><span id="attendPresentCount">0</span> ${t('emp_present')}</span>
-                            <span class="text-xs bg-red-100 dark:bg-red-900/40 text-red-700 dark:text-red-400 font-bold px-2.5 py-1 rounded-full"><i class="fas fa-times-circle mr-1"></i><span id="attendAbsentCount">0</span> ${t('emp_absent')}</span>
+                            <span id="attendCountBadges" class="flex items-center space-x-3"></span>
+                            <button onclick="printAttendanceReport()" class="text-xs text-slate-600 dark:text-slate-300 bg-slate-100 dark:bg-slate-700 font-bold px-3 py-1.5 rounded-lg border dark:border-slate-600 hover:bg-slate-200 transition"><i class="fas fa-print mr-1"></i>${t('btn_print')}</button>
                             <button onclick="exportAttendanceCSV()" class="text-xs text-slate-600 dark:text-slate-300 bg-slate-100 dark:bg-slate-700 font-bold px-3 py-1.5 rounded-lg border dark:border-slate-600 hover:bg-slate-200 transition"><i class="fas fa-file-csv mr-1 text-emerald-500"></i>${t('emp_export')}</button>
                         </div>
                     </div>
-                    <div class="flex-1 overflow-auto">
-                        <table class="w-full text-left border-collapse text-sm">
-                            <thead class="sticky top-0 bg-slate-900 text-white text-xs font-bold uppercase tracking-wider">
-                                <tr>
-                                    <th class="px-4 py-3" rowspan="2">Employee</th>
-                                    <th class="px-3 py-1.5 text-center border-l border-slate-700 bg-amber-900/60 text-amber-300" colspan="3">${t('emp_session_morning')}</th>
-                                    <th class="px-3 py-1.5 text-center border-l border-slate-700 bg-blue-900/60 text-blue-300" colspan="3">${t('emp_session_afternoon')}</th>
-                                    <th class="px-3 py-1.5 text-center border-l border-slate-700 bg-violet-900/60 text-violet-300" colspan="3">${t('emp_session_ot')}</th>
-                                    <th class="px-3 py-1.5 text-center border-l border-slate-700" rowspan="2">Total</th>
-                                    <th class="px-3 py-1.5 text-center" rowspan="2">Status</th>
-                                    <th class="px-3 py-1.5 text-center" rowspan="2">Manual</th>
-                                </tr>
-                                <tr>
-                                    <th class="px-3 py-1 text-center border-l border-slate-700 bg-amber-900/40 text-amber-400 font-bold normal-case text-[10px]">In</th>
-                                    <th class="px-3 py-1 text-center bg-amber-900/40 text-amber-400 font-bold normal-case text-[10px]">Out</th>
-                                    <th class="px-3 py-1 text-center bg-amber-900/40 text-amber-400 font-bold normal-case text-[10px]">Hrs</th>
-                                    <th class="px-3 py-1 text-center border-l border-slate-700 bg-blue-900/40 text-blue-400 font-bold normal-case text-[10px]">In</th>
-                                    <th class="px-3 py-1 text-center bg-blue-900/40 text-blue-400 font-bold normal-case text-[10px]">Out</th>
-                                    <th class="px-3 py-1 text-center bg-blue-900/40 text-blue-400 font-bold normal-case text-[10px]">Hrs</th>
-                                    <th class="px-3 py-1 text-center border-l border-slate-700 bg-violet-900/40 text-violet-400 font-bold normal-case text-[10px]">In</th>
-                                    <th class="px-3 py-1 text-center bg-violet-900/40 text-violet-400 font-bold normal-case text-[10px]">Out</th>
-                                    <th class="px-3 py-1 text-center bg-violet-900/40 text-violet-400 font-bold normal-case text-[10px]">Hrs</th>
-                                </tr>
-                            </thead>
-                            <tbody id="attendTableBody" class="divide-y divide-slate-100 dark:divide-slate-700 bg-white dark:bg-slate-800">
-                                <tr><td colspan="7" class="p-10 text-center text-slate-400"><i class="fas fa-spinner fa-spin mr-2"></i></td></tr>
-                            </tbody>
-                        </table>
-                    </div>
+                    <div id="attendReportBody" class="flex-1 overflow-auto"></div>
                 </div>
 
                 <!-- QR Clock Station Sub-Tab -->
@@ -5401,6 +5795,7 @@
             </div>`;
 
             renderEmpTable();
+            renderAttendFilterInputs();
             renderAttendanceTable();
             renderEmpQRLog();
 
@@ -5464,25 +5859,75 @@
         }
 
         /* ── ATTENDANCE TABLE ─────────────────────────────────── */
+        function setAttendReportMode(mode) {
+            _attendReportMode = mode;
+            document.querySelectorAll('[id^="aMode_"]').forEach(b => {
+                const active = b.id === 'aMode_' + mode;
+                b.className = `text-xs font-bold px-3 py-1.5 rounded-lg transition ${active ? 'bg-white dark:bg-slate-800 text-violet-600 shadow' : 'text-slate-500 hover:text-slate-700'}`;
+            });
+            renderAttendFilterInputs();
+            renderAttendanceTable();
+        }
+
+        function renderAttendFilterInputs() {
+            const el = document.getElementById('attendFilterInputs');
+            if (!el) return;
+            if (_attendReportMode === 'day') {
+                el.innerHTML = `<input type="date" id="aDateInput" value="${_attendReportDate}" onchange="_attendReportDate=this.value"
+                    class="text-xs font-bold border border-slate-200 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-lg px-3 py-1.5 focus:ring-2 focus:ring-violet-400 outline-none">`;
+            } else if (_attendReportMode === 'month') {
+                el.innerHTML = `<input type="month" id="aMonthInput" value="${_attendReportDate.slice(0,7)}" onchange="_attendReportDate=this.value+'-01'"
+                    class="text-xs font-bold border border-slate-200 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-lg px-3 py-1.5 focus:ring-2 focus:ring-violet-400 outline-none">`;
+            } else {
+                el.innerHTML = `
+                    <input type="date" id="aFromInput" value="${_attendReportFrom}" onchange="_attendReportFrom=this.value"
+                        class="text-xs font-bold border border-slate-200 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-lg px-3 py-1.5 focus:ring-2 focus:ring-violet-400 outline-none">
+                    <span class="text-xs text-slate-400 font-bold">${t('rpt_to')}</span>
+                    <input type="date" id="aToInput" value="${_attendReportTo}" onchange="_attendReportTo=this.value"
+                        class="text-xs font-bold border border-slate-200 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-lg px-3 py-1.5 focus:ring-2 focus:ring-violet-400 outline-none">`;
+            }
+        }
+
+        // Returns [startDateStr, endDateStr] (inclusive, YYYY-MM-DD) for whichever
+        // Attendance Report period is currently selected.
+        function getAttendPeriodRange() {
+            if (_attendReportMode === 'day')   return [_attendReportDate, _attendReportDate];
+            if (_attendReportMode === 'month') { const m = _attendReportDate.slice(0,7); const [y,mo] = m.split('-').map(Number); const lastDay = new Date(y, mo, 0).getDate(); return [`${m}-01`, `${m}-${String(lastDay).padStart(2,'0')}`]; }
+            return [_attendReportFrom, _attendReportTo];
+        }
+
         function renderAttendanceTable() {
-            const tbody  = document.getElementById('attendTableBody');
-            const dateEl = document.getElementById('attendDateFilter');
-            if (!tbody || !dateEl) return;
+            if (_attendReportMode === 'day')   { const i = document.getElementById('aDateInput');  if(i) _attendReportDate = i.value; }
+            if (_attendReportMode === 'month') { const i = document.getElementById('aMonthInput'); if(i) _attendReportDate = i.value + '-01'; }
+            if (_attendReportMode === 'range') { const f = document.getElementById('aFromInput'), toEl = document.getElementById('aToInput'); if(f) _attendReportFrom = f.value; if(toEl) _attendReportTo = toEl.value; }
 
-            const filterDate = dateEl.value;
+            const body = document.getElementById('attendReportBody');
+            if (!body) return;
+
+            const [startDate, endDate] = getAttendPeriodRange();
             const activeEmps = employeeData.filter(e => e.status === 'active');
-            const dayRecords = attendanceLog.filter(r => r.timestamp.startsWith(filterDate));
+            const periodRecords = attendanceLog.filter(r => {
+                const d = r.timestamp.slice(0,10);
+                return d >= startDate && d <= endDate;
+            });
 
+            if (_attendReportMode === 'day') {
+                renderAttendDayGrid(body, periodRecords, activeEmps, startDate);
+            } else {
+                renderAttendSummary(body, periodRecords, activeEmps, startDate, endDate);
+            }
+        }
+
+        // ── DAY MODE: detailed per-session in/out grid with manual clock adjustment ──
+        function renderAttendDayGrid(body, dayRecords, activeEmps, filterDate) {
             const fmtTime = ts => ts ? new Date(ts).toLocaleTimeString([], { hour:'2-digit', minute:'2-digit' }) : '—';
 
-            // Helper: get first in / last out for a given employee + session
             const getSessionTimes = (empId, session) => {
                 const recs = dayRecords.filter(r => r.empId === empId && r.session === session).sort((a,b) => a.timestamp.localeCompare(b.timestamp));
                 const inRec  = recs.find(r => r.type === 'in');
                 const outRec = [...recs].reverse().find(r => r.type === 'out');
                 return { inRec, outRec };
             };
-
             const calcHours = (inTs, outTs) => {
                 if (!inTs || !outTs) return null;
                 return ((new Date(outTs) - new Date(inTs)) / 3600000).toFixed(1);
@@ -5520,22 +5965,18 @@
                             </div>
                         </div>
                     </td>
-                    <!-- Morning -->
                     <td class="px-3 py-2.5 text-center border-l dark:border-slate-700">${cellIn(m.inRec)}</td>
                     <td class="px-3 py-2.5 text-center">${cellOut(m.outRec)}</td>
                     <td class="px-3 py-2.5 text-center font-bold text-slate-600 dark:text-slate-400">${mHrs ? mHrs+'h' : '—'}</td>
-                    <!-- Afternoon -->
                     <td class="px-3 py-2.5 text-center border-l dark:border-slate-700">${cellIn(af.inRec)}</td>
                     <td class="px-3 py-2.5 text-center">${cellOut(af.outRec)}</td>
                     <td class="px-3 py-2.5 text-center font-bold text-slate-600 dark:text-slate-400">${afHrs ? afHrs+'h' : '—'}</td>
-                    <!-- OT -->
                     <td class="px-3 py-2.5 text-center border-l dark:border-slate-700">${cellIn(ot.inRec)}</td>
                     <td class="px-3 py-2.5 text-center">${cellOut(ot.outRec)}</td>
                     <td class="px-3 py-2.5 text-center font-bold text-violet-600 dark:text-violet-400">${otHrs ? otHrs+'h' : '—'}</td>
-                    <!-- Total -->
                     <td class="px-3 py-2.5 text-center font-black text-slate-800 dark:text-white border-l dark:border-slate-700">${parseFloat(totalHrs) > 0 ? totalHrs+'h' : '—'}</td>
                     <td class="px-3 py-2.5 text-center">${statusBadge}</td>
-                    <td class="px-3 py-2.5 text-center">
+                    <td class="px-3 py-2.5 text-center no-print">
                         <div class="flex items-center justify-center space-x-1 flex-wrap gap-y-1">
                             <button onclick="manualClock('${emp.id}','${filterDate}','morning','in')" class="text-[9px] bg-amber-50 dark:bg-amber-900/20 text-amber-700 dark:text-amber-400 font-bold px-1.5 py-0.5 rounded hover:bg-amber-100 transition" title="Morning In">M↑</button>
                             <button onclick="manualClock('${emp.id}','${filterDate}','morning','out')" class="text-[9px] bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-400 font-bold px-1.5 py-0.5 rounded hover:bg-slate-200 transition" title="Morning Out">M↓</button>
@@ -5548,12 +5989,143 @@
                 </tr>`;
             }).join('');
 
-            tbody.innerHTML = rows || `<tr><td colspan="13" class="p-10 text-center text-slate-400"><p class="font-semibold">${t('emp_attend_empty')}</p></td></tr>`;
+            body.innerHTML = `
+                <table class="w-full text-left border-collapse text-sm">
+                    <thead class="sticky top-0 bg-slate-900 text-white text-xs font-bold uppercase tracking-wider">
+                        <tr>
+                            <th class="px-4 py-3" rowspan="2">Employee</th>
+                            <th class="px-3 py-1.5 text-center border-l border-slate-700 bg-amber-900/60 text-amber-300" colspan="3">${t('emp_session_morning')}</th>
+                            <th class="px-3 py-1.5 text-center border-l border-slate-700 bg-blue-900/60 text-blue-300" colspan="3">${t('emp_session_afternoon')}</th>
+                            <th class="px-3 py-1.5 text-center border-l border-slate-700 bg-violet-900/60 text-violet-300" colspan="3">${t('emp_session_ot')}</th>
+                            <th class="px-3 py-1.5 text-center border-l border-slate-700" rowspan="2">Total</th>
+                            <th class="px-3 py-1.5 text-center" rowspan="2">Status</th>
+                            <th class="px-3 py-1.5 text-center no-print" rowspan="2">Manual</th>
+                        </tr>
+                        <tr>
+                            <th class="px-3 py-1 text-center border-l border-slate-700 bg-amber-900/40 text-amber-400 font-bold normal-case text-[10px]">In</th>
+                            <th class="px-3 py-1 text-center bg-amber-900/40 text-amber-400 font-bold normal-case text-[10px]">Out</th>
+                            <th class="px-3 py-1 text-center bg-amber-900/40 text-amber-400 font-bold normal-case text-[10px]">Hrs</th>
+                            <th class="px-3 py-1 text-center border-l border-slate-700 bg-blue-900/40 text-blue-400 font-bold normal-case text-[10px]">In</th>
+                            <th class="px-3 py-1 text-center bg-blue-900/40 text-blue-400 font-bold normal-case text-[10px]">Out</th>
+                            <th class="px-3 py-1 text-center bg-blue-900/40 text-blue-400 font-bold normal-case text-[10px]">Hrs</th>
+                            <th class="px-3 py-1 text-center border-l border-slate-700 bg-violet-900/40 text-violet-400 font-bold normal-case text-[10px]">In</th>
+                            <th class="px-3 py-1 text-center bg-violet-900/40 text-violet-400 font-bold normal-case text-[10px]">Out</th>
+                            <th class="px-3 py-1 text-center bg-violet-900/40 text-violet-400 font-bold normal-case text-[10px]">Hrs</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100 dark:divide-slate-700 bg-white dark:bg-slate-800">
+                        ${rows || `<tr><td colspan="13" class="p-10 text-center text-slate-400"><p class="font-semibold">${t('emp_attend_empty')}</p></td></tr>`}
+                    </tbody>
+                </table>`;
 
-            const pc = document.getElementById('attendPresentCount');
-            const ac = document.getElementById('attendAbsentCount');
-            if (pc) pc.textContent = presentCount;
-            if (ac) ac.textContent = absentCount;
+            updateAttendCountBadges(`<span class="text-xs bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-400 font-bold px-2.5 py-1 rounded-full"><i class="fas fa-check-circle mr-1"></i>${presentCount} ${t('emp_present')}</span>
+                <span class="text-xs bg-red-100 dark:bg-red-900/40 text-red-700 dark:text-red-400 font-bold px-2.5 py-1 rounded-full"><i class="fas fa-times-circle mr-1"></i>${absentCount} ${t('emp_absent')}</span>`);
+        }
+
+        // ── MONTH/RANGE MODE: per-employee summary totals across the period ──
+        function renderAttendSummary(body, periodRecords, activeEmps, startDate, endDate) {
+            const calcHours = (inTs, outTs) => (!inTs || !outTs) ? 0 : Math.max(0, (new Date(outTs) - new Date(inTs)) / 3600000);
+
+            const summaries = activeEmps.map(emp => {
+                const empRecords = periodRecords.filter(r => r.empId === emp.id);
+                const byDate = {};
+                empRecords.forEach(r => {
+                    const d = r.timestamp.slice(0,10);
+                    if (!byDate[d]) byDate[d] = {};
+                    if (!byDate[d][r.session]) byDate[d][r.session] = {};
+                    if (r.type === 'in'  && !byDate[d][r.session].in)  byDate[d][r.session].in  = r.timestamp;
+                    if (r.type === 'out') byDate[d][r.session].out = r.timestamp;
+                });
+
+                let daysPresent = 0, mHrs = 0, afHrs = 0, otHrs = 0;
+                Object.values(byDate).forEach(day => {
+                    if (Object.keys(day).length) daysPresent++;
+                    if (day.morning)   mHrs  += calcHours(day.morning.in, day.morning.out);
+                    if (day.afternoon) afHrs += calcHours(day.afternoon.in, day.afternoon.out);
+                    if (day.ot)        otHrs += calcHours(day.ot.in, day.ot.out);
+                });
+                const totalHrs = mHrs + afHrs + otHrs;
+                return { emp, daysPresent, mHrs, afHrs, otHrs, totalHrs };
+            }).sort((a,b) => b.totalHrs - a.totalHrs);
+
+            const grandDays  = summaries.reduce((s,x) => s + x.daysPresent, 0);
+            const grandHours = summaries.reduce((s,x) => s + x.totalHrs, 0);
+            const periodLabel = startDate === endDate ? startDate : `${startDate} – ${endDate}`;
+
+            body.innerHTML = `
+                <div class="p-5">
+                    <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mb-5">
+                        ${[
+                            { label: t('attend_stat_employees'), val: activeEmps.length, icon: 'fa-users', color: 'violet' },
+                            { label: t('attend_stat_days'), val: grandDays, icon: 'fa-calendar-check', color: 'emerald' },
+                            { label: t('attend_stat_hours'), val: grandHours.toFixed(1) + 'h', icon: 'fa-clock', color: 'amber' },
+                        ].map(s => `
+                        <div class="bg-white dark:bg-slate-800 rounded-xl p-4 border border-slate-200 dark:border-slate-700 shadow-sm flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-xl bg-${s.color}-100 dark:bg-${s.color}-900/30 flex items-center justify-center flex-shrink-0">
+                                <i class="fas ${s.icon} text-${s.color}-600 dark:text-${s.color}-400"></i></div>
+                            <div><p class="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase">${s.label}</p>
+                            <p class="text-xl font-black text-slate-800 dark:text-white">${s.val}</p></div>
+                        </div>`).join('')}
+                    </div>
+                    <div class="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
+                        <div class="px-5 py-4 border-b dark:border-slate-700">
+                            <h3 class="text-sm font-black text-slate-800 dark:text-white flex items-center">
+                                <i class="fas fa-users text-violet-500 mr-2"></i> ${t('attend_summary_title')} — ${periodLabel}
+                            </h3>
+                        </div>
+                        <table class="w-full text-sm">
+                            <thead><tr class="bg-slate-50 dark:bg-slate-700/50">
+                                ${[t('attend_th_employee'), t('attend_th_days'), t('attend_th_morning_hrs'), t('attend_th_afternoon_hrs'), t('attend_th_ot_hrs'), t('attend_th_total_hrs')].map(h =>
+                                    `<th class="px-4 py-3 text-left text-[10px] font-black text-slate-500 dark:text-slate-400 uppercase">${h}</th>`).join('')}
+                            </tr></thead>
+                            <tbody class="divide-y divide-slate-100 dark:divide-slate-700">
+                                ${summaries.length === 0 ? `<tr><td colspan="6" class="text-center py-10 text-slate-400"><i class="fas fa-user-clock text-3xl block mb-2 opacity-30"></i>${t('emp_attend_empty')}</td></tr>` :
+                                summaries.map(s => `
+                                <tr class="hover:bg-slate-50 dark:hover:bg-slate-700/40 transition">
+                                    <td class="px-4 py-3">
+                                        <div class="flex items-center gap-2">
+                                            <div class="w-7 h-7 rounded-full flex items-center justify-center text-[10px] font-black text-white flex-shrink-0" style="background:${getAvatarColor(s.emp.name)}">${getInitials(s.emp.name)}</div>
+                                            <div><p class="font-bold text-slate-800 dark:text-white text-xs">${s.emp.name}</p><p class="text-[10px] text-slate-400">${s.emp.role||''}</p></div>
+                                        </div>
+                                    </td>
+                                    <td class="px-4 py-3 font-bold text-slate-700 dark:text-slate-300">${s.daysPresent}</td>
+                                    <td class="px-4 py-3 text-amber-600 dark:text-amber-400">${s.mHrs.toFixed(1)}h</td>
+                                    <td class="px-4 py-3 text-blue-600 dark:text-blue-400">${s.afHrs.toFixed(1)}h</td>
+                                    <td class="px-4 py-3 text-violet-600 dark:text-violet-400">${s.otHrs.toFixed(1)}h</td>
+                                    <td class="px-4 py-3 font-black text-slate-800 dark:text-white">${s.totalHrs.toFixed(1)}h</td>
+                                </tr>`).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>`;
+
+            updateAttendCountBadges(`<span class="text-xs bg-violet-100 dark:bg-violet-900/40 text-violet-700 dark:text-violet-400 font-bold px-2.5 py-1 rounded-full"><i class="fas fa-clock mr-1"></i>${grandHours.toFixed(1)}h total</span>`);
+        }
+
+        function updateAttendCountBadges(html) {
+            const el = document.getElementById('attendCountBadges');
+            if (el) el.innerHTML = html;
+        }
+
+        // Prints the currently-visible Attendance Report (whichever mode is active)
+        // via the same print bridge used by the Sales/P&L reports.
+        function printAttendanceReport() {
+            const content   = document.getElementById('attendReportBody');
+            const printArea = document.getElementById('reportPrintArea');
+            if (!content || !printArea) { window.print(); return; }
+            const storeName = receiptSettings.name || document.getElementById('store_name')?.value || 'JC STORE';
+            const [startDate, endDate] = getAttendPeriodRange();
+            const periodLabel = startDate === endDate ? startDate : `${startDate} – ${endDate}`;
+            printArea.innerHTML = `
+                <div class="print-report-header">
+                    <h1 style="font-size:20px;font-weight:900;margin:0;font-family:sans-serif;">${storeName}</h1>
+                    <p style="font-size:12px;color:#555;margin:4px 0 0;font-family:sans-serif;">Attendance Report — ${periodLabel} — Generated ${new Date().toLocaleString()}</p>
+                </div>
+                <div style="font-family:sans-serif;font-size:11px;">${content.innerHTML}</div>`;
+            document.body.classList.add('printing-report');
+            const cleanup = () => { document.body.classList.remove('printing-report'); window.removeEventListener('afterprint', cleanup); };
+            window.addEventListener('afterprint', cleanup);
+            setTimeout(() => window.print(), 50);
         }
 
         /* ── CRUD ────────────────────────────────────────────── */
@@ -6005,17 +6577,26 @@
         }
 
         function exportAttendanceCSV() {
-            if (!attendanceLog.length) { showToast('No attendance records to export.','warning'); return; }
+            const [startDate, endDate] = getAttendPeriodRange();
+            const periodRecords = attendanceLog.filter(r => {
+                const d = r.timestamp.slice(0,10);
+                return d >= startDate && d <= endDate;
+            });
+            if (!periodRecords.length) { showToast('No attendance records in this period to export.','warning'); return; }
             const sesLabels = { morning:'Morning', afternoon:'Afternoon', ot:'OT' };
             const headers = ['Date','Time','Employee ID','Employee Name','Role','Session','Type'];
-            const rows = attendanceLog.map(r => {
-                const emp = employeeData.find(e=>e.id===r.empId);
-                const d   = new Date(r.timestamp);
-                return [d.toLocaleDateString(), d.toLocaleTimeString(), r.empId, emp?.name||'', emp?.role||'', sesLabels[r.session]||r.session||'', r.type==='in'?'Clock In':'Clock Out'];
-            });
+            const rows = periodRecords
+                .slice()
+                .sort((a,b) => a.timestamp.localeCompare(b.timestamp))
+                .map(r => {
+                    const emp = employeeData.find(e=>e.id===r.empId);
+                    const d   = new Date(r.timestamp);
+                    return [d.toLocaleDateString(), d.toLocaleTimeString(), r.empId, emp?.name||'', emp?.role||'', sesLabels[r.session]||r.session||'', r.type==='in'?'Clock In':'Clock Out'];
+                });
             const csv = [headers,...rows].map(r=>r.map(c=>`"${String(c||'').replace(/"/g,'""')}"`).join(',')).join('\n');
             const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([csv],{type:'text/csv'}));
-            a.download = `JC_Attendance_${new Date().toISOString().split('T')[0]}.csv`;
+            const periodTag = startDate === endDate ? startDate : `${startDate}_to_${endDate}`;
+            a.download = `JC_Attendance_${periodTag}.csv`;
             document.body.appendChild(a); a.click(); document.body.removeChild(a);
             showToast('Attendance exported!','success');
         }
@@ -6298,6 +6879,11 @@
             chk('rcpt_vat_enabled',     receiptSettings.vatEnabled);
             chk('rcpt_show_vat',        receiptSettings.showVAT !== false);
             chk('rcpt_item_discount',   receiptSettings.itemDiscount);
+            const logoSizeEl = document.getElementById('rcpt_logo_size');
+            const logoSizeValEl = document.getElementById('rcpt_logo_size_val');
+            const logoSize = receiptSettings.logoSize || 40;
+            if (logoSizeEl) logoSizeEl.value = logoSize;
+            if (logoSizeValEl) logoSizeValEl.textContent = logoSize + 'px';
             updateReceiptPreview();
         }
 
@@ -6312,6 +6898,7 @@
                 showCustomer:   document.getElementById('rcpt_show_customer')?.checked   ?? true,
                 showLogo:       document.getElementById('rcpt_show_logo')?.checked        ?? true,
                 showStoreName:  document.getElementById('rcpt_show_store_name')?.checked  ?? true,
+                logoSize:       parseInt(document.getElementById('rcpt_logo_size')?.value) || 40,
                 vatEnabled:     document.getElementById('rcpt_vat_enabled')?.checked      ?? false,
                 vatRate:        parseFloat(document.getElementById('rcpt_vat_rate')?.value) || 10,
                 showVAT:        document.getElementById('rcpt_show_vat')?.checked         ?? true,
@@ -6337,6 +6924,7 @@
             const ftr        = document.getElementById('rcpt_footer')?.value  || 'Thank you for your purchase!';
             const showLogo      = document.getElementById('rcpt_show_logo')?.checked !== false;
             const showStoreName = document.getElementById('rcpt_show_store_name')?.checked !== false;
+            const logoSize      = parseInt(document.getElementById('rcpt_logo_size')?.value) || 40;
             const vatEnabled = document.getElementById('rcpt_vat_enabled')?.checked;
             const showVAT    = document.getElementById('rcpt_show_vat')?.checked;
             const vatRate    = parseFloat(document.getElementById('rcpt_vat_rate')?.value) || 10;
@@ -6348,7 +6936,7 @@
             el.innerHTML = `
                 <div class="text-center space-y-0.5 pb-2 border-b border-dashed border-slate-300">
                     <div class="flex items-center justify-center gap-1.5 mb-0.5">
-                        ${logo ? `<img src="${logo}" class="w-8 h-8 object-contain flex-shrink-0">` : ''}
+                        ${logo ? `<img src="${logo}" style="width:${logoSize}px;height:${logoSize}px" class="object-contain flex-shrink-0">` : ''}
                         ${showStoreName ? `<p class="font-black text-lg uppercase tracking-widest">${n}</p>` : ''}
                     </div>
                     ${addr ? `<p class="text-slate-500 text-[10px]">${addr}</p>` : ''}
@@ -6661,7 +7249,11 @@
                     showToast('✅ Backup restored! Reloading…', 'success');
                     addNotification('success', 'Backup Restored',
                         `Data restored from ${data._exportDate ? new Date(data._exportDate).toLocaleDateString() : 'file'}.`, 'fa-database');
-                    setTimeout(() => location.reload(), 1200);
+                    // Wait for the save to actually land in IndexedDB rather than just
+                    // hoping a fixed delay was long enough — this is the one flow where
+                    // reloading before the write finishes would be most painful (a full
+                    // restore silently not taking effect).
+                    _pendingSave.finally(() => setTimeout(() => location.reload(), 400));
                 } catch (err) {
                     showToast(`❌ Restore failed: ${err.message}`, 'danger');
                 }
@@ -7687,8 +8279,8 @@
                                 expenses.slice().sort((a,b)=> (b.date||'').localeCompare(a.date||'')).map(e => `
                                 <div class="flex items-center gap-3 px-5 py-3">
                                     <div class="flex-1 min-w-0">
-                                        <p class="text-sm font-bold text-slate-800 dark:text-white truncate">${e.category}</p>
-                                        <p class="text-[10px] text-slate-400">${e.date}${e.note ? ' · ' + e.note : ''}</p>
+                                        <p class="text-sm font-bold text-slate-800 dark:text-white truncate">${e.note || e.category}</p>
+                                        <p class="text-[10px] text-slate-400">${e.date} · ${e.category}</p>
                                     </div>
                                     <p class="text-sm font-black text-red-500 flex-shrink-0">-$${(e.amount||0).toFixed(2)}</p>
                                     <button onclick="deleteExpense('${e.id}')" class="no-print text-slate-400 hover:text-red-500 flex-shrink-0 transition"><i class="fas fa-trash text-xs"></i></button>
@@ -8147,12 +8739,13 @@
         }
 
         // --- SYSTEM IGNITION PROTOCOL ---
-        window.onload = () => {
-            loadSystemData();
+        window.onload = async () => {
+            await loadSystemData();
             runTimeEngine();
             fetchWeather();
             renderTables();
             renderKhqrTable();
+            renderStorageUsagePanel();
             renderInvestmentMatrix();
             syncMatrixToROI();
             renderDashboard();
