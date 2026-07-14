@@ -41,10 +41,6 @@ body.lang-zh { font-family: 'Noto Sans SC', sans-serif; }
 .no-scrollbar::-webkit-scrollbar { display: none; }
 .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
-/* Language pills */
-.lang-pill { padding: 6px 12px; border-radius: 9999px; font-size: 12px; font-weight: 700; color: var(--ink-soft); transition: all .15s; }
-.lang-pill.active { background: var(--jade); color: #fff; }
-
 /* Category filter pills */
 .cat-pill { flex-shrink: 0; padding: 8px 16px; border-radius: 9999px; font-size: 13px; font-weight: 700; border: 1.5px solid var(--line); color: var(--ink-soft); background: var(--paper-card); white-space: nowrap; transition: all .15s; cursor: pointer; }
 .cat-pill.active { background: var(--ink); border-color: var(--ink); color: #fff; }
@@ -138,16 +134,21 @@ body.lang-zh { font-family: 'Noto Sans SC', sans-serif; }
 .product-actions .btn-add, .product-actions .qty-stepper { margin-top: 0; flex: 1; min-width: 0; }
 #favBtn.is-active { background: var(--lacquer); color: #fff; border-color: var(--lacquer); }
 
-/* Hero banner */
-.hero-banner { position: relative; overflow: hidden; background: linear-gradient(135deg, var(--jade) 0%, var(--jade-deep) 100%); }
-.hero-banner-pattern { position: absolute; inset: 0; opacity: .10; background-image: radial-gradient(circle, #fff 1.5px, transparent 1.5px); background-size: 22px 22px; pointer-events: none; }
-.hero-eyebrow { display: inline-block; background: rgba(255,255,255,0.18); color: #fff; font-size: 11px; font-weight: 800; letter-spacing: .07em; text-transform: uppercase; padding: 6px 14px; border-radius: 9999px; }
-.hero-headline { color: #fff; font-weight: 900; font-size: clamp(1.5rem, 4vw, 2.5rem); line-height: 1.18; margin-top: 14px; }
-.hero-subtext { color: rgba(255,255,255,0.85); font-size: 15px; margin-top: 10px; max-width: 460px; }
-.hero-cta { margin-top: 22px; background: #fff; color: var(--jade-deep); font-weight: 900; font-size: 13.5px; padding: 13px 26px; border-radius: 9999px; box-shadow: 0 10px 24px rgba(0,0,0,0.18); transition: transform .15s; display: inline-block; }
+/* Hero banner - animated image carousel */
+.hero-banner { position: relative; overflow: hidden; background: var(--jade-deep); min-height: 320px; display: flex; align-items: center; }
+.hero-carousel { position: absolute; inset: 0; z-index: 0; }
+.hero-slide { position: absolute; inset: 0; opacity: 0; transition: opacity 1.1s ease; }
+.hero-slide.active { opacity: 1; }
+.hero-slide img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.hero-slide::after { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(14,107,84,0.86) 0%, rgba(10,78,62,0.88) 100%); }
+.hero-dots { position: absolute; bottom: 16px; left: 50%; transform: translateX(-50%); display: flex; gap: 6px; z-index: 2; }
+.hero-dot { width: 7px; height: 7px; border-radius: 9999px; background: rgba(255,255,255,0.4); cursor: pointer; transition: background .2s, width .2s; border: none; padding: 0; }
+.hero-dot.active { background: #fff; width: 20px; }
+.hero-eyebrow { display: inline-block; background: rgba(255,255,255,0.18); color: #fff; font-size: 11px; font-weight: 800; letter-spacing: .07em; text-transform: uppercase; padding: 6px 14px; border-radius: 9999px; position: relative; z-index: 1; }
+.hero-headline { color: #fff; font-weight: 900; font-size: clamp(1.5rem, 4vw, 2.5rem); line-height: 1.18; margin-top: 14px; position: relative; z-index: 1; }
+.hero-subtext { color: rgba(255,255,255,0.85); font-size: 15px; margin-top: 10px; max-width: 480px; position: relative; z-index: 1; }
+.hero-cta { margin-top: 22px; background: #fff; color: var(--jade-deep); font-weight: 900; font-size: 13.5px; padding: 13px 26px; border-radius: 9999px; box-shadow: 0 10px 24px rgba(0,0,0,0.18); transition: transform .15s; display: inline-block; position: relative; z-index: 1; }
 .hero-cta:hover { transform: translateY(-2px); }
-.hero-icon-cluster { position: relative; width: 190px; height: 160px; flex-shrink: 0; }
-.hero-icon-badge { position: absolute; width: 58px; height: 58px; border-radius: 18px; background: #fff; display: flex; align-items: center; justify-content: center; font-size: 22px; color: var(--jade); box-shadow: 0 10px 22px rgba(0,0,0,0.18); }
 
 /* Section headings */
 .section-heading { font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: .08em; color: var(--ink-soft); margin-bottom: 14px; }
@@ -173,6 +174,35 @@ body.lang-zh { font-family: 'Noto Sans SC', sans-serif; }
 .footer-link:hover { color: var(--jade); }
 .footer-badge { display: inline-flex; align-items: center; gap: 7px; font-size: 12px; font-weight: 700; color: var(--ink-soft); background: var(--paper); border: 1px solid var(--line); padding: 7px 12px; border-radius: 9999px; }
 .footer-badge i { color: var(--jade); }
+
+/* Language dropdown (flag + name), replaces the old pill switcher */
+.lang-select-wrap { position: relative; display: inline-flex; align-items: center; flex-shrink: 0; }
+.lang-select-wrap select {
+  appearance: none; -webkit-appearance: none; -moz-appearance: none;
+  background: var(--paper); border: 1px solid var(--line); border-radius: 9999px;
+  padding: 7px 26px 7px 12px; font-size: 12.5px; font-weight: 700; color: var(--ink);
+  cursor: pointer; max-width: 108px;
+}
+.lang-select-arrow { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); font-size: 9px; color: var(--ink-soft); pointer-events: none; }
+
+/* Click-to-add product image overlay */
+.product-card-img.is-clickable { cursor: pointer; }
+.img-add-overlay { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; opacity: 0; background: rgba(14,107,84,0); transition: opacity .2s, background .2s; }
+.product-card-img.is-clickable:hover .img-add-overlay { opacity: 1; background: rgba(14,107,84,0.32); }
+.img-add-overlay i { color: #fff; font-size: 18px; background: rgba(0,0,0,0.28); width: 38px; height: 38px; border-radius: 9999px; display: flex; align-items: center; justify-content: center; }
+
+/* Back to top floating button */
+.back-to-top { position: fixed; right: 16px; bottom: 80px; width: 44px; height: 44px; border-radius: 9999px; background: var(--ink); color: #fff; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 20px rgba(0,0,0,0.25); z-index: 45; opacity: 0; transform: translateY(10px) scale(0.9); pointer-events: none; transition: opacity .2s, transform .2s; }
+.back-to-top.visible { opacity: 1; transform: translateY(0) scale(1); pointer-events: auto; }
+@media (min-width: 640px) { .back-to-top { bottom: 24px; } }
+
+/* Bottom floating dock (mobile) */
+.bottom-dock { position: fixed; left: 0; right: 0; bottom: 0; z-index: 40; background: var(--paper-card); border-top: 1px solid var(--line); display: flex; justify-content: space-around; align-items: center; padding: 8px 4px calc(6px + env(safe-area-inset-bottom)); box-shadow: 0 -4px 16px rgba(0,0,0,0.06); }
+.dock-item { display: flex; flex-direction: column; align-items: center; gap: 2px; color: var(--ink-soft); font-size: 9.5px; font-weight: 700; flex: 1; padding: 4px 2px; position: relative; }
+.dock-item i { font-size: 17px; }
+.dock-item.is-active { color: var(--jade); }
+.dock-badge { position: absolute; top: -2px; right: 22%; min-width: 15px; height: 15px; padding: 0 3px; border-radius: 9999px; background: var(--lacquer); color: #fff; font-size: 9px; font-weight: 800; display: flex; align-items: center; justify-content: center; }
+@media (max-width: 639px) { body { padding-bottom: 64px; } }
 </style>
 </head>
 <body class="lang-en">
@@ -189,35 +219,38 @@ body.lang-zh { font-family: 'Noto Sans SC', sans-serif; }
       <img id="storeLogo" src="" alt="" class="h-9 w-auto rounded-md object-contain flex-shrink-0">
       <span id="storeName" class="font-black text-lg sm:text-xl tracking-tight truncate"></span>
     </div>
-    <div class="flex items-center gap-1 bg-[var(--paper)] rounded-full p-1 border flex-shrink-0" style="border-color:var(--line)">
-      <button class="lang-pill" data-lang="en" onclick="setLang('en')">EN</button>
-      <button class="lang-pill" data-lang="zh" onclick="setLang('zh')">中文</button>
-      <button class="lang-pill" data-lang="km" onclick="setLang('km')">ខ្មែរ</button>
+    <div class="flex items-center gap-2 sm:gap-3 flex-shrink-0">
+      <div class="lang-select-wrap">
+        <select id="langSelect" onchange="setLang(this.value)" aria-label="Language">
+          <option value="en">🇬🇧 English</option>
+          <option value="zh">🇨🇳 中文</option>
+          <option value="km">🇰🇭 ខ្មែរ</option>
+        </select>
+        <i class="fas fa-chevron-down lang-select-arrow"></i>
+      </div>
+      <button id="favBtn" onclick="toggleFavoritesFilter()" data-i18n-aria="favorites" class="relative flex items-center justify-center w-10 h-10 rounded-full flex-shrink-0 border transition" style="border-color:var(--line); color:var(--lacquer)">
+        <i class="fas fa-heart"></i>
+        <span id="favBadge" class="hidden absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 rounded-full text-[10px] font-black flex items-center justify-center text-white" style="background:var(--lacquer)">0</span>
+      </button>
+      <button id="cartBtn" onclick="openDrawer('cart')" data-i18n-aria="cart" class="relative flex items-center justify-center w-10 h-10 rounded-full text-white flex-shrink-0" style="background:var(--jade)">
+        <i class="fas fa-basket-shopping"></i>
+        <span id="cartBadge" class="hidden absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 rounded-full text-[10px] font-black flex items-center justify-center text-white" style="background:var(--lacquer)">0</span>
+      </button>
     </div>
-    <button id="favBtn" onclick="toggleFavoritesFilter()" data-i18n-aria="favorites" class="relative flex items-center justify-center w-10 h-10 rounded-full flex-shrink-0 border transition" style="border-color:var(--line); color:var(--lacquer)">
-      <i class="fas fa-heart"></i>
-      <span id="favBadge" class="hidden absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 rounded-full text-[10px] font-black flex items-center justify-center text-white" style="background:var(--lacquer)">0</span>
-    </button>
-    <button id="cartBtn" onclick="openDrawer('cart')" data-i18n-aria="cart" class="relative flex items-center justify-center w-10 h-10 rounded-full text-white flex-shrink-0" style="background:var(--jade)">
-      <i class="fas fa-basket-shopping"></i>
-      <span id="cartBadge" class="hidden absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 rounded-full text-[10px] font-black flex items-center justify-center text-white" style="background:var(--lacquer)">0</span>
-    </button>
   </div>
 </header>
 
 <main>
-  <!-- ============== HERO BANNER ============== -->
+  <!-- ============== HERO BANNER (animated image carousel) ============== -->
   <section class="hero-banner">
-    <div class="hero-banner-pattern"></div>
-    <div class="max-w-6xl mx-auto px-4 sm:px-6 py-10 sm:py-14 relative flex flex-col sm:flex-row items-center gap-8 sm:gap-10">
-      <div class="flex-1 text-center sm:text-left">
-        <span class="hero-eyebrow" data-i18n="hero_eyebrow"></span>
-        <h1 id="heroHeadline" class="hero-headline"></h1>
-        <p id="heroSubtext" class="hero-subtext mx-auto sm:mx-0" data-i18n="hero_subtext"></p>
-        <button onclick="scrollToProducts()" class="hero-cta" data-i18n="shop_now"></button>
-      </div>
-      <div id="heroIconCluster" class="hero-icon-cluster mx-auto sm:mx-0"></div>
+    <div class="hero-carousel" id="heroCarousel"></div>
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 py-14 sm:py-20 relative flex flex-col items-center text-center">
+      <span class="hero-eyebrow" data-i18n="hero_eyebrow"></span>
+      <h1 id="heroHeadline" class="hero-headline"></h1>
+      <p id="heroSubtext" class="hero-subtext" data-i18n="hero_subtext"></p>
+      <button onclick="scrollToProducts()" class="hero-cta" data-i18n="shop_now"></button>
     </div>
+    <div class="hero-dots" id="heroDots"></div>
   </section>
 
   <!-- ============== SHOP BY CATEGORY ============== -->
@@ -394,6 +427,32 @@ body.lang-zh { font-family: 'Noto Sans SC', sans-serif; }
   </div>
 </div>
 
+<!-- ============== BACK TO TOP ============== -->
+<button id="backToTopBtn" onclick="scrollToTopPage()" data-i18n-aria="back_to_top" class="back-to-top">
+  <i class="fas fa-arrow-up"></i>
+</button>
+
+<!-- ============== BOTTOM FLOATING DOCK (mobile) ============== -->
+<nav class="bottom-dock sm:hidden">
+  <button onclick="scrollToTopPage()" class="dock-item">
+    <i class="fas fa-house"></i><span data-i18n="dock_home"></span>
+  </button>
+  <button onclick="goToShopByCategory()" class="dock-item">
+    <i class="fas fa-shapes"></i><span data-i18n="dock_categories"></span>
+  </button>
+  <button onclick="focusSearch()" class="dock-item">
+    <i class="fas fa-magnifying-glass"></i><span data-i18n="dock_search"></span>
+  </button>
+  <button onclick="toggleFavoritesFilter()" class="dock-item">
+    <i class="fas fa-heart"></i><span data-i18n="favorites"></span>
+    <span id="dockFavBadge" class="dock-badge hidden">0</span>
+  </button>
+  <button onclick="openDrawer('cart')" class="dock-item">
+    <i class="fas fa-basket-shopping"></i><span data-i18n="cart"></span>
+    <span id="dockCartBadge" class="dock-badge hidden">0</span>
+  </button>
+</nav>
+
 <script>
 // ============================================================
 // ── CONSTANTS ────────────────────────────────────────────────
@@ -417,13 +476,11 @@ const CATEGORY_ICONS = {
   cat_apparel: 'fa-shirt'
 };
 
-const HERO_BADGE_POSITIONS = [
-  { top: '2%',  left: '32%', rot: -8 },
-  { top: '20%', left: '2%',  rot: 7 },
-  { top: '16%', left: '64%', rot: 10 },
-  { top: '58%', left: '20%', rot: -6 },
-  { top: '54%', left: '68%', rot: -12 },
-  { top: '84%', left: '42%', rot: 5 }
+// Default hero carousel images (used until the shop syncs its own via catalog.heroBanners).
+const DEFAULT_HERO_BANNERS = [
+  'https://images.unsplash.com/photo-1481437156560-3205f6a55735?auto=format&fit=crop&w=1200&q=80',
+  'https://images.unsplash.com/photo-1587654780291-39c9404d746b?auto=format&fit=crop&w=1200&q=80',
+  'https://images.unsplash.com/photo-1498049794561-7780e7231661?auto=format&fit=crop&w=1200&q=80'
 ];
 
 // Abstract placeholder marks for the "Explore Our Brands" marquee - simple generic
@@ -463,7 +520,8 @@ const DEFAULT_CATALOG = {
       name: { en: 'Premium Eco Laundry Gel', zh: '高级环保洗衣凝珠', km: 'សាប៊ូបោកខោអាវប្រភេទជែលពិសេស' } }
   ],
   payment: { khqr: [ { bank: 'ABA Bank', merchant: 'JC STORE CO., LTD', account: '000 123 456', qr: 'https://via.placeholder.com/240x240?text=Scan+to+Pay' } ] },
-  brands: DEFAULT_BRANDS
+  brands: DEFAULT_BRANDS,
+  heroBanners: DEFAULT_HERO_BANNERS
 };
 
 const UI = {
@@ -534,7 +592,12 @@ const UI = {
     download_pending: 'Download',
     clear_pending: 'Clear',
     clear_pending_confirm: 'Delete all pending orders stored on this device? This cannot be undone.',
-    added_to_cart: 'Added to cart'
+    added_to_cart: 'Added to cart',
+    back_to_top: 'Back to top',
+    dock_home: 'Home',
+    dock_categories: 'Categories',
+    dock_search: 'Search',
+    cart_updated_notice: 'Some items in your cart were updated to match current stock.'
   },
   zh: {
     hero_headline: '{categories}——一站购齐,用您的语言浏览。',
@@ -603,7 +666,12 @@ const UI = {
     download_pending: '下载',
     clear_pending: '清除',
     clear_pending_confirm: '删除此设备上存储的所有待处理订单?此操作无法撤销。',
-    added_to_cart: '已加入购物车'
+    added_to_cart: '已加入购物车',
+    back_to_top: '返回顶部',
+    dock_home: '首页',
+    dock_categories: '分类',
+    dock_search: '搜索',
+    cart_updated_notice: '购物车中的部分商品已根据最新库存更新。'
   },
   km: {
     hero_headline: '{categories} — នៅកន្លែងតែមួយ ជាមួយភាសារបស់អ្នក។',
@@ -672,7 +740,12 @@ const UI = {
     download_pending: 'ទាញយក',
     clear_pending: 'សម្អាត',
     clear_pending_confirm: 'លុបកម្មង់ទាំងអស់ដែលរក្សាទុកលើឧបករណ៍នេះ? សកម្មភាពនេះមិនអាចត្រឡប់វិញបានទេ។',
-    added_to_cart: 'បានបញ្ចូលទៅរទេះ'
+    added_to_cart: 'បានបញ្ចូលទៅរទេះ',
+    back_to_top: 'ត្រឡប់ទៅលើ',
+    dock_home: 'ទំព័រដើម',
+    dock_categories: 'ប្រភេទ',
+    dock_search: 'ស្វែងរក',
+    cart_updated_notice: 'ទំនិញមួយចំនួននៅក្នុងរទេះត្រូវបានធ្វើបច្ចុប្បន្នភាពទៅតាមស្តុកបច្ចុប្បន្ន។'
   }
 };
 
@@ -772,15 +845,55 @@ async function loadCatalog() {
   state.catalog = DEFAULT_CATALOG;
 }
 
+// Keeps an already-open storefront tab in sync with category/stock changes made in the
+// admin system, as long as the shop re-exports and redeploys storefront-catalog.json.
+// Skipped while a manual "sync catalog" override is active in this browser, since that's
+// a deliberate one-off action rather than something with a live file to keep re-checking.
+const CATALOG_REFRESH_INTERVAL_MS = 60000;
+let catalogRefreshTimer = null;
+function startCatalogAutoRefresh() {
+  clearInterval(catalogRefreshTimer);
+  catalogRefreshTimer = setInterval(async function() {
+    if (localStorage.getItem(CATALOG_STORAGE_KEY)) return;
+    try {
+      const res = await fetch(CATALOG_FILE_URL, { cache: 'no-store' });
+      if (!res.ok) return;
+      const data = await res.json();
+      if (!data || !Array.isArray(data.products)) return;
+      if (JSON.stringify(data) === JSON.stringify(state.catalog)) return;
+      state.catalog = data;
+      reconcileCartWithCatalog();
+      renderAll();
+      renderCartItems();
+      renderHeroCarousel();
+    } catch (e) { /* static file not reachable right now - try again next interval */ }
+  }, CATALOG_REFRESH_INTERVAL_MS);
+}
+
+// Clamps or removes cart lines that no longer fit the freshly-synced stock levels.
+function reconcileCartWithCatalog() {
+  let changed = false;
+  state.cart = state.cart.filter(function(c) {
+    const p = (state.catalog.products || []).find(function(x) { return x.sku === c.sku; });
+    if (!p || Number(p.qty) <= 0) { changed = true; return false; }
+    if (c.qty > p.qty) { c.qty = p.qty; changed = true; }
+    return true;
+  });
+  if (changed) {
+    saveCart();
+    renderCartBadge();
+    showToast(t('cart_updated_notice'), 'info');
+  }
+}
+
 // ============================================================
 // ── RENDERING ────────────────────────────────────────────────
 // ============================================================
 function renderAll() {
   document.documentElement.lang = state.lang;
   document.body.className = 'lang-' + state.lang;
-  document.querySelectorAll('.lang-pill').forEach(function(btn) {
-    btn.classList.toggle('active', btn.dataset.lang === state.lang);
-  });
+  const langSelectEl = document.getElementById('langSelect');
+  if (langSelectEl.value !== state.lang) langSelectEl.value = state.lang;
 
   const store = state.catalog.store || {};
   const logoEl = document.getElementById('storeLogo');
@@ -792,7 +905,6 @@ function renderAll() {
   const names = (state.catalog.categories || []).map(function(c) { return c[state.lang] || c.en; });
   document.getElementById('heroHeadline').textContent = t('hero_headline').replace('{categories}', joinList(names, state.lang));
 
-  renderHeroIconCluster();
   renderCategoryTilesAndPills();
   renderProducts();
   renderBrandMarquee();
@@ -802,13 +914,36 @@ function renderAll() {
   applyStaticI18n();
 }
 
-function renderHeroIconCluster() {
-  const cats = (state.catalog.categories || []).slice(0, HERO_BADGE_POSITIONS.length);
-  document.getElementById('heroIconCluster').innerHTML = cats.map(function(c, i) {
-    const pos = HERO_BADGE_POSITIONS[i];
-    const icon = CATEGORY_ICONS[c.key] || 'fa-tag';
-    return '<div class="hero-icon-badge" style="top:' + pos.top + '; left:' + pos.left + '; transform:rotate(' + pos.rot + 'deg);"><i class="fas ' + icon + '"></i></div>';
+// Rendered separately from renderAll() (which also runs on every language switch) so that
+// switching languages doesn't reset the current slide or restart the auto-advance timer.
+// Call this once on load, and again whenever the catalog itself changes (sync/refresh).
+let heroCarouselTimer = null;
+let heroCarouselIndex = 0;
+function renderHeroCarousel() {
+  const banners = (state.catalog.heroBanners && state.catalog.heroBanners.length) ? state.catalog.heroBanners : DEFAULT_HERO_BANNERS;
+  heroCarouselIndex = 0;
+
+  document.getElementById('heroCarousel').innerHTML = banners.map(function(src, i) {
+    return '<div class="hero-slide' + (i === 0 ? ' active' : '') + '"><img src="' + src + '" alt="" loading="' + (i === 0 ? 'eager' : 'lazy') + '" onerror="this.style.display=\'none\'"></div>';
   }).join('');
+
+  document.getElementById('heroDots').innerHTML = banners.length > 1 ? banners.map(function(src, i) {
+    return '<button class="hero-dot' + (i === 0 ? ' active' : '') + '" onclick="goToHeroSlide(' + i + ')" aria-label="' + (i + 1) + '"></button>';
+  }).join('') : '';
+
+  clearInterval(heroCarouselTimer);
+  const reducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (banners.length > 1 && !reducedMotion) {
+    heroCarouselTimer = setInterval(function() {
+      const banners2 = (state.catalog.heroBanners && state.catalog.heroBanners.length) ? state.catalog.heroBanners : DEFAULT_HERO_BANNERS;
+      goToHeroSlide((heroCarouselIndex + 1) % banners2.length);
+    }, 5000);
+  }
+}
+function goToHeroSlide(i) {
+  document.querySelectorAll('#heroCarousel .hero-slide').forEach(function(s, idx) { s.classList.toggle('active', idx === i); });
+  document.querySelectorAll('#heroDots .hero-dot').forEach(function(d, idx) { d.classList.toggle('active', idx === i); });
+  heroCarouselIndex = i;
 }
 
 function renderCategoryTilesAndPills() {
@@ -939,9 +1074,14 @@ function productCard(p) {
   const favLabel = favorited ? t('remove_from_favorites') : t('add_to_favorites');
   const favBtn = '<button class="btn-fav' + (favorited ? ' is-favorited' : '') + '" onclick="toggleFavorite(\'' + escapeJs(p.sku) + '\')" aria-label="' + escapeHtml(favLabel) + '"><i class="fas fa-heart"></i></button>';
 
+  const imgClickable = stockState !== 'out';
+  const imgClickAttr = imgClickable ? ' onclick="addToCart(\'' + escapeJs(p.sku) + '\')"' : '';
+  const imgOverlay = imgClickable ? '<div class="img-add-overlay"><i class="fas fa-cart-plus"></i></div>' : '';
+
   return '<div class="product-card">' +
-    '<div class="product-card-img">' +
+    '<div class="product-card-img' + (imgClickable ? ' is-clickable' : '') + '"' + imgClickAttr + '>' +
       '<img src="' + (p.img || PLACEHOLDER_IMG) + '" alt="' + escapeHtml(name) + '" loading="lazy" onerror="this.onerror=null;this.src=\'' + PLACEHOLDER_IMG + '\'">' +
+      imgOverlay +
       stockBadge +
     '</div>' +
     '<div class="product-card-body">' +
@@ -974,9 +1114,11 @@ function toggleFavoritesFilter() {
 }
 
 function renderFavoritesBadge() {
-  const badge = document.getElementById('favBadge');
-  if (state.favorites.length > 0) { badge.textContent = state.favorites.length; badge.classList.remove('hidden'); }
-  else badge.classList.add('hidden');
+  const count = state.favorites.length;
+  [document.getElementById('favBadge'), document.getElementById('dockFavBadge')].forEach(function(badge) {
+    if (count > 0) { badge.textContent = count; badge.classList.remove('hidden'); }
+    else badge.classList.add('hidden');
+  });
 }
 
 // ============================================================
@@ -1035,9 +1177,10 @@ function renderFooter() {
 
 function renderCartBadge() {
   const count = state.cart.reduce(function(s,c){ return s + c.qty; }, 0);
-  const badge = document.getElementById('cartBadge');
-  if (count > 0) { badge.textContent = count; badge.classList.remove('hidden'); }
-  else badge.classList.add('hidden');
+  [document.getElementById('cartBadge'), document.getElementById('dockCartBadge')].forEach(function(badge) {
+    if (count > 0) { badge.textContent = count; badge.classList.remove('hidden'); }
+    else badge.classList.add('hidden');
+  });
 }
 function bounceCart() {
   const btn = document.getElementById('cartBtn');
@@ -1327,6 +1470,12 @@ function downloadOrder() {
 function onSearchInput(v) { state.query = v; renderProducts(); }
 function clearSearch() { state.query = ''; document.getElementById('searchInput').value = ''; renderProducts(); }
 function scrollToProducts() { document.getElementById('productGrid').scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+function scrollToTopPage() { window.scrollTo({ top: 0, behavior: 'smooth' }); }
+function goToShopByCategory() { document.getElementById('categoryTiles').scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+function focusSearch() {
+  document.getElementById('searchInput').scrollIntoView({ behavior: 'smooth', block: 'center' });
+  document.getElementById('searchInput').focus();
+}
 
 // ============================================================
 // ── LANGUAGE ─────────────────────────────────────────────────
@@ -1393,9 +1542,11 @@ function handleCatalogFileUpload(e) {
       localStorage.setItem(CATALOG_STORAGE_KEY, JSON.stringify(data));
       localStorage.setItem(CATALOG_SYNCED_KEY, new Date().toISOString());
       state.catalog = data;
+      reconcileCartWithCatalog();
       renderAll();
       renderCartItems();
       renderSyncModal();
+      renderHeroCarousel();
       showToast('Catalog synced.', 'success');
     } catch (err) {
       showToast('Could not read that file.', 'error');
@@ -1409,9 +1560,11 @@ function resetToSharedCatalog() {
   localStorage.removeItem(CATALOG_STORAGE_KEY);
   localStorage.removeItem(CATALOG_SYNCED_KEY);
   loadCatalog().then(function() {
+    reconcileCartWithCatalog();
     renderAll();
     renderCartItems();
     renderSyncModal();
+    renderHeroCarousel();
   });
 }
 
@@ -1438,12 +1591,19 @@ document.addEventListener('DOMContentLoaded', async function() {
   await loadCatalog();
   renderAll();
   renderCartItems();
+  renderHeroCarousel();
+  startCatalogAutoRefresh();
 
   document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') {
       closeDrawer();
       closeSyncModal();
     }
+  });
+
+  const backToTopBtn = document.getElementById('backToTopBtn');
+  window.addEventListener('scroll', function() {
+    backToTopBtn.classList.toggle('visible', window.scrollY > 400);
   });
 });
 </script>
