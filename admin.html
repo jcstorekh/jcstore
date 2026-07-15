@@ -279,6 +279,7 @@
                     <li id="nav-customers"><button onclick="switchTab('customers')" class="tab-btn w-full text-left px-6 py-3 hover:bg-slate-800 focus:outline-none border-l-4 border-transparent text-slate-300 flex items-center" data-target="customers"><i class="fas fa-users-line w-6 text-center mr-2 text-sky-400"></i> <span data-i18n="menu_customers" class="whitespace-nowrap">Customers</span></button></li>
                     <li id="nav-costing"><button onclick="switchTab('costing')" class="tab-btn w-full text-left px-6 py-3 hover:bg-slate-800 focus:outline-none border-l-4 border-transparent text-slate-300 flex items-center" data-target="costing"><i class="fas fa-file-invoice-dollar w-6 text-center mr-2"></i> <span data-i18n="menu_costing" class="whitespace-nowrap">Costing & Pricing</span></button></li>
                     <li id="nav-inventory"><button onclick="switchTab('inventory')" class="tab-btn w-full text-left px-6 py-3 hover:bg-slate-800 focus:outline-none border-l-4 border-transparent text-slate-300 flex items-center" data-target="inventory"><i class="fas fa-boxes w-6 text-center mr-2"></i> <span data-i18n="menu_inventory" class="whitespace-nowrap">Inventory Database</span></button></li>
+                    <li id="nav-storefront"><button onclick="switchTab('storefront')" class="tab-btn w-full text-left px-6 py-3 hover:bg-slate-800 focus:outline-none border-l-4 border-transparent text-slate-300 flex items-center" data-target="storefront"><i class="fas fa-store w-6 text-center mr-2 text-emerald-400"></i> <span data-i18n="menu_storefront" class="whitespace-nowrap">Storefront</span></button></li>
                     <li id="nav-employee"><button onclick="switchTab('employee')" class="tab-btn w-full text-left px-6 py-3 hover:bg-slate-800 focus:outline-none border-l-4 border-transparent text-slate-300 flex items-center" data-target="employee"><i class="fas fa-id-badge w-6 text-center mr-2"></i> <span data-i18n="menu_employee" class="whitespace-nowrap">Employees</span></button></li>
                     <li id="nav-reports"><button onclick="switchTab('reports')" class="tab-btn w-full text-left px-6 py-3 hover:bg-slate-800 focus:outline-none border-l-4 border-transparent text-slate-300 flex items-center" data-target="reports"><i class="fas fa-chart-column w-6 text-center mr-2 text-indigo-400"></i> <span data-i18n="menu_reports" class="whitespace-nowrap">Reports</span></button></li>
                     <li id="nav-business-plan"><button onclick="switchTab('business-plan')" class="tab-btn w-full text-left px-6 py-3 hover:bg-slate-800 focus:outline-none border-l-4 border-transparent text-slate-300 flex items-center" data-target="business-plan"><i class="fas fa-briefcase w-6 text-center mr-2"></i> <span data-i18n="menu_biz_plan" class="whitespace-nowrap">Business Plan</span></button></li>
@@ -925,6 +926,58 @@
                 </div>
             </div>
 
+            <div id="storefront" class="tab-content">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <!-- Hero Banner Images -->
+                    <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700">
+                        <h3 class="text-base font-bold text-slate-800 dark:text-white mb-1 flex items-center"><i class="fas fa-images text-emerald-500 mr-2"></i><span data-i18n="sf_hero_title">Hero Banner Images</span></h3>
+                        <p class="text-xs text-slate-500 dark:text-slate-400 mb-4" data-i18n="sf_hero_desc">Shown as an auto-rotating slideshow at the top of the storefront.</p>
+                        <div id="storefrontHeroList" class="grid grid-cols-3 gap-2 mb-3"></div>
+                        <input type="file" id="storefrontHeroInput" accept="image/*" class="hidden" onchange="handleStorefrontHeroUpload(event)">
+                        <button onclick="document.getElementById('storefrontHeroInput').click()" class="bg-emerald-600 text-white font-bold text-xs px-4 py-2.5 rounded-lg hover:bg-emerald-700 transition w-full"><i class="fas fa-upload mr-1.5"></i> <span data-i18n="sf_hero_add">Add Banner Image</span></button>
+                    </div>
+
+                    <!-- Brand Partners -->
+                    <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700">
+                        <h3 class="text-base font-bold text-slate-800 dark:text-white mb-1 flex items-center"><i class="fas fa-award text-emerald-500 mr-2"></i><span data-i18n="sf_brands_title">Brand Partners</span></h3>
+                        <p class="text-xs text-slate-500 dark:text-slate-400 mb-4" data-i18n="sf_brands_desc">Logos shown in the "Explore Our Brands" scrolling strip. Transparent PNGs work best.</p>
+                        <div id="storefrontBrandsList" class="space-y-2 mb-3 max-h-48 overflow-y-auto"></div>
+                        <div class="flex gap-2">
+                            <input type="text" id="storefrontBrandNameInput" placeholder="Brand name" class="flex-1 min-w-0 p-2 border border-slate-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded text-sm outline-none focus:ring-2 focus:ring-emerald-500">
+                            <input type="file" id="storefrontBrandLogoInput" accept="image/*" class="hidden" onchange="handleStorefrontBrandUpload(event)">
+                            <button onclick="triggerBrandLogoUpload()" class="bg-emerald-600 text-white font-bold text-xs px-4 py-2 rounded-lg hover:bg-emerald-700 transition whitespace-nowrap flex-shrink-0"><i class="fas fa-upload mr-1.5"></i> <span data-i18n="sf_brands_add">Add Logo</span></button>
+                        </div>
+                    </div>
+
+                    <!-- Follow Us -->
+                    <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700">
+                        <h3 class="text-base font-bold text-slate-800 dark:text-white mb-1 flex items-center"><i class="fas fa-share-nodes text-emerald-500 mr-2"></i><span data-i18n="sf_social_title">Follow Us Links</span></h3>
+                        <p class="text-xs text-slate-500 dark:text-slate-400 mb-4" data-i18n="sf_social_desc">Optional — leave a field blank to hide that icon in the storefront footer.</p>
+                        <form onsubmit="saveStorefrontSocial(event)" class="space-y-2.5">
+                            <div><label class="text-xs font-bold text-slate-600 dark:text-slate-400"><i class="fab fa-facebook mr-1"></i> Facebook</label><input type="url" id="sf_social_facebook" placeholder="https://facebook.com/yourpage" class="w-full p-2 border border-slate-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded mt-1 text-sm outline-none focus:ring-2 focus:ring-emerald-500"></div>
+                            <div><label class="text-xs font-bold text-slate-600 dark:text-slate-400"><i class="fab fa-instagram mr-1"></i> Instagram</label><input type="url" id="sf_social_instagram" placeholder="https://instagram.com/yourpage" class="w-full p-2 border border-slate-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded mt-1 text-sm outline-none focus:ring-2 focus:ring-emerald-500"></div>
+                            <div><label class="text-xs font-bold text-slate-600 dark:text-slate-400"><i class="fab fa-telegram mr-1"></i> Telegram</label><input type="url" id="sf_social_telegram" placeholder="https://t.me/yourchannel" class="w-full p-2 border border-slate-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded mt-1 text-sm outline-none focus:ring-2 focus:ring-emerald-500"></div>
+                            <div><label class="text-xs font-bold text-slate-600 dark:text-slate-400"><i class="fab fa-tiktok mr-1"></i> TikTok</label><input type="url" id="sf_social_tiktok" placeholder="https://tiktok.com/@yourhandle" class="w-full p-2 border border-slate-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded mt-1 text-sm outline-none focus:ring-2 focus:ring-emerald-500"></div>
+                            <button type="submit" class="w-full bg-slate-800 text-white font-bold text-xs py-2.5 rounded hover:bg-slate-900 shadow transition"><i class="fas fa-save mr-1"></i> <span data-i18n="sf_social_save">Save Follow Us Links</span></button>
+                        </form>
+                    </div>
+
+                    <!-- Publish / Sync -->
+                    <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700">
+                        <h3 class="text-base font-bold text-slate-800 dark:text-white mb-1 flex items-center"><i class="fas fa-arrows-rotate text-emerald-500 mr-2"></i><span data-i18n="sf_sync_title">Publish to Storefront</span></h3>
+                        <p class="text-xs text-slate-500 dark:text-slate-400 mb-4" data-i18n="sf_sync_desc">Exports everything on this page — plus products, prices, and stock — as a file the public storefront reads. Cost and margin figures are never included.</p>
+                        <div class="space-y-3">
+                            <button onclick="exportStorefrontCatalog()" class="bg-emerald-600 text-white font-bold text-xs px-5 py-2.5 rounded-lg hover:bg-emerald-700 transition shadow-sm w-full"><i class="fas fa-cloud-arrow-down mr-1.5"></i> <span data-i18n="sf_sync_export">Download Catalog (.json)</span></button>
+                            <div>
+                                <input type="file" id="onlineOrdersFileInput" accept=".json" onchange="handleOnlineOrdersImport(event)" class="hidden">
+                                <button onclick="document.getElementById('onlineOrdersFileInput').click()" class="bg-violet-600 text-white font-bold text-xs px-5 py-2.5 rounded-lg hover:bg-violet-700 transition shadow-sm w-full"><i class="fas fa-cart-arrow-down mr-1.5"></i> <span data-i18n="sf_sync_import">Import Online Orders</span></button>
+                                <p class="text-[10px] text-slate-400 mt-1.5" data-i18n="sf_sync_import_hint">Adds orders to Hold Orders in POS, ready to complete like any other sale.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <div id="settings" class="tab-content">
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
                     <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 lg:col-span-1 space-y-8">
@@ -1206,27 +1259,6 @@
                             <p class="text-xs text-slate-500 dark:text-slate-400 mb-3">⚠️ This will overwrite all current data. Cannot be undone.</p>
                             <input type="file" id="restoreFileInput" accept=".json" onchange="handleRestoreFile(event)" class="hidden">
                             <button onclick="document.getElementById('restoreFileInput').click()" class="bg-amber-600 text-white font-bold text-xs px-5 py-2.5 rounded-lg hover:bg-amber-700 transition shadow-sm w-full"><i class="fas fa-upload mr-1.5"></i> Choose Backup File</button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Online Storefront Sync Panel -->
-                <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 mt-6">
-                    <div class="mb-5 border-b dark:border-slate-700 pb-4">
-                        <h3 class="text-lg font-bold text-slate-800 dark:text-white flex items-center"><i class="fas fa-store text-emerald-500 mr-2"></i> Online Storefront Sync</h3>
-                        <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Keep the public storefront's product list current, and bring orders placed there back into this system.</p>
-                    </div>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div class="bg-emerald-50 dark:bg-emerald-900/20 rounded-xl p-5 border border-emerald-200 dark:border-emerald-800/40">
-                            <p class="text-sm font-bold text-slate-800 dark:text-white mb-1 flex items-center"><i class="fas fa-cloud-arrow-down text-emerald-500 mr-2"></i> Export Storefront Catalog</p>
-                            <p class="text-xs text-slate-500 dark:text-slate-400 mb-4">Downloads the product list, prices, and payment QR as a file the storefront can sync from. Cost and margin figures are never included.</p>
-                            <button onclick="exportStorefrontCatalog()" class="bg-emerald-600 text-white font-bold text-xs px-5 py-2.5 rounded-lg hover:bg-emerald-700 transition shadow-sm w-full"><i class="fas fa-store mr-1.5"></i> Download Catalog (.json)</button>
-                        </div>
-                        <div class="bg-violet-50 dark:bg-violet-900/20 rounded-xl p-5 border border-violet-200 dark:border-violet-800/40">
-                            <p class="text-sm font-bold text-slate-800 dark:text-white mb-1 flex items-center"><i class="fas fa-cart-arrow-down text-violet-500 mr-2"></i> Import Online Orders</p>
-                            <p class="text-xs text-slate-500 dark:text-slate-400 mb-3">Adds orders placed on the storefront to <strong>Hold Orders</strong> in POS, ready to review and complete like any other sale.</p>
-                            <input type="file" id="onlineOrdersFileInput" accept=".json" onchange="handleOnlineOrdersImport(event)" class="hidden">
-                            <button onclick="document.getElementById('onlineOrdersFileInput').click()" class="bg-violet-600 text-white font-bold text-xs px-5 py-2.5 rounded-lg hover:bg-violet-700 transition shadow-sm w-full"><i class="fas fa-upload mr-1.5"></i> Choose Orders File</button>
                         </div>
                     </div>
                 </div>
@@ -1518,6 +1550,29 @@
         // RESTORED KHQR Default Data
         let khqrData = [ { bank: 'ABA Bank', merchant: 'JC STORE CO., LTD', account: '000 123 456', qr: 'https://via.placeholder.com/100x100?text=ABA+QR' } ];
         let itemCategories = ['cat_toys', 'cat_daily', 'cat_elec', 'cat_apparel'];
+
+        // ── Storefront tab data ──────────────────────────────────────
+        // Hero carousel photos, "Explore Our Brands" logos, and social links for the
+        // public storefront. Brands/photos are seeded with the same placeholders already
+        // shipped in storefront-catalog.json, so a first export doesn't regress the demo.
+        let storefrontHeroBanners = [
+            'https://images.unsplash.com/photo-1481437156560-3205f6a55735?auto=format&fit=crop&w=1200&q=80',
+            'https://images.unsplash.com/photo-1587654780291-39c9404d746b?auto=format&fit=crop&w=1200&q=80',
+            'https://images.unsplash.com/photo-1498049794561-7780e7231661?auto=format&fit=crop&w=1200&q=80'
+        ];
+        let storefrontBrands = [
+            {"name":"Brand partner 1","logo":"data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2040%2040%22%3E%3Ccircle%20cx%3D%2220%22%20cy%3D%2220%22%20r%3D%2214%22%20fill%3D%22none%22%20stroke%3D%22%239AA79F%22%20stroke-width%3D%223%22%2F%3E%3C%2Fsvg%3E"},
+            {"name":"Brand partner 2","logo":"data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2040%2040%22%3E%3Cpolygon%20points%3D%2220%2C5%2035%2C20%2020%2C35%205%2C20%22%20fill%3D%22none%22%20stroke%3D%22%239AA79F%22%20stroke-width%3D%223%22%2F%3E%3C%2Fsvg%3E"},
+            {"name":"Brand partner 3","logo":"data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2040%2040%22%3E%3Cpolygon%20points%3D%2220%2C6%2034%2C32%206%2C32%22%20fill%3D%22none%22%20stroke%3D%22%239AA79F%22%20stroke-width%3D%223%22%20stroke-linejoin%3D%22round%22%2F%3E%3C%2Fsvg%3E"},
+            {"name":"Brand partner 4","logo":"data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2040%2040%22%3E%3Cpolygon%20points%3D%2220%2C4%2034%2C12%2034%2C28%2020%2C36%206%2C28%206%2C12%22%20fill%3D%22none%22%20stroke%3D%22%239AA79F%22%20stroke-width%3D%223%22%20stroke-linejoin%3D%22round%22%2F%3E%3C%2Fsvg%3E"},
+            {"name":"Brand partner 5","logo":"data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2040%2040%22%3E%3Cpath%20d%3D%22M20%204%20L23%2017%20L36%2020%20L23%2023%20L20%2036%20L17%2023%20L4%2020%20L17%2017%20Z%22%20fill%3D%22%239AA79F%22%2F%3E%3C%2Fsvg%3E"},
+            {"name":"Brand partner 6","logo":"data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2040%2040%22%3E%3Cpath%20d%3D%22M8%2027%20C8%2013%2032%2013%2032%2027%20C24%2022%2016%2022%208%2027%20Z%22%20fill%3D%22%239AA79F%22%2F%3E%3C%2Fsvg%3E"},
+            {"name":"Brand partner 7","logo":"data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2040%2040%22%3E%3Crect%20x%3D%228%22%20y%3D%228%22%20width%3D%2224%22%20height%3D%2224%22%20rx%3D%224%22%20fill%3D%22none%22%20stroke%3D%22%239AA79F%22%20stroke-width%3D%223%22%2F%3E%3C%2Fsvg%3E"},
+            {"name":"Brand partner 8","logo":"data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2040%2040%22%3E%3Cpath%20d%3D%22M12%2030%20L12%2014%20L20%206%20L28%2014%20L28%2030%20Z%22%20fill%3D%22none%22%20stroke%3D%22%239AA79F%22%20stroke-width%3D%223%22%20stroke-linejoin%3D%22round%22%2F%3E%3C%2Fsvg%3E"}
+        ];
+        // Left blank by default (unlike the decorative photos/marks above) - these are real
+        // clickable links, so it's more honest to start empty than to ship placeholder URLs.
+        let storefrontSocial = { facebook: '', instagram: '', telegram: '', tiktok: '' };
         
         let matrixData = {
             capex: [65000, 15000, 25000, 10000, 0],
@@ -1541,6 +1596,7 @@
             { id: 'customers',     label: 'Customers',         icon: 'fa-users-line',           color: 'text-sky-500'    },
             { id: 'costing',       label: 'Costing & Pricing', icon: 'fa-file-invoice-dollar',  color: 'text-emerald-500'},
             { id: 'inventory',     label: 'Inventory DB',      icon: 'fa-boxes',                color: 'text-amber-500'  },
+            { id: 'storefront',    label: 'Storefront',        icon: 'fa-store',                color: 'text-emerald-500'},
             { id: 'employee',      label: 'Employees',         icon: 'fa-id-badge',             color: 'text-violet-500' },
             { id: 'reports',       label: 'Reports',           icon: 'fa-chart-column',         color: 'text-indigo-500' },
             { id: 'business-plan', label: 'Business Plan',     icon: 'fa-briefcase',            color: 'text-purple-500' },
@@ -1558,7 +1614,7 @@
                 email: 'admin@jcstore.com',
                 pin: '',
                 isAdmin: true,
-                tabs: ['dashboard','pos','customers','costing','inventory','employee','reports','business-plan','investment','roi','settings'],
+                tabs: ['dashboard','pos','customers','costing','inventory','storefront','employee','reports','business-plan','investment','roi','settings'],
                 avatar: null
             }
         ];
@@ -1604,8 +1660,18 @@
                 dash_view_all: "View All →", dash_all_healthy: "All stock levels are healthy!",
                 dash_no_cats: "No categories yet.", dash_categories: "categor", dash_category_s: "y", dash_category_pl: "ies",
                 dash_skus: "SKU", dash_units: "units",
-                menu_inventory: "Inventory Database", menu_biz_plan: "Business Plan", menu_investment: "Investment Matrix",
+                menu_inventory: "Inventory Database", menu_storefront: "Storefront", menu_biz_plan: "Business Plan", menu_investment: "Investment Matrix",
                 menu_roi: "Professional ROI", menu_settings: "Settings & Gateway", lbl_rate: "Rate:", lbl_active: "Active:",
+                sf_hero_title: "Hero Banner Images", sf_hero_desc: "Shown as an auto-rotating slideshow at the top of the storefront.",
+                sf_hero_add: "Add Banner Image", sf_hero_empty: "No banner images yet.",
+                sf_brands_title: "Brand Partners", sf_brands_desc: "Logos shown in the \u201cExplore Our Brands\u201d scrolling strip. Transparent PNGs work best.",
+                sf_brands_add: "Add Logo", sf_brands_empty: "No brands added yet.",
+                sf_social_title: "Follow Us Links", sf_social_desc: "Optional \u2014 leave a field blank to hide that icon in the storefront footer.",
+                sf_social_save: "Save Follow Us Links",
+                sf_sync_title: "Publish to Storefront",
+                sf_sync_desc: "Exports everything on this page \u2014 plus products, prices, and stock \u2014 as a file the public storefront reads. Cost and margin figures are never included.",
+                sf_sync_export: "Download Catalog (.json)", sf_sync_import: "Import Online Orders",
+                sf_sync_import_hint: "Adds orders to Hold Orders in POS, ready to complete like any other sale.",
                 dash_revenue: "Gross Revenue", dash_net_yield: "Net Profit Yield", dash_active_skus: "Active SKUs", dash_roi: "Current ROI",
                 cost_create_profile: "Create New Costing Profile", btn_cancel_edit: "Cancel Edit", form_prod_name: "Product Name",
                 form_category: "Category", form_sku: "SKU Number", form_barcode: "Barcode String", btn_scan: "Scan",
@@ -1760,8 +1826,18 @@
                 dash_view_all: "查看全部 →", dash_all_healthy: "所有库存水平正常！",
                 dash_no_cats: "尚无类别。", dash_categories: "类", dash_category_s: "别", dash_category_pl: "别",
                 dash_skus: "SKU", dash_units: "件",
-                menu_inventory: "库存数据库", menu_biz_plan: "商业计划书", menu_investment: "投资矩阵",
+                menu_inventory: "库存数据库", menu_storefront: "网店", menu_biz_plan: "商业计划书", menu_investment: "投资矩阵",
                 menu_roi: "专业投资回报", menu_settings: "设置与网关", lbl_rate: "汇率:", lbl_active: "当前激活:",
+                sf_hero_title: "首页横幅图片", sf_hero_desc: "以自动轮播幻灯片的形式显示在网店顶部。",
+                sf_hero_add: "添加横幅图片", sf_hero_empty: "暂无横幅图片。",
+                sf_brands_title: "品牌合作伙伴", sf_brands_desc: "显示在\u201c探索我们的品牌\u201d滚动条中的标志。建议使用透明背景的 PNG 图片。",
+                sf_brands_add: "添加标志", sf_brands_empty: "暂无品牌。",
+                sf_social_title: "关注我们链接", sf_social_desc: "选填 \u2014 留空则在网店页脚隐藏该图标。",
+                sf_social_save: "保存关注我们链接",
+                sf_sync_title: "发布到网店",
+                sf_sync_desc: "导出此页面上的所有内容 \u2014 以及商品、价格和库存 \u2014 作为公开网店读取的文件。成本和利润数据永远不会包含在内。",
+                sf_sync_export: "下载目录 (.json)", sf_sync_import: "导入网店订单",
+                sf_sync_import_hint: "将订单添加到POS的暂存订单中,可像其他销售一样完成。",
                 dash_revenue: "总销售总额", dash_net_yield: "净利润率", dash_active_skus: "活跃内码数", dash_roi: "当前回报率",
                 cost_create_profile: "创建新成本档案", btn_cancel_edit: "取消编辑", form_prod_name: "产品名称",
                 form_category: "商品品类", form_sku: "SKU 编号", form_barcode: "条形码数据", btn_scan: "相机扫描",
@@ -1915,8 +1991,18 @@
                 dash_view_all: "មើលទាំងអស់ →", dash_all_healthy: "ស្តុកទំនិញទាំងអស់គ្រប់គ្រាន់!",
                 dash_no_cats: "មិនទាន់មានប្រភេទទំនិញទេ។", dash_categories: "ប្រភេទ", dash_category_s: "", dash_category_pl: "",
                 dash_skus: "SKU", dash_units: "ឯកតា",
-                menu_inventory: "ទិន្នន័យសារពើភ័ណ្ឌ", menu_biz_plan: "ផែនការអាជីវកម្ម", menu_investment: "ម៉ាទ្រីសវិវិយោគ",
+                menu_inventory: "ទិន្នន័យសារពើភ័ណ្ឌ", menu_storefront: "ហាងអនឡាញ", menu_biz_plan: "ផែនការអាជីវកម្ម", menu_investment: "ម៉ាទ្រីសវិវិយោគ",
                 menu_roi: "សន្ទស្សន៍ ROI អាជីព", menu_settings: "ការកំណត់ និងហ្គេតវ៉េ", lbl_rate: "អត្រាប្តូរប្រាក់:", lbl_active: "សកម្ម:",
+                sf_hero_title: "រូបភាពបដាផ្ទាំងធំ", sf_hero_desc: "បង្ហាញជាស្លាយបង្វិលដោយស្វ័យប្រវត្តិនៅផ្នែកខាងលើនៃហាងអនឡាញ។",
+                sf_hero_add: "បន្ថែមរូបភាពបដា", sf_hero_empty: "មិនទាន់មានរូបភាពបដានៅឡើយទេ។",
+                sf_brands_title: "ដៃគូម៉ាកយីហោ", sf_brands_desc: "និមិត្តសញ្ញាបង្ហាញនៅក្នុងផ្ទាំង \u201cស្វែងរកម៉ាកយីហោរបស់យើង\u201d។ រូបភាព PNG ផ្ទៃខាងក្រោយថ្លាគឺល្អបំផុត។",
+                sf_brands_add: "បន្ថែមនិមិត្តសញ្ញា", sf_brands_empty: "មិនទាន់មានម៉ាកយីហោនៅឡើយទេ។",
+                sf_social_title: "តំណភ្ជាប់តាមដានយើង", sf_social_desc: "មិនចាំបាច់ \u2014 ទុកចន្លោះទទេដើម្បីលាក់រូបតំណាងនោះនៅផ្នែកខាងក្រោមហាងអនឡាញ។",
+                sf_social_save: "រក្សាទុកតំណភ្ជាប់តាមដានយើង",
+                sf_sync_title: "បោះផ្សាយទៅហាងអនឡាញ",
+                sf_sync_desc: "នាំចេញអ្វីៗគ្រប់យ៉ាងនៅលើទំព័រនេះ \u2014 បូកនឹងទំនិញ តម្លៃ និងស្តុក \u2014 ជាឯកសារដែលហាងអនឡាញអានបាន។ ចំណុចថ្លៃដើម និងប្រាក់ចំណេញមិនត្រូវបានរួមបញ្ចូលឡើយ។",
+                sf_sync_export: "ទាញយកបញ្ជីទំនិញ (.json)", sf_sync_import: "នាំចូលកម្មង់ពីហាងអនឡាញ",
+                sf_sync_import_hint: "បន្ថែមកម្មង់ទៅកាន់ Hold Orders នៅក្នុង POS ដែលអាចបញ្ចប់ដូចការលក់ធម្មតា។",
                 dash_revenue: "ចំណូលសរុប", dash_net_yield: "ផលចំណេញសុទ្ធ", dash_active_skus: "មុខទំនិញសកម្ម", dash_roi: "សន្ទស្សន៍ ROI បច្ចុប្បន្ន",
                 cost_create_profile: "បង្កើតប្រវត្តិថ្លៃដើមថ្មី", btn_cancel_edit: "បោះបង់ការកែប្រែ", form_prod_name: "ឈ្មោះផលិតផល",
                 form_category: "ប្រភេទក្រុមទំនិញ", form_sku: "លេខកូដ SKU", form_barcode: "ទិន្នន័យបារកូដ", btn_scan: "ស្កេនកាមេរ៉ា",
@@ -2716,6 +2802,9 @@
                 loyaltySettings,
                 expenseData,
                 expenseCategories,
+                storefrontHeroBanners,
+                storefrontBrands,
+                storefrontSocial,
                 settings: {
                     logo: currentStoreLogo,
                     currency: activeCurrency,
@@ -2916,7 +3005,7 @@
                             userAccounts.unshift({
                                 id:'admin_001', name:'JC Manager', role:'Administrator',
                                 email:'admin@jcstore.com', pin:'', isAdmin:true,
-                                tabs:['dashboard','pos','customers','costing','inventory','employee','reports','business-plan','investment','roi','settings'],
+                                tabs:['dashboard','pos','customers','costing','inventory','storefront','employee','reports','business-plan','investment','roi','settings'],
                                 avatar:null
                             });
                         }
@@ -2955,6 +3044,15 @@
                     }
                     if(parsed.leaveRequests && Array.isArray(parsed.leaveRequests)) {
                         leaveRequests = parsed.leaveRequests;
+                    }
+                    if(parsed.storefrontHeroBanners && Array.isArray(parsed.storefrontHeroBanners)) {
+                        storefrontHeroBanners = parsed.storefrontHeroBanners;
+                    }
+                    if(parsed.storefrontBrands && Array.isArray(parsed.storefrontBrands)) {
+                        storefrontBrands = parsed.storefrontBrands;
+                    }
+                    if(parsed.storefrontSocial) {
+                        storefrontSocial = { ...storefrontSocial, ...parsed.storefrontSocial };
                     }
 
                     if(parsed.settings) {
@@ -3151,6 +3249,7 @@
                 if (wrapper) wrapper.style.display = '';
                 // Load receipt settings form when entering settings tab
                 if (tabId === 'settings') setTimeout(loadReceiptSettingsForm, 50);
+                if (tabId === 'storefront') setTimeout(renderStorefrontTab, 50);
             }
         }
 
@@ -3293,6 +3392,34 @@
                         ctx.fillRect(0, 0, width, height);
                         ctx.drawImage(img, 0, 0, width, height);
                         resolve(canvas.toDataURL('image/jpeg', quality));
+                    };
+                    img.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+
+        // Same resize logic as compressImageFile, but keeps transparency (PNG output,
+        // no white fill) — used for brand/partner logos, which are meant to float on
+        // whatever background they're placed against rather than sit in a white box.
+        function compressImageFilePNG(file, maxDimension = 300) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onerror = () => reject(new Error('Could not read the file.'));
+                reader.onload = (e) => {
+                    const img = new Image();
+                    img.onerror = () => reject(new Error('Could not load the image.'));
+                    img.onload = () => {
+                        let { width, height } = img;
+                        if (width > maxDimension || height > maxDimension) {
+                            if (width > height) { height = Math.round(height * maxDimension / width); width = maxDimension; }
+                            else { width = Math.round(width * maxDimension / height); height = maxDimension; }
+                        }
+                        const canvas = document.createElement('canvas');
+                        canvas.width = width; canvas.height = height;
+                        const ctx = canvas.getContext('2d');
+                        ctx.drawImage(img, 0, 0, width, height);
+                        resolve(canvas.toDataURL('image/png'));
                     };
                     img.src = e.target.result;
                 };
@@ -3941,7 +4068,7 @@
                 email: 'admin@jcstore.com',
                 pin: '',
                 isAdmin: true,
-                tabs: ['dashboard','pos','customers','costing','inventory','employee','reports','business-plan','investment','roi','settings'],
+                tabs: ['dashboard','pos','customers','costing','inventory','storefront','employee','reports','business-plan','investment','roi','settings'],
                 avatar: null
             };
 
@@ -7287,6 +7414,118 @@
         }
 
         // ============================================================
+        // ── STOREFRONT TAB (hero banners, brands, social links) ──────
+        // ============================================================
+        function renderStorefrontTab() {
+            renderStorefrontHeroList();
+            renderStorefrontBrandsList();
+            const s = storefrontSocial || {};
+            document.getElementById('sf_social_facebook').value  = s.facebook  || '';
+            document.getElementById('sf_social_instagram').value = s.instagram || '';
+            document.getElementById('sf_social_telegram').value  = s.telegram  || '';
+            document.getElementById('sf_social_tiktok').value    = s.tiktok    || '';
+        }
+
+        function renderStorefrontHeroList() {
+            const container = document.getElementById('storefrontHeroList');
+            if (!container) return;
+            if (!storefrontHeroBanners.length) {
+                const msg = (i18nDictionary[currentLang] && i18nDictionary[currentLang].sf_hero_empty) || 'No banner images yet.';
+                container.innerHTML = `<p class="col-span-3 text-xs text-slate-400 text-center py-4">${msg}</p>`;
+                return;
+            }
+            container.innerHTML = storefrontHeroBanners.map((src, i) => `
+                <div class="relative group">
+                    <img src="${src}" class="w-full h-16 object-cover rounded-lg border border-slate-200 dark:border-slate-600">
+                    <button onclick="removeStorefrontHero(${i})" class="absolute -top-1.5 -right-1.5 w-5 h-5 bg-red-500 text-white rounded-full text-[10px] flex items-center justify-center opacity-0 group-hover:opacity-100 transition shadow"><i class="fas fa-times"></i></button>
+                </div>
+            `).join('');
+        }
+
+        async function handleStorefrontHeroUpload(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            try {
+                const compressed = await compressImageFile(file, 1200, 0.8);
+                storefrontHeroBanners.push(compressed);
+                saveSystemData();
+                renderStorefrontHeroList();
+                showToast('Banner image added.', 'success');
+            } catch (err) {
+                showToast('Could not add that image.', 'error');
+            }
+            e.target.value = '';
+        }
+
+        function removeStorefrontHero(i) {
+            storefrontHeroBanners.splice(i, 1);
+            saveSystemData();
+            renderStorefrontHeroList();
+        }
+
+        function renderStorefrontBrandsList() {
+            const container = document.getElementById('storefrontBrandsList');
+            if (!container) return;
+            if (!storefrontBrands.length) {
+                const msg = (i18nDictionary[currentLang] && i18nDictionary[currentLang].sf_brands_empty) || 'No brands added yet.';
+                container.innerHTML = `<p class="text-xs text-slate-400 text-center py-4">${msg}</p>`;
+                return;
+            }
+            container.innerHTML = storefrontBrands.map((b, i) => `
+                <div class="flex items-center gap-3 p-2 border border-slate-200 dark:border-slate-600 rounded-lg">
+                    <img src="${b.logo}" class="w-10 h-10 object-contain rounded bg-slate-50 dark:bg-slate-700 p-1">
+                    <span class="flex-1 text-sm font-medium text-slate-700 dark:text-slate-200 truncate">${b.name}</span>
+                    <button onclick="removeStorefrontBrand(${i})" class="text-red-500 hover:text-red-700 text-xs px-1"><i class="fas fa-trash"></i></button>
+                </div>
+            `).join('');
+        }
+
+        function triggerBrandLogoUpload() {
+            const name = document.getElementById('storefrontBrandNameInput').value.trim();
+            if (!name) {
+                showToast('Enter a brand name first.', 'warning');
+                return;
+            }
+            document.getElementById('storefrontBrandLogoInput').click();
+        }
+
+        async function handleStorefrontBrandUpload(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            const nameInput = document.getElementById('storefrontBrandNameInput');
+            const name = nameInput.value.trim() || 'Brand';
+            try {
+                const compressed = await compressImageFilePNG(file, 300);
+                storefrontBrands.push({ name, logo: compressed });
+                saveSystemData();
+                renderStorefrontBrandsList();
+                nameInput.value = '';
+                showToast('Brand added.', 'success');
+            } catch (err) {
+                showToast('Could not add that logo.', 'error');
+            }
+            e.target.value = '';
+        }
+
+        function removeStorefrontBrand(i) {
+            storefrontBrands.splice(i, 1);
+            saveSystemData();
+            renderStorefrontBrandsList();
+        }
+
+        function saveStorefrontSocial(e) {
+            e.preventDefault();
+            storefrontSocial = {
+                facebook:  document.getElementById('sf_social_facebook').value.trim(),
+                instagram: document.getElementById('sf_social_instagram').value.trim(),
+                telegram:  document.getElementById('sf_social_telegram').value.trim(),
+                tiktok:    document.getElementById('sf_social_tiktok').value.trim()
+            };
+            saveSystemData();
+            showToast('Follow Us links saved.', 'success');
+        }
+
+        // ============================================================
         // ── ONLINE STOREFRONT SYNC ────────────────────────────────────
         // ============================================================
         // Bridges this back-office system with a separately-hosted public
@@ -7325,13 +7564,16 @@
                     logo:    currentStoreLogo,
                     rate:    parseFloat(document.getElementById('exchangeRateInput')?.value) || 4100,
                     phone:   receiptSettings.phone   || '',
-                    address: receiptSettings.address || ''
+                    address: receiptSettings.address || '',
+                    social:  storefrontSocial
                 },
                 categories,
                 products,
                 payment: {
                     khqr: khqrData.map(k => ({ bank: k.bank, merchant: k.merchant, account: k.account, qr: k.qr }))
-                }
+                },
+                brands: storefrontBrands,
+                heroBanners: storefrontHeroBanners
             };
 
             const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
