@@ -941,25 +941,30 @@
                     <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700">
                         <h3 class="text-base font-bold text-slate-800 dark:text-white mb-1 flex items-center"><i class="fas fa-award text-emerald-500 mr-2"></i><span data-i18n="sf_brands_title">Brand Partners</span></h3>
                         <p class="text-xs text-slate-500 dark:text-slate-400 mb-4" data-i18n="sf_brands_desc">Logos shown in the "Explore Our Brands" scrolling strip. Transparent PNGs work best.</p>
-                        <div id="storefrontBrandsList" class="space-y-2 mb-3 max-h-48 overflow-y-auto"></div>
-                        <div class="flex gap-2">
-                            <input type="text" id="storefrontBrandNameInput" placeholder="Brand name" class="flex-1 min-w-0 p-2 border border-slate-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded text-sm outline-none focus:ring-2 focus:ring-emerald-500">
-                            <input type="file" id="storefrontBrandLogoInput" accept="image/*" class="hidden" onchange="handleStorefrontBrandUpload(event)">
-                            <button onclick="triggerBrandLogoUpload()" class="bg-emerald-600 text-white font-bold text-xs px-4 py-2 rounded-lg hover:bg-emerald-700 transition whitespace-nowrap flex-shrink-0"><i class="fas fa-upload mr-1.5"></i> <span data-i18n="sf_brands_add">Add Logo</span></button>
-                        </div>
+                        <div id="storefrontBrandsList" class="grid grid-cols-4 gap-2 mb-3"></div>
+                        <input type="file" id="storefrontBrandLogoInput" accept="image/*" class="hidden" onchange="handleStorefrontBrandUpload(event)">
+                        <button onclick="document.getElementById('storefrontBrandLogoInput').click()" class="bg-emerald-600 text-white font-bold text-xs px-4 py-2.5 rounded-lg hover:bg-emerald-700 transition w-full"><i class="fas fa-upload mr-1.5"></i> <span data-i18n="sf_brands_add">Add Logo</span></button>
                     </div>
 
                     <!-- Follow Us -->
                     <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700">
                         <h3 class="text-base font-bold text-slate-800 dark:text-white mb-1 flex items-center"><i class="fas fa-share-nodes text-emerald-500 mr-2"></i><span data-i18n="sf_social_title">Follow Us Links</span></h3>
-                        <p class="text-xs text-slate-500 dark:text-slate-400 mb-4" data-i18n="sf_social_desc">Optional — leave a field blank to hide that icon in the storefront footer.</p>
-                        <form onsubmit="saveStorefrontSocial(event)" class="space-y-2.5">
-                            <div><label class="text-xs font-bold text-slate-600 dark:text-slate-400"><i class="fab fa-facebook mr-1"></i> Facebook</label><input type="url" id="sf_social_facebook" placeholder="https://facebook.com/yourpage" class="w-full p-2 border border-slate-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded mt-1 text-sm outline-none focus:ring-2 focus:ring-emerald-500"></div>
-                            <div><label class="text-xs font-bold text-slate-600 dark:text-slate-400"><i class="fab fa-instagram mr-1"></i> Instagram</label><input type="url" id="sf_social_instagram" placeholder="https://instagram.com/yourpage" class="w-full p-2 border border-slate-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded mt-1 text-sm outline-none focus:ring-2 focus:ring-emerald-500"></div>
-                            <div><label class="text-xs font-bold text-slate-600 dark:text-slate-400"><i class="fab fa-telegram mr-1"></i> Telegram</label><input type="url" id="sf_social_telegram" placeholder="https://t.me/yourchannel" class="w-full p-2 border border-slate-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded mt-1 text-sm outline-none focus:ring-2 focus:ring-emerald-500"></div>
-                            <div><label class="text-xs font-bold text-slate-600 dark:text-slate-400"><i class="fab fa-tiktok mr-1"></i> TikTok</label><input type="url" id="sf_social_tiktok" placeholder="https://tiktok.com/@yourhandle" class="w-full p-2 border border-slate-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded mt-1 text-sm outline-none focus:ring-2 focus:ring-emerald-500"></div>
-                            <button type="submit" class="w-full bg-slate-800 text-white font-bold text-xs py-2.5 rounded hover:bg-slate-900 shadow transition"><i class="fas fa-save mr-1"></i> <span data-i18n="sf_social_save">Save Follow Us Links</span></button>
-                        </form>
+                        <p class="text-xs text-slate-500 dark:text-slate-400 mb-4" data-i18n="sf_social_desc">Add as many links as you like — pick the closest matching icon for each.</p>
+                        <div id="storefrontSocialList" class="space-y-2 mb-3"></div>
+                        <div class="flex gap-2">
+                            <select id="sf_social_platform" class="p-2 border border-slate-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded text-sm outline-none focus:ring-2 focus:ring-emerald-500 flex-shrink-0">
+                                <option value="facebook">Facebook</option>
+                                <option value="instagram">Instagram</option>
+                                <option value="telegram">Telegram</option>
+                                <option value="tiktok">TikTok</option>
+                                <option value="youtube">YouTube</option>
+                                <option value="whatsapp">WhatsApp</option>
+                                <option value="website">Website</option>
+                                <option value="other">Other</option>
+                            </select>
+                            <input type="url" id="sf_social_url_input" placeholder="https://..." class="flex-1 min-w-0 p-2 border border-slate-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded text-sm outline-none focus:ring-2 focus:ring-emerald-500">
+                        </div>
+                        <button onclick="addStorefrontSocialLink()" class="bg-emerald-600 text-white font-bold text-xs px-4 py-2.5 rounded-lg hover:bg-emerald-700 transition w-full mt-2"><i class="fas fa-plus mr-1.5"></i> <span data-i18n="sf_social_add">Add Link</span></button>
                     </div>
 
                     <!-- Publish / Sync -->
@@ -1572,7 +1577,9 @@
         ];
         // Left blank by default (unlike the decorative photos/marks above) - these are real
         // clickable links, so it's more honest to start empty than to ship placeholder URLs.
-        let storefrontSocial = { facebook: '', instagram: '', telegram: '', tiktok: '' };
+        // Each entry is { platform, url } - platform picks the icon shown on the storefront,
+        // and there's no fixed limit on how many you can add.
+        let storefrontSocial = [];
         
         let matrixData = {
             capex: [65000, 15000, 25000, 10000, 0],
@@ -1666,8 +1673,8 @@
                 sf_hero_add: "Add Banner Image", sf_hero_empty: "No banner images yet.",
                 sf_brands_title: "Brand Partners", sf_brands_desc: "Logos shown in the \u201cExplore Our Brands\u201d scrolling strip. Transparent PNGs work best.",
                 sf_brands_add: "Add Logo", sf_brands_empty: "No brands added yet.",
-                sf_social_title: "Follow Us Links", sf_social_desc: "Optional \u2014 leave a field blank to hide that icon in the storefront footer.",
-                sf_social_save: "Save Follow Us Links",
+                sf_social_title: "Follow Us Links", sf_social_desc: "Add as many links as you like \u2014 pick the closest matching icon for each.",
+                sf_social_add: "Add Link",
                 sf_sync_title: "Publish to Storefront",
                 sf_sync_desc: "Exports everything on this page \u2014 plus products, prices, and stock \u2014 as a file the public storefront reads. Cost and margin figures are never included.",
                 sf_sync_export: "Download Catalog (.json)", sf_sync_import: "Import Online Orders",
@@ -1832,8 +1839,8 @@
                 sf_hero_add: "添加横幅图片", sf_hero_empty: "暂无横幅图片。",
                 sf_brands_title: "品牌合作伙伴", sf_brands_desc: "显示在\u201c探索我们的品牌\u201d滚动条中的标志。建议使用透明背景的 PNG 图片。",
                 sf_brands_add: "添加标志", sf_brands_empty: "暂无品牌。",
-                sf_social_title: "关注我们链接", sf_social_desc: "选填 \u2014 留空则在网店页脚隐藏该图标。",
-                sf_social_save: "保存关注我们链接",
+                sf_social_title: "关注我们链接", sf_social_desc: "添加任意数量的链接 \u2014 为每个链接选择最匹配的图标。",
+                sf_social_add: "添加链接",
                 sf_sync_title: "发布到网店",
                 sf_sync_desc: "导出此页面上的所有内容 \u2014 以及商品、价格和库存 \u2014 作为公开网店读取的文件。成本和利润数据永远不会包含在内。",
                 sf_sync_export: "下载目录 (.json)", sf_sync_import: "导入网店订单",
@@ -1997,8 +2004,8 @@
                 sf_hero_add: "បន្ថែមរូបភាពបដា", sf_hero_empty: "មិនទាន់មានរូបភាពបដានៅឡើយទេ។",
                 sf_brands_title: "ដៃគូម៉ាកយីហោ", sf_brands_desc: "និមិត្តសញ្ញាបង្ហាញនៅក្នុងផ្ទាំង \u201cស្វែងរកម៉ាកយីហោរបស់យើង\u201d។ រូបភាព PNG ផ្ទៃខាងក្រោយថ្លាគឺល្អបំផុត។",
                 sf_brands_add: "បន្ថែមនិមិត្តសញ្ញា", sf_brands_empty: "មិនទាន់មានម៉ាកយីហោនៅឡើយទេ។",
-                sf_social_title: "តំណភ្ជាប់តាមដានយើង", sf_social_desc: "មិនចាំបាច់ \u2014 ទុកចន្លោះទទេដើម្បីលាក់រូបតំណាងនោះនៅផ្នែកខាងក្រោមហាងអនឡាញ។",
-                sf_social_save: "រក្សាទុកតំណភ្ជាប់តាមដានយើង",
+                sf_social_title: "តំណភ្ជាប់តាមដានយើង", sf_social_desc: "បន្ថែមតំណភ្ជាប់ប៉ុន្មានក៏បាន \u2014 ជ្រើសរើសរូបតំណាងដែលត្រូវគ្នាបំផុតសម្រាប់នីមួយៗ។",
+                sf_social_add: "បន្ថែមតំណភ្ជាប់",
                 sf_sync_title: "បោះផ្សាយទៅហាងអនឡាញ",
                 sf_sync_desc: "នាំចេញអ្វីៗគ្រប់យ៉ាងនៅលើទំព័រនេះ \u2014 បូកនឹងទំនិញ តម្លៃ និងស្តុក \u2014 ជាឯកសារដែលហាងអនឡាញអានបាន។ ចំណុចថ្លៃដើម និងប្រាក់ចំណេញមិនត្រូវបានរួមបញ្ចូលឡើយ។",
                 sf_sync_export: "ទាញយកបញ្ជីទំនិញ (.json)", sf_sync_import: "នាំចូលកម្មង់ពីហាងអនឡាញ",
@@ -3052,7 +3059,9 @@
                         storefrontBrands = parsed.storefrontBrands;
                     }
                     if(parsed.storefrontSocial) {
-                        storefrontSocial = { ...storefrontSocial, ...parsed.storefrontSocial };
+                        storefrontSocial = Array.isArray(parsed.storefrontSocial)
+                            ? parsed.storefrontSocial
+                            : Object.keys(parsed.storefrontSocial).map(k => ({ platform: k, url: parsed.storefrontSocial[k] })).filter(e => e.url);
                     }
 
                     if(parsed.settings) {
@@ -7416,14 +7425,21 @@
         // ============================================================
         // ── STOREFRONT TAB (hero banners, brands, social links) ──────
         // ============================================================
+        const SOCIAL_PLATFORM_META = {
+            facebook:  { label: 'Facebook',  icon: 'fab fa-facebook-f'  },
+            instagram: { label: 'Instagram', icon: 'fab fa-instagram'   },
+            telegram:  { label: 'Telegram',  icon: 'fab fa-telegram'    },
+            tiktok:    { label: 'TikTok',    icon: 'fab fa-tiktok'      },
+            youtube:   { label: 'YouTube',   icon: 'fab fa-youtube'     },
+            whatsapp:  { label: 'WhatsApp',  icon: 'fab fa-whatsapp'    },
+            website:   { label: 'Website',   icon: 'fas fa-globe'       },
+            other:     { label: 'Other',     icon: 'fas fa-link'        }
+        };
+
         function renderStorefrontTab() {
             renderStorefrontHeroList();
             renderStorefrontBrandsList();
-            const s = storefrontSocial || {};
-            document.getElementById('sf_social_facebook').value  = s.facebook  || '';
-            document.getElementById('sf_social_instagram').value = s.instagram || '';
-            document.getElementById('sf_social_telegram').value  = s.telegram  || '';
-            document.getElementById('sf_social_tiktok').value    = s.tiktok    || '';
+            renderStorefrontSocialList();
         }
 
         function renderStorefrontHeroList() {
@@ -7463,43 +7479,33 @@
             renderStorefrontHeroList();
         }
 
+        // Brand Partners: logo-only - no name is required to upload one. The name each
+        // entry carries is just a fallback for alt text / the hover tooltip below, since
+        // the storefront marquee itself only ever shows the image.
         function renderStorefrontBrandsList() {
             const container = document.getElementById('storefrontBrandsList');
             if (!container) return;
             if (!storefrontBrands.length) {
                 const msg = (i18nDictionary[currentLang] && i18nDictionary[currentLang].sf_brands_empty) || 'No brands added yet.';
-                container.innerHTML = `<p class="text-xs text-slate-400 text-center py-4">${msg}</p>`;
+                container.innerHTML = `<p class="col-span-4 text-xs text-slate-400 text-center py-4">${msg}</p>`;
                 return;
             }
             container.innerHTML = storefrontBrands.map((b, i) => `
-                <div class="flex items-center gap-3 p-2 border border-slate-200 dark:border-slate-600 rounded-lg">
-                    <img src="${b.logo}" class="w-10 h-10 object-contain rounded bg-slate-50 dark:bg-slate-700 p-1">
-                    <span class="flex-1 text-sm font-medium text-slate-700 dark:text-slate-200 truncate">${b.name}</span>
-                    <button onclick="removeStorefrontBrand(${i})" class="text-red-500 hover:text-red-700 text-xs px-1"><i class="fas fa-trash"></i></button>
+                <div class="relative group" title="${b.name || ''}">
+                    <img src="${b.logo}" class="w-full h-16 object-contain rounded-lg border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-700 p-2">
+                    <button onclick="removeStorefrontBrand(${i})" class="absolute -top-1.5 -right-1.5 w-5 h-5 bg-red-500 text-white rounded-full text-[10px] flex items-center justify-center opacity-0 group-hover:opacity-100 transition shadow"><i class="fas fa-times"></i></button>
                 </div>
             `).join('');
-        }
-
-        function triggerBrandLogoUpload() {
-            const name = document.getElementById('storefrontBrandNameInput').value.trim();
-            if (!name) {
-                showToast('Enter a brand name first.', 'warning');
-                return;
-            }
-            document.getElementById('storefrontBrandLogoInput').click();
         }
 
         async function handleStorefrontBrandUpload(e) {
             const file = e.target.files[0];
             if (!file) return;
-            const nameInput = document.getElementById('storefrontBrandNameInput');
-            const name = nameInput.value.trim() || 'Brand';
             try {
                 const compressed = await compressImageFilePNG(file, 300);
-                storefrontBrands.push({ name, logo: compressed });
+                storefrontBrands.push({ name: 'Brand ' + (storefrontBrands.length + 1), logo: compressed });
                 saveSystemData();
                 renderStorefrontBrandsList();
-                nameInput.value = '';
                 showToast('Brand added.', 'success');
             } catch (err) {
                 showToast('Could not add that logo.', 'error');
@@ -7513,16 +7519,46 @@
             renderStorefrontBrandsList();
         }
 
-        function saveStorefrontSocial(e) {
-            e.preventDefault();
-            storefrontSocial = {
-                facebook:  document.getElementById('sf_social_facebook').value.trim(),
-                instagram: document.getElementById('sf_social_instagram').value.trim(),
-                telegram:  document.getElementById('sf_social_telegram').value.trim(),
-                tiktok:    document.getElementById('sf_social_tiktok').value.trim()
-            };
+        // Follow Us: a free-form list rather than a handful of fixed platform fields,
+        // so the shop can add (or skip) as many links as they actually use.
+        function renderStorefrontSocialList() {
+            const container = document.getElementById('storefrontSocialList');
+            if (!container) return;
+            if (!storefrontSocial.length) {
+                container.innerHTML = `<p class="text-xs text-slate-400 text-center py-4">No links added yet.</p>`;
+                return;
+            }
+            container.innerHTML = storefrontSocial.map((s, i) => {
+                const meta = SOCIAL_PLATFORM_META[s.platform] || SOCIAL_PLATFORM_META.other;
+                return `
+                <div class="flex items-center gap-3 p-2 border border-slate-200 dark:border-slate-600 rounded-lg">
+                    <i class="${meta.icon} text-emerald-500 w-5 text-center"></i>
+                    <span class="text-xs font-bold text-slate-500 dark:text-slate-400 flex-shrink-0">${meta.label}</span>
+                    <span class="flex-1 text-sm text-slate-700 dark:text-slate-200 truncate">${s.url}</span>
+                    <button onclick="removeStorefrontSocialLink(${i})" class="text-red-500 hover:text-red-700 text-xs px-1"><i class="fas fa-trash"></i></button>
+                </div>`;
+            }).join('');
+        }
+
+        function addStorefrontSocialLink() {
+            const platform = document.getElementById('sf_social_platform').value;
+            const urlInput = document.getElementById('sf_social_url_input');
+            const url = urlInput.value.trim();
+            if (!url) {
+                showToast('Enter a link first.', 'warning');
+                return;
+            }
+            storefrontSocial.push({ platform, url });
             saveSystemData();
-            showToast('Follow Us links saved.', 'success');
+            renderStorefrontSocialList();
+            urlInput.value = '';
+            showToast('Link added.', 'success');
+        }
+
+        function removeStorefrontSocialLink(i) {
+            storefrontSocial.splice(i, 1);
+            saveSystemData();
+            renderStorefrontSocialList();
         }
 
         // ============================================================
