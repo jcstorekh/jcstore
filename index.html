@@ -135,7 +135,8 @@ body.lang-zh { font-family: 'Noto Sans SC', sans-serif; }
 #favBtn.is-active { background: var(--lacquer); color: #fff; border-color: var(--lacquer); }
 
 /* Hero banner - pure animated image carousel, no text, clickable through to products */
-.hero-banner { position: relative; overflow: hidden; background: var(--jade-deep); min-height: 280px; display: flex; align-items: center; cursor: pointer; }
+.hero-banner { position: relative; overflow: hidden; background: var(--jade-deep); min-height: 62vh; max-height: 640px; display: flex; align-items: center; cursor: pointer; }
+@media (max-width: 639px) { .hero-banner { min-height: 46vh; } }
 .hero-banner:hover .hero-slide.active img { transform: scale(1.03); }
 .hero-banner:focus-visible { outline: 3px solid #fff; outline-offset: -3px; }
 .hero-carousel { position: absolute; inset: 0; z-index: 0; }
@@ -173,15 +174,11 @@ body.lang-zh { font-family: 'Noto Sans SC', sans-serif; }
 .footer-social-icon { width: 34px; height: 34px; border-radius: 9999px; background: var(--paper); border: 1px solid var(--line); display: flex; align-items: center; justify-content: center; color: var(--ink-soft); font-size: 14px; transition: all .15s; }
 .footer-social-icon:hover { background: var(--jade); border-color: var(--jade); color: #fff; }
 
-/* Language dropdown (flag + name), replaces the old pill switcher */
-.lang-select-wrap { position: relative; display: inline-flex; align-items: center; flex-shrink: 0; }
-.lang-select-wrap select {
-  appearance: none; -webkit-appearance: none; -moz-appearance: none;
-  background: var(--paper); border: 1px solid var(--line); border-radius: 9999px;
-  padding: 7px 26px 7px 12px; font-size: 12.5px; font-weight: 700; color: var(--ink);
-  cursor: pointer; max-width: 108px;
-}
-.lang-select-arrow { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); font-size: 9px; color: var(--ink-soft); pointer-events: none; }
+/* Language switcher: flag icon buttons */
+.lang-flags { position: relative; display: inline-flex; align-items: center; gap: 3px; flex-shrink: 0; background: var(--paper); border: 1px solid var(--line); border-radius: 9999px; padding: 3px; }
+.lang-flag-btn { width: 30px; height: 30px; border-radius: 9999px; display: flex; align-items: center; justify-content: center; font-size: 16px; line-height: 1; opacity: .5; filter: grayscale(.4); transition: all .15s; }
+.lang-flag-btn:hover { opacity: .8; }
+.lang-flag-btn.active { opacity: 1; background: var(--paper-card); box-shadow: 0 2px 6px rgba(0,0,0,0.15); filter: grayscale(0); transform: scale(1.06); }
 
 /* Click-to-add product image overlay */
 .product-card-img.is-clickable { cursor: pointer; }
@@ -189,7 +186,6 @@ body.lang-zh { font-family: 'Noto Sans SC', sans-serif; }
 .product-card-img.is-clickable:hover .img-add-overlay { opacity: 1; background: rgba(14,107,84,0.32); }
 .img-add-overlay i { color: #fff; font-size: 18px; background: rgba(0,0,0,0.28); width: 38px; height: 38px; border-radius: 9999px; display: flex; align-items: center; justify-content: center; }
 
-/* Back to top floating button */
 /* Floating scroll button: "go to bottom" at the top of the page, "back to top" once scrolled */
 .scroll-fab { position: fixed; right: 16px; bottom: 144px; width: 44px; height: 44px; border-radius: 9999px; background: var(--ink); color: #fff; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 20px rgba(0,0,0,0.25); z-index: 45; transition: transform .15s; }
 .scroll-fab:hover { transform: scale(1.06); }
@@ -226,13 +222,10 @@ body.lang-zh { font-family: 'Noto Sans SC', sans-serif; }
       <span id="storeName" class="font-black text-lg sm:text-xl tracking-tight truncate"></span>
     </div>
     <div class="flex items-center gap-2 sm:gap-3 flex-shrink-0">
-      <div class="lang-select-wrap">
-        <select id="langSelect" onchange="setLang(this.value)" aria-label="Language">
-          <option value="en">🇺🇸 English</option>
-          <option value="zh">🇨🇳 中文</option>
-          <option value="km">🇰🇭 ខ្មែរ</option>
-        </select>
-        <i class="fas fa-chevron-down lang-select-arrow"></i>
+      <div class="lang-flags">
+        <button class="lang-flag-btn" data-lang="en" onclick="setLang('en')" aria-label="English">🇺🇸</button>
+        <button class="lang-flag-btn" data-lang="zh" onclick="setLang('zh')" aria-label="中文">🇨🇳</button>
+        <button class="lang-flag-btn" data-lang="km" onclick="setLang('km')" aria-label="ខ្មែរ">🇰🇭</button>
       </div>
       <button id="favBtn" onclick="toggleFavoritesFilter()" data-i18n-aria="favorites" class="relative flex items-center justify-center w-10 h-10 rounded-full flex-shrink-0 border transition" style="border-color:var(--line); color:var(--lacquer)">
         <i class="fas fa-heart"></i>
@@ -486,6 +479,27 @@ const CATEGORY_ICONS = {
   cat_elec: 'fa-plug',
   cat_apparel: 'fa-shirt'
 };
+
+const SOCIAL_PLATFORM_ICONS = {
+  facebook: 'fab fa-facebook-f',
+  instagram: 'fab fa-instagram',
+  telegram: 'fab fa-telegram',
+  tiktok: 'fab fa-tiktok',
+  youtube: 'fab fa-youtube',
+  whatsapp: 'fab fa-whatsapp',
+  website: 'fas fa-globe',
+  other: 'fas fa-link'
+};
+// Accepts the current array format ([{platform, url}, ...]) and, defensively, the
+// older fixed-object shape ({facebook, instagram, ...}) from before "Follow Us" could
+// hold more than 4 fixed platforms - either way, callers just get a plain array back.
+function normalizeSocialLinks(social) {
+  if (Array.isArray(social)) return social;
+  if (social && typeof social === 'object') {
+    return Object.keys(social).map(function(k) { return { platform: k, url: social[k] }; });
+  }
+  return [];
+}
 
 // Default hero carousel images (used until the shop syncs its own via catalog.heroBanners).
 const DEFAULT_HERO_BANNERS = [
@@ -905,8 +919,9 @@ function reconcileCartWithCatalog() {
 function renderAll() {
   document.documentElement.lang = state.lang;
   document.body.className = 'lang-' + state.lang;
-  const langSelectEl = document.getElementById('langSelect');
-  if (langSelectEl.value !== state.lang) langSelectEl.value = state.lang;
+  document.querySelectorAll('.lang-flag-btn').forEach(function(btn) {
+    btn.classList.toggle('active', btn.dataset.lang === state.lang);
+  });
 
   const store = state.catalog.store || {};
   const logoEl = document.getElementById('storeLogo');
@@ -1182,15 +1197,10 @@ function renderFooter() {
   if (khqrCount) badges += '<span class="footer-badge"><i class="fas fa-qrcode"></i>' + escapeHtml(t('pay_khqr')) + '</span>';
   document.getElementById('footerPaymentBadges').innerHTML = badges;
 
-  const social = store.social || {};
-  const platforms = [
-    { key: 'facebook',  icon: 'fab fa-facebook-f' },
-    { key: 'instagram', icon: 'fab fa-instagram' },
-    { key: 'telegram',  icon: 'fab fa-telegram' },
-    { key: 'tiktok',    icon: 'fab fa-tiktok' }
-  ];
-  const socialLinks = platforms.filter(function(p) { return social[p.key]; }).map(function(p) {
-    return '<a href="' + escapeHtml(social[p.key]) + '" target="_blank" rel="noopener" class="footer-social-icon" aria-label="' + p.key + '"><i class="' + p.icon + '"></i></a>';
+  const socialEntries = normalizeSocialLinks(store.social);
+  const socialLinks = socialEntries.filter(function(s) { return s.url; }).map(function(s) {
+    const icon = SOCIAL_PLATFORM_ICONS[s.platform] || SOCIAL_PLATFORM_ICONS.other;
+    return '<a href="' + escapeHtml(s.url) + '" target="_blank" rel="noopener" class="footer-social-icon" aria-label="' + escapeHtml(s.platform || 'link') + '"><i class="' + icon + '"></i></a>';
   });
   document.getElementById('footerSocialLinks').innerHTML = socialLinks.join('');
   document.getElementById('footerSocialCol').style.display = socialLinks.length ? '' : 'none';
