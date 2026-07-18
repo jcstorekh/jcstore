@@ -161,8 +161,8 @@ body.lang-zh { font-family: 'Noto Sans SC', sans-serif; }
 .brand-marquee-wrap { overflow: hidden; -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent); mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent); }
 .brand-marquee-track { display: flex; align-items: center; gap: 64px; width: max-content; animation: marqueeScroll 26s linear infinite; }
 .brand-marquee-track:hover { animation-play-state: paused; }
-.brand-logo { height: 36px; width: auto; flex-shrink: 0; opacity: .68; transition: opacity .2s; background: transparent; }
-.brand-logo:hover { opacity: 1; }
+.brand-logo { height: 36px; width: auto; flex-shrink: 0; opacity: 1; transition: transform .2s; background: transparent; }
+.brand-logo:hover { transform: scale(1.08); }
 @keyframes marqueeScroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 
 /* Footer */
@@ -282,16 +282,18 @@ body.lang-zh { font-family: 'Noto Sans SC', sans-serif; }
 
 <!-- ============== FOOTER ============== -->
 <footer class="border-t mt-4" style="border-color:var(--line); background:var(--paper-card)">
-  <div class="max-w-6xl mx-auto px-4 sm:px-6 py-12 grid grid-cols-2 sm:grid-cols-4 gap-8 text-sm">
-    <div class="col-span-2 sm:col-span-1">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 py-12 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-8 text-sm">
+    <div class="col-span-2 sm:col-span-3 lg:col-span-1">
       <div class="flex items-center gap-2 mb-3">
         <img id="footerLogo" src="" alt="" class="h-7 w-auto rounded object-contain">
         <span id="footerStoreName" class="font-black" style="color:var(--ink)"></span>
       </div>
+      <p id="footerAboutUs" class="text-xs leading-relaxed" style="color:var(--ink-soft)"></p>
+    </div>
+    <div>
       <p class="footer-col-title" data-i18n="contact_us_label"></p>
       <p id="footerAddress" class="text-xs leading-relaxed" style="color:var(--ink-soft)"></p>
       <p class="mt-2"><a id="footerPhoneLink" href="#" class="text-xs font-bold" style="color:var(--jade)"></a></p>
-      <p id="footerWhatsapp" class="mt-1.5 text-xs"></p>
     </div>
     <div>
       <p class="footer-col-title" data-i18n="shop_links"></p>
@@ -1168,6 +1170,10 @@ function renderFooter() {
   logoEl.onerror = function() { this.onerror = null; this.src = PLACEHOLDER_IMG; };
   document.getElementById('footerStoreName').textContent = store.name || '';
 
+  const aboutEl = document.getElementById('footerAboutUs');
+  aboutEl.textContent = store.aboutUs || '';
+  aboutEl.style.display = store.aboutUs ? '' : 'none';
+
   const addrEl = document.getElementById('footerAddress');
   addrEl.textContent = store.address || '';
   addrEl.style.display = store.address ? '' : 'none';
@@ -1182,11 +1188,6 @@ function renderFooter() {
     phoneLinkEl.style.display = 'none';
   }
 
-  const waEl = document.getElementById('footerWhatsapp');
-  waEl.innerHTML = phoneDigits
-    ? '<a href="https://wa.me/' + phoneDigits + '" target="_blank" rel="noopener" style="color:var(--jade)" class="font-bold"><i class="fab fa-whatsapp mr-1"></i>WhatsApp</a>'
-    : '';
-
   const cats = state.catalog.categories || [];
   document.getElementById('footerCategoryLinks').innerHTML = cats.map(function(c) {
     return '<button class="footer-link" onclick="goToCategorySection(\'' + escapeJs(c.key) + '\')">' + escapeHtml(c[state.lang] || c.en) + '</button>';
@@ -1199,8 +1200,10 @@ function renderFooter() {
 
   const socialEntries = normalizeSocialLinks(store.social);
   const socialLinks = socialEntries.filter(function(s) { return s.url; }).map(function(s) {
-    const icon = SOCIAL_PLATFORM_ICONS[s.platform] || SOCIAL_PLATFORM_ICONS.other;
-    return '<a href="' + escapeHtml(s.url) + '" target="_blank" rel="noopener" class="footer-social-icon" aria-label="' + escapeHtml(s.platform || 'link') + '"><i class="' + icon + '"></i></a>';
+    const inner = s.customIcon
+      ? '<img src="' + s.customIcon + '" alt="" class="w-4 h-4 object-contain">'
+      : '<i class="' + (SOCIAL_PLATFORM_ICONS[s.platform] || SOCIAL_PLATFORM_ICONS.other) + '"></i>';
+    return '<a href="' + escapeHtml(s.url) + '" target="_blank" rel="noopener" class="footer-social-icon" aria-label="' + escapeHtml(s.platform || 'link') + '">' + inner + '</a>';
   });
   document.getElementById('footerSocialLinks').innerHTML = socialLinks.join('');
   document.getElementById('footerSocialCol').style.display = socialLinks.length ? '' : 'none';

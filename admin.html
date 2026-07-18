@@ -376,18 +376,15 @@
                         </span>
                         <i class="fas fa-chevron-down text-[9px] text-slate-400"></i>
                     </button>
-                    <div id="langDropdown" class="hidden absolute right-0 mt-2 w-36 bg-white dark:bg-slate-800 rounded-xl shadow-xl border border-slate-200 dark:border-slate-700 z-50 py-1.5 overflow-hidden">
-                        <button onclick="setLanguage('en')" class="w-full text-left px-3 py-2 hover:bg-slate-100 dark:hover:bg-slate-700 flex items-center space-x-3 transition text-sm font-semibold text-slate-700 dark:text-slate-200">
-                            <img src="https://flagcdn.com/w40/us.png" alt="US" class="w-6 h-6 rounded-full object-cover shadow-sm flex-shrink-0">
-                            <span>English</span>
+                    <div id="langDropdown" class="hidden absolute right-0 mt-2 bg-white dark:bg-slate-800 rounded-xl shadow-xl border border-slate-200 dark:border-slate-700 z-50 p-2 flex items-center gap-1.5">
+                        <button onclick="setLanguage('en')" title="English" class="p-1 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition">
+                            <img src="https://flagcdn.com/w40/us.png" alt="EN" class="w-8 h-8 rounded-full object-cover shadow-sm">
                         </button>
-                        <button onclick="setLanguage('zh')" class="w-full text-left px-3 py-2 hover:bg-slate-100 dark:hover:bg-slate-700 flex items-center space-x-3 transition text-sm font-semibold text-slate-700 dark:text-slate-200">
-                            <img src="https://flagcdn.com/w40/cn.png" alt="CN" class="w-6 h-6 rounded-full object-cover shadow-sm flex-shrink-0">
-                            <span>中文</span>
+                        <button onclick="setLanguage('zh')" title="中文" class="p-1 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition">
+                            <img src="https://flagcdn.com/w40/cn.png" alt="CN" class="w-8 h-8 rounded-full object-cover shadow-sm">
                         </button>
-                        <button onclick="setLanguage('km')" class="w-full text-left px-3 py-2 hover:bg-slate-100 dark:hover:bg-slate-700 flex items-center space-x-3 transition text-sm font-semibold text-slate-700 dark:text-slate-200">
-                            <img src="https://flagcdn.com/w40/kh.png" alt="KH" class="w-6 h-6 rounded-full object-cover shadow-sm flex-shrink-0">
-                            <span>ខ្មែរ</span>
+                        <button onclick="setLanguage('km')" title="ខ្មែរ" class="p-1 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition">
+                            <img src="https://flagcdn.com/w40/kh.png" alt="KH" class="w-8 h-8 rounded-full object-cover shadow-sm">
                         </button>
                     </div>
                 </div>
@@ -928,6 +925,32 @@
 
             <div id="storefront" class="tab-content">
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <!-- Store Branding -->
+                    <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700">
+                        <h3 class="text-base font-bold text-slate-800 dark:text-white mb-1 flex items-center"><i class="fas fa-store text-emerald-500 mr-2"></i><span data-i18n="sf_branding_title">Store Branding</span></h3>
+                        <p class="text-xs text-slate-500 dark:text-slate-400 mb-4" data-i18n="sf_branding_desc">The logo and description shown at the top of the public storefront.</p>
+                        <div class="flex items-center gap-3 mb-4">
+                            <img id="storefrontLogoPreview" src="https://via.placeholder.com/150x50?text=JC+STORE" class="h-12 w-24 object-contain border border-slate-300 dark:border-slate-600 p-1 rounded bg-slate-50 dark:bg-slate-700">
+                            <div class="flex-1">
+                                <input type="file" id="storefrontLogoInput" accept="image/*" class="hidden" onchange="handleStorefrontLogoUpload(event)">
+                                <button onclick="document.getElementById('storefrontLogoInput').click()" class="bg-slate-700 text-white font-bold text-xs px-4 py-2 rounded-lg hover:bg-slate-800 transition w-full"><i class="fas fa-upload mr-1.5"></i> <span data-i18n="sf_branding_logo_btn">Change Logo</span></button>
+                            </div>
+                        </div>
+                        <label class="block text-xs font-bold text-slate-600 dark:text-slate-400 mb-1" data-i18n="sf_branding_about_label">About Us</label>
+                        <textarea id="sf_about_us" rows="3" placeholder="A short description of your store, shown under the logo in the footer..." onchange="saveStorefrontAboutUs()" class="w-full p-2 border border-slate-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded text-sm outline-none focus:ring-2 focus:ring-emerald-500 resize-none"></textarea>
+                    </div>
+
+                    <!-- Contact Us -->
+                    <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700">
+                        <h3 class="text-base font-bold text-slate-800 dark:text-white mb-1 flex items-center"><i class="fas fa-address-book text-emerald-500 mr-2"></i><span data-i18n="sf_contact_title">Contact Us</span></h3>
+                        <p class="text-xs text-slate-500 dark:text-slate-400 mb-4" data-i18n="sf_contact_desc">Shown in the storefront footer, and used for the WhatsApp order/chat links. Shared with Settings → Receipt.</p>
+                        <div class="space-y-2.5">
+                            <div><label class="text-xs font-bold text-slate-600 dark:text-slate-400" data-i18n="sf_contact_address_label">Address</label><input type="text" id="sf_contact_address" placeholder="#12, St 271, Phnom Penh" class="w-full p-2 border border-slate-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded mt-1 text-sm outline-none focus:ring-2 focus:ring-emerald-500"></div>
+                            <div><label class="text-xs font-bold text-slate-600 dark:text-slate-400" data-i18n="sf_contact_phone_label">Phone / WhatsApp</label><input type="text" id="sf_contact_phone" placeholder="012 345 678" class="w-full p-2 border border-slate-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded mt-1 text-sm outline-none focus:ring-2 focus:ring-emerald-500"></div>
+                            <button onclick="saveStorefrontContact()" class="w-full bg-slate-800 text-white font-bold text-xs py-2.5 rounded hover:bg-slate-900 shadow transition mt-1"><i class="fas fa-save mr-1"></i> <span data-i18n="sf_contact_save">Save Contact Info</span></button>
+                        </div>
+                    </div>
+
                     <!-- Hero Banner Images -->
                     <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700">
                         <h3 class="text-base font-bold text-slate-800 dark:text-white mb-1 flex items-center"><i class="fas fa-images text-emerald-500 mr-2"></i><span data-i18n="sf_hero_title">Hero Banner Images</span></h3>
@@ -949,8 +972,9 @@
                     <!-- Follow Us -->
                     <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700">
                         <h3 class="text-base font-bold text-slate-800 dark:text-white mb-1 flex items-center"><i class="fas fa-share-nodes text-emerald-500 mr-2"></i><span data-i18n="sf_social_title">Follow Us Links</span></h3>
-                        <p class="text-xs text-slate-500 dark:text-slate-400 mb-4" data-i18n="sf_social_desc">Add as many links as you like — pick the closest matching icon for each.</p>
+                        <p class="text-xs text-slate-500 dark:text-slate-400 mb-4" data-i18n="sf_social_desc">Add as many links as you like — pick the closest matching icon for each, and change either any time. Click an entry's icon to upload your own instead.</p>
                         <div id="storefrontSocialList" class="space-y-2 mb-3"></div>
+                        <input type="file" id="storefrontSocialIconInput" accept="image/*" class="hidden" onchange="handleStorefrontSocialIconUpload(event)">
                         <div class="flex gap-2">
                             <select id="sf_social_platform" class="p-2 border border-slate-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded text-sm outline-none focus:ring-2 focus:ring-emerald-500 flex-shrink-0">
                                 <option value="facebook">Facebook</option>
@@ -972,7 +996,8 @@
                         <h3 class="text-base font-bold text-slate-800 dark:text-white mb-1 flex items-center"><i class="fas fa-arrows-rotate text-emerald-500 mr-2"></i><span data-i18n="sf_sync_title">Publish to Storefront</span></h3>
                         <p class="text-xs text-slate-500 dark:text-slate-400 mb-4" data-i18n="sf_sync_desc">Exports everything on this page — plus products, prices, and stock — as a file the public storefront reads. Cost and margin figures are never included.</p>
                         <div class="space-y-3">
-                            <button onclick="exportStorefrontCatalog()" class="bg-emerald-600 text-white font-bold text-xs px-5 py-2.5 rounded-lg hover:bg-emerald-700 transition shadow-sm w-full"><i class="fas fa-cloud-arrow-down mr-1.5"></i> <span data-i18n="sf_sync_export">Download Catalog (.json)</span></button>
+                            <button onclick="exportStorefrontCatalog()" class="bg-emerald-600 text-white font-bold text-xs px-5 py-2.5 rounded-lg hover:bg-emerald-700 transition shadow-sm w-full"><i class="fas fa-cloud-arrow-down mr-1.5"></i> <span data-i18n="sf_sync_export">Publish to Storefront</span></button>
+                            <p class="text-[10px] text-slate-400" data-i18n="sf_sync_export_hint">Saves directly to the storefront if it's hosted on this same website, and also downloads a copy of the file either way.</p>
                             <div>
                                 <input type="file" id="onlineOrdersFileInput" accept=".json" onchange="handleOnlineOrdersImport(event)" class="hidden">
                                 <button onclick="document.getElementById('onlineOrdersFileInput').click()" class="bg-violet-600 text-white font-bold text-xs px-5 py-2.5 rounded-lg hover:bg-violet-700 transition shadow-sm w-full"><i class="fas fa-cart-arrow-down mr-1.5"></i> <span data-i18n="sf_sync_import">Import Online Orders</span></button>
@@ -1580,6 +1605,10 @@
         // Each entry is { platform, url } - platform picks the icon shown on the storefront,
         // and there's no fixed limit on how many you can add.
         let storefrontSocial = [];
+        // A short public description of the store, shown in the storefront footer under
+        // the logo. Left blank by default - this reads in the shop's own voice, so it
+        // should come from them rather than ship with placeholder marketing copy.
+        let storefrontAboutUs = '';
         
         let matrixData = {
             capex: [65000, 15000, 25000, 10000, 0],
@@ -1590,6 +1619,11 @@
 
         const DEFAULT_LOGO = 'https://via.placeholder.com/150x50?text=JC+STORE';
         let currentStoreLogo = DEFAULT_LOGO;
+        // The public storefront's own logo - deliberately separate from currentStoreLogo
+        // above, since a shop may want different branding for internal admin use vs the
+        // customer-facing site. Defaults to the same starting image so the storefront
+        // isn't left with a broken logo before anyone's touched this.
+        let storefrontLogo = DEFAULT_LOGO;
         let activeCurrency = 'USD';
         let activeCurrencySign = '$';
         
@@ -1669,15 +1703,20 @@
                 dash_skus: "SKU", dash_units: "units",
                 menu_inventory: "Inventory Database", menu_storefront: "Storefront", menu_biz_plan: "Business Plan", menu_investment: "Investment Matrix",
                 menu_roi: "Professional ROI", menu_settings: "Settings & Gateway", lbl_rate: "Rate:", lbl_active: "Active:",
+                sf_branding_title: "Store Branding", sf_branding_desc: "The logo and description shown at the top of the public storefront.",
+                sf_branding_logo_btn: "Change Logo", sf_branding_about_label: "About Us",
+                sf_contact_title: "Contact Us", sf_contact_desc: "Shown in the storefront footer, and used for the WhatsApp order/chat links. Shared with Settings \u2192 Receipt.",
+                sf_contact_address_label: "Address", sf_contact_phone_label: "Phone / WhatsApp", sf_contact_save: "Save Contact Info",
                 sf_hero_title: "Hero Banner Images", sf_hero_desc: "Shown as an auto-rotating slideshow at the top of the storefront.",
                 sf_hero_add: "Add Banner Image", sf_hero_empty: "No banner images yet.",
                 sf_brands_title: "Brand Partners", sf_brands_desc: "Logos shown in the \u201cExplore Our Brands\u201d scrolling strip. Transparent PNGs work best.",
                 sf_brands_add: "Add Logo", sf_brands_empty: "No brands added yet.",
-                sf_social_title: "Follow Us Links", sf_social_desc: "Add as many links as you like \u2014 pick the closest matching icon for each.",
+                sf_social_title: "Follow Us Links", sf_social_desc: "Add as many links as you like \u2014 pick the closest matching icon for each, and change either any time.",
                 sf_social_add: "Add Link",
                 sf_sync_title: "Publish to Storefront",
                 sf_sync_desc: "Exports everything on this page \u2014 plus products, prices, and stock \u2014 as a file the public storefront reads. Cost and margin figures are never included.",
-                sf_sync_export: "Download Catalog (.json)", sf_sync_import: "Import Online Orders",
+                sf_sync_export: "Publish to Storefront", sf_sync_export_hint: "Saves directly to the storefront if it's hosted on this same website, and also downloads a copy of the file either way.",
+                sf_sync_import: "Import Online Orders",
                 sf_sync_import_hint: "Adds orders to Hold Orders in POS, ready to complete like any other sale.",
                 dash_revenue: "Gross Revenue", dash_net_yield: "Net Profit Yield", dash_active_skus: "Active SKUs", dash_roi: "Current ROI",
                 cost_create_profile: "Create New Costing Profile", btn_cancel_edit: "Cancel Edit", form_prod_name: "Product Name",
@@ -1835,15 +1874,20 @@
                 dash_skus: "SKU", dash_units: "件",
                 menu_inventory: "库存数据库", menu_storefront: "网店", menu_biz_plan: "商业计划书", menu_investment: "投资矩阵",
                 menu_roi: "专业投资回报", menu_settings: "设置与网关", lbl_rate: "汇率:", lbl_active: "当前激活:",
+                sf_branding_title: "店铺品牌形象", sf_branding_desc: "显示在网店顶部的商标和简介。",
+                sf_branding_logo_btn: "更换商标", sf_branding_about_label: "关于我们",
+                sf_contact_title: "联系我们", sf_contact_desc: "显示在网店页脚,并用于 WhatsApp 订单/聊天链接。与「设置 \u2192 收据」共用。",
+                sf_contact_address_label: "地址", sf_contact_phone_label: "电话 / WhatsApp", sf_contact_save: "保存联系方式",
                 sf_hero_title: "首页横幅图片", sf_hero_desc: "以自动轮播幻灯片的形式显示在网店顶部。",
                 sf_hero_add: "添加横幅图片", sf_hero_empty: "暂无横幅图片。",
                 sf_brands_title: "品牌合作伙伴", sf_brands_desc: "显示在\u201c探索我们的品牌\u201d滚动条中的标志。建议使用透明背景的 PNG 图片。",
                 sf_brands_add: "添加标志", sf_brands_empty: "暂无品牌。",
-                sf_social_title: "关注我们链接", sf_social_desc: "添加任意数量的链接 \u2014 为每个链接选择最匹配的图标。",
+                sf_social_title: "关注我们链接", sf_social_desc: "添加任意数量的链接 \u2014 为每个链接选择最匹配的图标,并可随时更改。",
                 sf_social_add: "添加链接",
                 sf_sync_title: "发布到网店",
                 sf_sync_desc: "导出此页面上的所有内容 \u2014 以及商品、价格和库存 \u2014 作为公开网店读取的文件。成本和利润数据永远不会包含在内。",
-                sf_sync_export: "下载目录 (.json)", sf_sync_import: "导入网店订单",
+                sf_sync_export: "发布到网店", sf_sync_export_hint: "如果网店托管在同一个网站上,将直接保存到网店;无论如何都会同时下载一份文件备份。",
+                sf_sync_import: "导入网店订单",
                 sf_sync_import_hint: "将订单添加到POS的暂存订单中,可像其他销售一样完成。",
                 dash_revenue: "总销售总额", dash_net_yield: "净利润率", dash_active_skus: "活跃内码数", dash_roi: "当前回报率",
                 cost_create_profile: "创建新成本档案", btn_cancel_edit: "取消编辑", form_prod_name: "产品名称",
@@ -2000,15 +2044,20 @@
                 dash_skus: "SKU", dash_units: "ឯកតា",
                 menu_inventory: "ទិន្នន័យសារពើភ័ណ្ឌ", menu_storefront: "ហាងអនឡាញ", menu_biz_plan: "ផែនការអាជីវកម្ម", menu_investment: "ម៉ាទ្រីសវិវិយោគ",
                 menu_roi: "សន្ទស្សន៍ ROI អាជីព", menu_settings: "ការកំណត់ និងហ្គេតវ៉េ", lbl_rate: "អត្រាប្តូរប្រាក់:", lbl_active: "សកម្ម:",
+                sf_branding_title: "ម៉ាកយីហោហាង", sf_branding_desc: "និមិត្តសញ្ញា និងការពិពណ៌នាបង្ហាញនៅផ្នែកខាងលើនៃហាងអនឡាញ។",
+                sf_branding_logo_btn: "ប្តូរនិមិត្តសញ្ញា", sf_branding_about_label: "អំពីយើង",
+                sf_contact_title: "ទាក់ទងមកយើង", sf_contact_desc: "បង្ហាញនៅផ្នែកខាងក្រោមហាងអនឡាញ ហើយប្រើសម្រាប់តំណភ្ជាប់កម្មង់/ជជែក WhatsApp។ ប្រើរួមគ្នាជាមួយ ការកំណត់ \u2192 បង្កាន់ដៃ។",
+                sf_contact_address_label: "អាសយដ្ឋាន", sf_contact_phone_label: "លេខទូរស័ព្ទ / WhatsApp", sf_contact_save: "រក្សាទុកព័ត៌មានទំនាក់ទំនង",
                 sf_hero_title: "រូបភាពបដាផ្ទាំងធំ", sf_hero_desc: "បង្ហាញជាស្លាយបង្វិលដោយស្វ័យប្រវត្តិនៅផ្នែកខាងលើនៃហាងអនឡាញ។",
                 sf_hero_add: "បន្ថែមរូបភាពបដា", sf_hero_empty: "មិនទាន់មានរូបភាពបដានៅឡើយទេ។",
                 sf_brands_title: "ដៃគូម៉ាកយីហោ", sf_brands_desc: "និមិត្តសញ្ញាបង្ហាញនៅក្នុងផ្ទាំង \u201cស្វែងរកម៉ាកយីហោរបស់យើង\u201d។ រូបភាព PNG ផ្ទៃខាងក្រោយថ្លាគឺល្អបំផុត។",
                 sf_brands_add: "បន្ថែមនិមិត្តសញ្ញា", sf_brands_empty: "មិនទាន់មានម៉ាកយីហោនៅឡើយទេ។",
-                sf_social_title: "តំណភ្ជាប់តាមដានយើង", sf_social_desc: "បន្ថែមតំណភ្ជាប់ប៉ុន្មានក៏បាន \u2014 ជ្រើសរើសរូបតំណាងដែលត្រូវគ្នាបំផុតសម្រាប់នីមួយៗ។",
+                sf_social_title: "តំណភ្ជាប់តាមដានយើង", sf_social_desc: "បន្ថែមតំណភ្ជាប់ប៉ុន្មានក៏បាន \u2014 ជ្រើសរើសរូបតំណាងដែលត្រូវគ្នាបំផុតសម្រាប់នីមួយៗ ហើយអាចផ្លាស់ប្តូរបានគ្រប់ពេល។",
                 sf_social_add: "បន្ថែមតំណភ្ជាប់",
                 sf_sync_title: "បោះផ្សាយទៅហាងអនឡាញ",
                 sf_sync_desc: "នាំចេញអ្វីៗគ្រប់យ៉ាងនៅលើទំព័រនេះ \u2014 បូកនឹងទំនិញ តម្លៃ និងស្តុក \u2014 ជាឯកសារដែលហាងអនឡាញអានបាន។ ចំណុចថ្លៃដើម និងប្រាក់ចំណេញមិនត្រូវបានរួមបញ្ចូលឡើយ។",
-                sf_sync_export: "ទាញយកបញ្ជីទំនិញ (.json)", sf_sync_import: "នាំចូលកម្មង់ពីហាងអនឡាញ",
+                sf_sync_export: "បោះផ្សាយទៅហាងអនឡាញ", sf_sync_export_hint: "រក្សាទុកដោយផ្ទាល់ទៅហាងអនឡាញ ប្រសិនបើវាដំណើរការនៅលើគេហទំព័រតែមួយនេះ ហើយវានឹងទាញយកឯកសារមួយច្បាប់ជាការបម្រុងទុកជានិច្ច។",
+                sf_sync_import: "នាំចូលកម្មង់ពីហាងអនឡាញ",
                 sf_sync_import_hint: "បន្ថែមកម្មង់ទៅកាន់ Hold Orders នៅក្នុង POS ដែលអាចបញ្ចប់ដូចការលក់ធម្មតា។",
                 dash_revenue: "ចំណូលសរុប", dash_net_yield: "ផលចំណេញសុទ្ធ", dash_active_skus: "មុខទំនិញសកម្ម", dash_roi: "សន្ទស្សន៍ ROI បច្ចុប្បន្ន",
                 cost_create_profile: "បង្កើតប្រវត្តិថ្លៃដើមថ្មី", btn_cancel_edit: "បោះបង់ការកែប្រែ", form_prod_name: "ឈ្មោះផលិតផល",
@@ -2812,6 +2861,8 @@
                 storefrontHeroBanners,
                 storefrontBrands,
                 storefrontSocial,
+                storefrontAboutUs,
+                storefrontLogo,
                 settings: {
                     logo: currentStoreLogo,
                     currency: activeCurrency,
@@ -3062,6 +3113,12 @@
                         storefrontSocial = Array.isArray(parsed.storefrontSocial)
                             ? parsed.storefrontSocial
                             : Object.keys(parsed.storefrontSocial).map(k => ({ platform: k, url: parsed.storefrontSocial[k] })).filter(e => e.url);
+                    }
+                    if(typeof parsed.storefrontAboutUs === 'string') {
+                        storefrontAboutUs = parsed.storefrontAboutUs;
+                    }
+                    if(parsed.storefrontLogo) {
+                        storefrontLogo = parsed.storefrontLogo;
                     }
 
                     if(parsed.settings) {
@@ -3442,7 +3499,7 @@
             const logoInput = document.getElementById('store_logo_input');
             if (logoInput.files && logoInput.files[0]) {
                 try {
-                    currentStoreLogo = await compressImageFile(logoInput.files[0], 500, 0.8);
+                    currentStoreLogo = await compressImageFilePNG(logoInput.files[0], 500);
                 } catch (err) {
                     showToast('Could not process that logo image. Try a different file.', 'error');
                     return;
@@ -7437,9 +7494,51 @@
         };
 
         function renderStorefrontTab() {
+            document.getElementById('storefrontLogoPreview').src = storefrontLogo;
+            document.getElementById('sf_about_us').value = storefrontAboutUs || '';
+            document.getElementById('sf_contact_address').value = receiptSettings.address || '';
+            document.getElementById('sf_contact_phone').value = receiptSettings.phone || '';
             renderStorefrontHeroList();
             renderStorefrontBrandsList();
             renderStorefrontSocialList();
+        }
+
+        // Deliberately separate from the admin's own logo (Settings → Store Profile) -
+        // a shop may want different branding for internal use vs the public storefront.
+        // PNG-compressed (not JPEG) so a transparent logo stays transparent instead of
+        // getting a white box behind it on the storefront's colored header/footer.
+        async function handleStorefrontLogoUpload(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            try {
+                storefrontLogo = await compressImageFilePNG(file, 500);
+                document.getElementById('storefrontLogoPreview').src = storefrontLogo;
+                saveSystemData();
+                showToast('Storefront logo updated.', 'success');
+            } catch (err) {
+                showToast('Could not process that logo image.', 'error');
+            }
+            e.target.value = '';
+        }
+
+        function saveStorefrontAboutUs() {
+            storefrontAboutUs = document.getElementById('sf_about_us').value.trim();
+            saveSystemData();
+        }
+
+        // Shares the same receiptSettings fields Settings → Receipt uses, so either tab
+        // stays correct - this rebuilds only address/phone, leaving the rest of the
+        // receipt template (footer text, VAT, show/hide toggles, etc.) untouched.
+        function saveStorefrontContact() {
+            const address = document.getElementById('sf_contact_address').value.trim();
+            const phone = document.getElementById('sf_contact_phone').value.trim();
+            receiptSettings = { ...receiptSettings, address, phone };
+            const rcptAddr = document.getElementById('rcpt_address');
+            const rcptPhone = document.getElementById('rcpt_phone');
+            if (rcptAddr) rcptAddr.value = address;
+            if (rcptPhone) rcptPhone.value = phone;
+            saveSystemData();
+            showToast('Contact info saved.', 'success');
         }
 
         function renderStorefrontHeroList() {
@@ -7521,6 +7620,12 @@
 
         // Follow Us: a free-form list rather than a handful of fixed platform fields,
         // so the shop can add (or skip) as many links as they actually use.
+        function socialPlatformOptionsHtml(selected) {
+            return Object.keys(SOCIAL_PLATFORM_META).map(key =>
+                `<option value="${key}" ${key === selected ? 'selected' : ''}>${SOCIAL_PLATFORM_META[key].label}</option>`
+            ).join('');
+        }
+
         function renderStorefrontSocialList() {
             const container = document.getElementById('storefrontSocialList');
             if (!container) return;
@@ -7530,14 +7635,44 @@
             }
             container.innerHTML = storefrontSocial.map((s, i) => {
                 const meta = SOCIAL_PLATFORM_META[s.platform] || SOCIAL_PLATFORM_META.other;
+                const iconInner = s.customIcon
+                    ? `<img src="${s.customIcon}" class="w-5 h-5 object-contain">`
+                    : `<i class="${meta.icon} text-emerald-500"></i>`;
                 return `
-                <div class="flex items-center gap-3 p-2 border border-slate-200 dark:border-slate-600 rounded-lg">
-                    <i class="${meta.icon} text-emerald-500 w-5 text-center"></i>
-                    <span class="text-xs font-bold text-slate-500 dark:text-slate-400 flex-shrink-0">${meta.label}</span>
-                    <span class="flex-1 text-sm text-slate-700 dark:text-slate-200 truncate">${s.url}</span>
-                    <button onclick="removeStorefrontSocialLink(${i})" class="text-red-500 hover:text-red-700 text-xs px-1"><i class="fas fa-trash"></i></button>
+                <div class="flex items-center gap-2 p-2 border border-slate-200 dark:border-slate-600 rounded-lg">
+                    <button onclick="triggerSocialIconUpload(${i})" title="Upload a custom icon" class="w-7 h-7 flex items-center justify-center text-center flex-shrink-0 rounded hover:bg-slate-100 dark:hover:bg-slate-700 transition">${iconInner}</button>
+                    <select onchange="updateStorefrontSocialPlatform(${i}, this.value)" class="text-xs font-bold border border-slate-200 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded p-1.5 flex-shrink-0 outline-none focus:ring-2 focus:ring-emerald-500">
+                        ${socialPlatformOptionsHtml(s.platform)}
+                    </select>
+                    <input type="url" value="${s.url}" onchange="updateStorefrontSocialUrl(${i}, this.value)" class="flex-1 min-w-0 text-sm border border-slate-200 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded p-1.5 outline-none focus:ring-2 focus:ring-emerald-500">
+                    <button onclick="removeStorefrontSocialLink(${i})" class="text-red-500 hover:text-red-700 text-xs px-1 flex-shrink-0"><i class="fas fa-trash"></i></button>
                 </div>`;
             }).join('');
+        }
+
+        // Lets an entry's icon be replaced with an uploaded image instead of the built-in
+        // set - useful for a platform that isn't in the list, or just a preferred mark.
+        // Choosing a different platform above does NOT clear a custom icon, since that's
+        // usually just fixing the link's category/label, not asking to go back to the
+        // built-in glyph - remove and re-add the entry to reset it.
+        let _pendingSocialIconIndex = null;
+        function triggerSocialIconUpload(i) {
+            _pendingSocialIconIndex = i;
+            document.getElementById('storefrontSocialIconInput').click();
+        }
+        async function handleStorefrontSocialIconUpload(e) {
+            const file = e.target.files[0];
+            const i = _pendingSocialIconIndex;
+            _pendingSocialIconIndex = null;
+            if (!file || i === null || !storefrontSocial[i]) return;
+            try {
+                storefrontSocial[i].customIcon = await compressImageFilePNG(file, 120);
+                saveSystemData();
+                renderStorefrontSocialList();
+            } catch (err) {
+                showToast('Could not process that icon image.', 'error');
+            }
+            e.target.value = '';
         }
 
         function addStorefrontSocialLink() {
@@ -7553,6 +7688,19 @@
             renderStorefrontSocialList();
             urlInput.value = '';
             showToast('Link added.', 'success');
+        }
+
+        function updateStorefrontSocialPlatform(i, platform) {
+            if (!storefrontSocial[i]) return;
+            storefrontSocial[i].platform = platform;
+            saveSystemData();
+            renderStorefrontSocialList();
+        }
+
+        function updateStorefrontSocialUrl(i, url) {
+            if (!storefrontSocial[i]) return;
+            storefrontSocial[i].url = url.trim();
+            saveSystemData();
         }
 
         function removeStorefrontSocialLink(i) {
@@ -7597,10 +7745,11 @@
                 _exportDate: new Date().toISOString(),
                 store: {
                     name:    document.getElementById('store_name')?.value || 'JC STORE',
-                    logo:    currentStoreLogo,
+                    logo:    storefrontLogo,
                     rate:    parseFloat(document.getElementById('exchangeRateInput')?.value) || 4100,
                     phone:   receiptSettings.phone   || '',
                     address: receiptSettings.address || '',
+                    aboutUs: storefrontAboutUs || '',
                     social:  storefrontSocial
                 },
                 categories,
@@ -7612,15 +7761,31 @@
                 heroBanners: storefrontHeroBanners
             };
 
-            const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
-            const url  = URL.createObjectURL(blob);
-            const a    = document.createElement('a');
-            a.href     = url;
-            a.download = `storefront-catalog.json`;
-            a.click();
-            URL.revokeObjectURL(url);
+            // If the storefront happens to be hosted on this same website (same origin),
+            // it already checks this exact browser storage key before anything else - so
+            // saving here means opening or refreshing it needs no manual file upload, and
+            // no download either. Only fall back to a file if that save didn't work (the
+            // storefront lives elsewhere, or storage is unavailable/full).
+            let autoSaved = false;
+            try {
+                localStorage.setItem('storefront_catalog_override', JSON.stringify(payload));
+                localStorage.setItem('storefront_catalog_synced_at', new Date().toISOString());
+                autoSaved = true;
+            } catch (e) { /* storage unavailable/full - falls through to the download below */ }
+
+            if (!autoSaved) {
+                const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+                const url  = URL.createObjectURL(blob);
+                const a    = document.createElement('a');
+                a.href     = url;
+                a.download = `storefront-catalog.json`;
+                a.click();
+                URL.revokeObjectURL(url);
+            }
             addNotification('success', 'Storefront Catalog Exported', `${products.length} product(s) exported for the public store.`, 'fa-store');
-            showToast('Catalog downloaded — sync it into your storefront to update it.', 'success');
+            showToast(autoSaved
+                ? 'Published to your storefront.'
+                : 'Catalog downloaded — sync it into your storefront to update it.', 'success');
         }
 
         function handleOnlineOrdersImport(e) {
